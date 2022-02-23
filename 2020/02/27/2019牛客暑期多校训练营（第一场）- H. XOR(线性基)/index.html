@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>2019牛客暑期多校训练营 (第一场) - H. XOR(线性基) | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="题目链接: XOR
+题意: 给定n个整数, 求满足子集异或和为0的子集大小之和
+思路: 先求出n个整数的线性基r, 线性基的大小为cr, 讨论每个元素对答案的贡献
+线性基r外的元素共有n-cr个, 对于每个元素, 都能够与其他n-cr-1个线性基外的元素组合, 组合后一定能在r内找到唯一的对应元素,">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+      <a class="main-nav-link" href="../../../../about">About</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-2019牛客暑期多校训练营（第一场）- H. XOR(线性基)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2020-02-27T11:28:00.000Z" itemprop="datePublished">2020-02-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      2019牛客暑期多校训练营 (第一场) - H. XOR(线性基)
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>题目链接: <a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/881/H">XOR</a></p>
+<p>题意: 给定n个整数, 求满足子集异或和为0的子集大小之和</p>
+<p>思路: 先求出n个整数的线性基r, 线性基的大小为cr, 讨论每个元素对答案的贡献</p>
+<p>线性基r外的元素共有n-cr个, 对于每个元素, 都能够与其他n-cr-1个线性基外的元素组合, 组合后一定能在r内找到唯一的对应元素, 所以每个元素对答案的贡献为<span class="markdown-them-math-inline">$2^{n-cr-1}$</span>种, 有n-cr个元素, 所以总共的贡献为<span class="markdown-them-math-inline">$(n-cr)*2^{n-cr-1}$</span><br>
+扫描一遍线性基r内的每个元素, 每次去掉第i个元素, 对剩下的n-1元素求线性基d, 线性基的大小为cd, 如果第i个元素还能插入线性基d, 则一定不能异或出0, 否则他能够与其他n-cd-1个线性基外的元素组合, 对答案的贡献为<span class="markdown-them-math-inline">$2^{n-cd-1}$</span><br>
+对于求线性基d, 我们可以先对没有在r内的元素求一个线性基b, 每次将线性基b和去掉第i个元素的线性基r进行合并即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;vector&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">100010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> M = <span class="hljs-number">70</span>;
+<span class="hljs-keyword">const</span> ll mod = <span class="hljs-number">1000000007</span>;
+
+<span class="hljs-keyword">int</span> n, vis[N];
+ll a[N], r[M], b[M], d[M];
+vector&lt;ll&gt; v;
+
+<span class="hljs-function">ll <span class="hljs-title">power</span><span class="hljs-params">(ll a, <span class="hljs-keyword">int</span> n, ll p)</span>
+</span>&#123;
+    ll res = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (n) &#123;
+        <span class="hljs-keyword">if</span> (n &amp; <span class="hljs-number">1</span>) res = (res * a) % p;
+        a = (a * a) % p;
+        n &gt;&gt;= <span class="hljs-number">1</span>;
+    &#125;
+    <span class="hljs-keyword">return</span> res % p;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">insert</span><span class="hljs-params">(ll x, ll b[])</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = <span class="hljs-number">63</span>; k &gt;= <span class="hljs-number">0</span>; k--) &#123;
+        <span class="hljs-keyword">if</span> (x &gt;&gt; k &amp; <span class="hljs-number">1</span>) &#123;
+            <span class="hljs-keyword">if</span> (b[k]) x ^= b[k];
+            <span class="hljs-keyword">else</span> &#123;
+                b[k] = x;
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+            &#125;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">while</span> (<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n) != EOF) &#123;
+        <span class="hljs-keyword">int</span> cr = <span class="hljs-number">0</span>;
+        v.<span class="hljs-built_in">clear</span>();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; M; i++) r[i] = b[i] = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+            vis[i] = <span class="hljs-number">0</span>;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld&quot;</span>, &amp;a[i]);
+            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">insert</span>(a[i], r)) &#123;
+                cr++;
+                vis[i] = <span class="hljs-number">1</span>;
+                v.<span class="hljs-built_in">push_back</span>(a[i]);
+            &#125;
+        &#125;
+        <span class="hljs-keyword">if</span> (cr == n) &#123;
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;0\n&quot;</span>);
+            <span class="hljs-keyword">continue</span>;
+        &#125;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+            <span class="hljs-keyword">if</span> (vis[i]) <span class="hljs-keyword">continue</span>;
+            <span class="hljs-built_in">insert</span>(a[i], b);
+        &#125;
+        ll res = (n - cr) * <span class="hljs-built_in">power</span>(<span class="hljs-number">2</span>, n - cr - <span class="hljs-number">1</span>, mod) % mod;
+        <span class="hljs-keyword">int</span> len = (<span class="hljs-keyword">int</span>)v.<span class="hljs-built_in">size</span>();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++) &#123;
+            <span class="hljs-keyword">int</span> cd = <span class="hljs-number">0</span>;
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = <span class="hljs-number">0</span>; k &lt;= <span class="hljs-number">63</span>; k++) d[k] = <span class="hljs-number">0</span>;
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = <span class="hljs-number">0</span>; k &lt; len; k++) &#123;
+                <span class="hljs-keyword">if</span> (i == k) <span class="hljs-keyword">continue</span>;
+                <span class="hljs-keyword">if</span> (<span class="hljs-built_in">insert</span>(v[k], d)) cd++;
+            &#125;
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = <span class="hljs-number">0</span>; k &lt;= <span class="hljs-number">63</span>; k++)
+                <span class="hljs-keyword">if</span> (b[k] &amp;&amp; <span class="hljs-built_in">insert</span>(b[k], d)) cd++;
+            <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">insert</span>(v[i], d))
+                res = (res + <span class="hljs-built_in">power</span>(<span class="hljs-number">2</span>, n - cd - <span class="hljs-number">1</span>, mod)) % mod;
+        &#125;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../03/19/%E5%B9%B3%E8%A1%A1%E6%A0%91%E5%85%A5%E9%97%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          平衡树入门
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../20/BZOJ%20-%202038%20%E5%B0%8FZ%E7%9A%84%E8%A2%9C%E5%AD%90(%E6%99%AE%E9%80%9A%E8%8E%AB%E9%98%9F)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          BZOJ - 2038 小Z的袜子(普通莫队)
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../04/13/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/">后缀自动机</a>
+          </li>
+        
+          <li>
+            <a href="../../../04/09/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/">二分图匹配</a>
+          </li>
+        
+          <li>
+            <a href="../../../04/02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/">后缀数组</a>
+          </li>
+        
+          <li>
+            <a href="../../../03/19/%E5%B9%B3%E8%A1%A1%E6%A0%91%E5%85%A5%E9%97%A8/">平衡树入门</a>
+          </li>
+        
+          <li>
+            <a href="">2019牛客暑期多校训练营 (第一场) - H. XOR(线性基)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>

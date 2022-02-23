@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>平衡树入门 | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="前置技能
+平衡树是二叉搜索树的一种, 二叉搜索树的定义如下:
+
+空树是二叉搜索树
+若二叉搜索树的左子树不为空, 则其左子树上所有点的权值均小于其根节点的值
+若二叉搜索树的右子树不为空, 则其右子树上所有点的权值均大于其根节点的值
+二叉搜索树的左右子树均为二叉搜索树
+对于有$n$个节点的二叉搜索树, ">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+      <a class="main-nav-link" href="../../../../about">About</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-平衡树入门" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2020-03-19T13:58:00.000Z" itemprop="datePublished">2020-03-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      平衡树入门
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p><strong>前置技能</strong></p>
+<p>平衡树是二叉搜索树的一种, 二叉搜索树的定义如下:</p>
+<ul>
+<li>空树是二叉搜索树</li>
+<li>若二叉搜索树的左子树不为空, 则其左子树上所有点的权值均小于其根节点的值</li>
+<li>若二叉搜索树的右子树不为空, 则其右子树上所有点的权值均大于其根节点的值</li>
+<li>二叉搜索树的左右子树均为二叉搜索树<br>
+对于有<span class="markdown-them-math-inline">$n$</span>个节点的二叉搜索树, 每次基本操作的最优复杂度为<span class="markdown-them-math-inline">$O(logn)$</span>, 由于二叉搜索树可能退化成一条链, 所以最坏复杂度<span class="markdown-them-math-inline">$O(n)$</span></li>
+</ul>
+<p>而每种平衡树都能通过一些方法让二叉搜索树不退化成一条链, 每次操作的时间复杂度保持在<span class="markdown-them-math-inline">$O(logn)$</span></p>
+<p>平衡树主要分为两种:</p>
+<ul>
+<li>
+<p>有旋转的树: AVL树, Splay树, 红黑树</p>
+</li>
+<li>
+<p>无旋转的树: 替罪羊树, fhq-Treap<br>
+树旋转也分为两种:</p>
+</li>
+<li>
+<p>右旋: 将自己变为左孩子的右孩子, 同时将左孩子的右孩子变为自己的左孩子</p>
+</li>
+<li>
+<p>左旋: 将自己变为右孩子的左孩子, 同时将右孩子的左孩子变为自己的右孩子</p>
+</li>
+</ul>
+<p><img src="/images/1588753-20200317210803955-1345170871.jpg" alt=""></p>
+<p><strong>替罪羊树</strong></p>
+<p>替罪羊树通过重构来维持树的平衡, 在插入、删除操作之后, 从上到下检测途经的节点, 若发现失衡, 则将以该节点为根的子树重构</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r;   <span class="hljs-comment">// 左右子树</span>
+    <span class="hljs-keyword">int</span> val;    <span class="hljs-comment">// 节点权值</span>
+    <span class="hljs-keyword">int</span> sz;     <span class="hljs-comment">// 包括已删除节点的子树大小</span>
+    <span class="hljs-keyword">int</span> fsz;    <span class="hljs-comment">// 实际大小, 不包括已删除节点的子树大小</span>
+    <span class="hljs-keyword">int</span> cnt;    <span class="hljs-comment">// 数据出现的次数</span>
+&#125;;
+</code></pre></div>
+<p>替罪羊树的删除是一种惰性删除, 只是打上一个标记表示该节点已经被删除, 实际大小就是没有被打上标记的节点数量, 这个标记就是cnt, cnt=0表示节点已经被删除, cnt&gt;0是表示节点存在</p>
+<p>为了判断节点是否需要重构, 我们定义一个平衡因子<span class="markdown-them-math-inline">$\alpha$</span>(取值在0.5到1之间), 一般取0.75, 当满足以下两个条件时表示该节点需要重构</p>
+<ul>
+<li>左子树或者右子树的sz大于整个子树的sz * <span class="markdown-them-math-inline">$\alpha$</span>(左子树或者右子树太大导致整个子树不平衡)</li>
+<li>整个子树被删除的节点数量大于整个子树的sz * 0.3(被删除的节点太多导致整个子树不平衡)</li>
+</ul>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">imbalance</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">max</span>(tree[tree[now].l].sz, tree[tree[now].r].sz) &gt; tree[now].sz * alpha) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    <span class="hljs-keyword">if</span> (tree[now].sz - tree[now].fsz &gt; tree[now].sz * <span class="hljs-number">0.3</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+&#125;
+</code></pre></div>
+<p>对于需要重构的节点, 重构分为两步:</p>
+<ul>
+<li>先中序遍历展开存入向量, 注意只有当前节点存在时(cnt&gt;0)才能够存入向量</li>
+<li>分治建二叉树(每次取区间中点作为根, 然后递归两边为左右子树建树)</li>
+</ul>
+<p><img src="/images/1588753-20200318001036784-1277583803.png" alt=""></p>
+<p>在分治的同时, 更新重构后子树每个节点的sz和fsz</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) <span class="hljs-keyword">return</span>;
+    <span class="hljs-built_in">dfs</span>(tree[now].l);
+    <span class="hljs-keyword">if</span> (tree[now].cnt) v.<span class="hljs-built_in">push_back</span>(now);
+    <span class="hljs-built_in">dfs</span>(tree[now].r);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">lift</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r, <span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (l == r) &#123;
+        now = v[l];
+        tree[now].l = tree[now].r = <span class="hljs-number">0</span>;
+        tree[now].sz = tree[now].fsz = tree[now].cnt;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-keyword">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    now = v[mid];
+    <span class="hljs-keyword">if</span> (l &lt; mid) <span class="hljs-built_in">lift</span>(l, mid - <span class="hljs-number">1</span>, tree[now].l);
+    <span class="hljs-keyword">else</span> tree[now].l = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">lift</span>(mid + <span class="hljs-number">1</span>, r, tree[now].r);
+    tree[now].sz = tree[tree[now].l].sz + tree[tree[now].r].sz + tree[now].cnt;
+    tree[now].fsz = tree[tree[now].l].fsz + tree[tree[now].r].fsz + tree[now].cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">rebuild</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    v.<span class="hljs-built_in">clear</span>();
+    <span class="hljs-built_in">dfs</span>(now);
+    <span class="hljs-keyword">if</span> (v.<span class="hljs-built_in">empty</span>()) &#123;
+        now = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-built_in">lift</span>(<span class="hljs-number">0</span>, (<span class="hljs-keyword">int</span>)v.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>, now);
+&#125;
+</code></pre></div>
+<p>显然, 对一颗重构后的子树, 我们还需要从上向下采用头递归的方式(比较好写, 自下而上需要多一个fa参数)更新路径上所有节点的sz和fsz<br>
+check函数表示检查now到end路径上所有的点, 如果有不平衡的节点则重构以该节点为根的子树<br>
+注意: check函数是自上向下检查每个节点是否需要重构, 因为如果自下而上判断, 可能会导致重构很多次, 复杂度不能保证, 而自上向下判断只需要重构第一个不平衡的节点即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> end)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (now == end) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">if</span> (tree[end].val &lt; tree[now].val) <span class="hljs-built_in">update</span>(tree[now].l, end);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">update</span>(tree[now].r, end);
+    tree[now].sz = tree[tree[now].l].sz + tree[tree[now].r].sz + tree[now].cnt;
+    tree[now].fsz = tree[tree[now].l].fsz + tree[tree[now].r].fsz + tree[now].cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">check</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> end)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (now == end) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">imbalance</span>(now)) &#123;
+        <span class="hljs-built_in">rebuild</span>(now);
+        <span class="hljs-built_in">update</span>(root, now);
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-keyword">if</span> (tree[end].val &lt; tree[now].val) <span class="hljs-built_in">check</span>(tree[now].l, end);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">check</span>(tree[now].r, end);
+&#125;
+</code></pre></div>
+<p>替罪羊的插入操作和普通二叉搜索树的插入操作差不多, 只是在每次插入之后, 都需要从根节点root到当前节点now自上向下判断每个节点是否需要重构</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) &#123;
+        <span class="hljs-built_in">newnode</span>(now, val);
+        <span class="hljs-built_in">check</span>(root, now);
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    tree[now].sz++;
+    tree[now].fsz++;
+    <span class="hljs-keyword">if</span> (val &lt; tree[now].val) <span class="hljs-built_in">insert</span>(tree[now].l, val);
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (val == tree[now].val) &#123;
+        tree[now].cnt++;
+        <span class="hljs-built_in">check</span>(root, now);
+    &#125;
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">insert</span>(tree[now].r, val);
+&#125;
+</code></pre></div>
+<p>删除操作同理, 每次删除后, 从根节点root到当前节点now自上向下判断每个节点是否需要重构</p>
+<p>注意: 删除操作减少的是节点的fsz, 不是节点sz, fsz表示的是真实的大小(不包括已经删除的节点)</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">del</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (tree[now].cnt &amp;&amp; tree[now].val == val) &#123;
+        tree[now].cnt--;
+        tree[now].fsz--;
+        <span class="hljs-built_in">check</span>(root, now);
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    tree[now].fsz--;
+    <span class="hljs-keyword">if</span> (val &lt; tree[now].val) <span class="hljs-built_in">del</span>(tree[now].l, val);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">del</span>(tree[now].r, val);
+&#125;
+</code></pre></div>
+<p>对于查询某个数的排名qrank(x)和查询某个排名上的数qnum(x), 则可以利用二叉搜索树的性质来求解</p>
+<p>对于某个数的前驱, 只需要查询qnum(qrank(x)-1), 即查询(这个数的排名-1)上的数</p>
+<p>但对于后继, 不能查询qnum(qrank(x)+1), 因为可能有重复的数字, 比如说1 2 2 4, 查询2的后继时, 2的排名为2, 但4的排名却是4, 这样查询的结果依然是2, 所以我们应该查询qnum(qrank(x+1))</p>
+<p>例题: <a target="_blank" rel="noopener" href="https://darkbzoj.tk/problem/3224">bzoj-3224普通平衡树</a></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;vector&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">100010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> alpha = <span class="hljs-number">0.75</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r, val;
+    <span class="hljs-keyword">int</span> sz, fsz, cnt;
+&#125;;
+
+node tree[N];
+<span class="hljs-keyword">int</span> root, cnt, n;
+vector&lt;<span class="hljs-keyword">int</span>&gt; v;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    now = ++cnt;
+    tree[now].val = val;
+    tree[now].sz = tree[now].fsz = <span class="hljs-number">1</span>;
+    tree[now].cnt = <span class="hljs-number">1</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">imbalance</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">max</span>(tree[tree[now].l].sz, tree[tree[now].r].sz) &gt; tree[now].sz * alpha) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    <span class="hljs-keyword">if</span> (tree[now].sz - tree[now].fsz &gt; tree[now].sz * <span class="hljs-number">0.3</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) <span class="hljs-keyword">return</span>;
+    <span class="hljs-built_in">dfs</span>(tree[now].l);
+    <span class="hljs-keyword">if</span> (tree[now].cnt) v.<span class="hljs-built_in">push_back</span>(now);
+    <span class="hljs-built_in">dfs</span>(tree[now].r);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">lift</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r, <span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (l == r) &#123;
+        now = v[l];
+        tree[now].l = tree[now].r = <span class="hljs-number">0</span>;
+        tree[now].sz = tree[now].fsz = tree[now].cnt;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-keyword">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    now = v[mid];
+    <span class="hljs-keyword">if</span> (l &lt; mid) <span class="hljs-built_in">lift</span>(l, mid - <span class="hljs-number">1</span>, tree[now].l);
+    <span class="hljs-keyword">else</span> tree[now].l = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">lift</span>(mid + <span class="hljs-number">1</span>, r, tree[now].r);
+    tree[now].sz = tree[tree[now].l].sz + tree[tree[now].r].sz + tree[now].cnt;
+    tree[now].fsz = tree[tree[now].l].fsz + tree[tree[now].r].fsz + tree[now].cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">rebuild</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    v.<span class="hljs-built_in">clear</span>();
+    <span class="hljs-built_in">dfs</span>(now);
+    <span class="hljs-keyword">if</span> (v.<span class="hljs-built_in">empty</span>()) &#123;
+        now = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-built_in">lift</span>(<span class="hljs-number">0</span>, (<span class="hljs-keyword">int</span>)v.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>, now);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> end)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (now == end) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">if</span> (tree[end].val &lt; tree[now].val) <span class="hljs-built_in">update</span>(tree[now].l, end);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">update</span>(tree[now].r, end);
+    tree[now].sz = tree[tree[now].l].sz + tree[tree[now].r].sz + tree[now].cnt;
+    tree[now].fsz = tree[tree[now].l].fsz + tree[tree[now].r].fsz + tree[now].cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">check</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> end)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (now == end) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">imbalance</span>(now)) &#123;
+        <span class="hljs-built_in">rebuild</span>(now);
+        <span class="hljs-built_in">update</span>(root, now);
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-keyword">if</span> (tree[end].val &lt; tree[now].val) <span class="hljs-built_in">check</span>(tree[now].l, end);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">check</span>(tree[now].r, end);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) &#123;
+        <span class="hljs-built_in">newnode</span>(now, val);
+        <span class="hljs-built_in">check</span>(root, now);
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    tree[now].sz++;
+    tree[now].fsz++;
+    <span class="hljs-keyword">if</span> (val &lt; tree[now].val) <span class="hljs-built_in">insert</span>(tree[now].l, val);
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (val == tree[now].val) &#123;
+        tree[now].cnt++;
+        <span class="hljs-built_in">check</span>(root, now);
+    &#125;
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">insert</span>(tree[now].r, val);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">del</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (tree[now].cnt &amp;&amp; tree[now].val == val) &#123;
+        tree[now].cnt--;
+        tree[now].fsz--;
+        <span class="hljs-built_in">check</span>(root, now);
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    tree[now].fsz--;
+    <span class="hljs-keyword">if</span> (val &lt; tree[now].val) <span class="hljs-built_in">del</span>(tree[now].l, val);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">del</span>(tree[now].r, val);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">qrank</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> now = root, rank = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (now) &#123;
+        <span class="hljs-keyword">if</span> (val &lt;= tree[now].val) now = tree[now].l;
+        <span class="hljs-keyword">else</span> &#123;
+            rank = rank + tree[tree[now].l].fsz + tree[now].cnt;
+            now = tree[now].r;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> rank;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">qnum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> rank)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> now = root;
+    <span class="hljs-keyword">while</span> (now) &#123;
+        <span class="hljs-keyword">int</span> lz = tree[tree[now].l].fsz;
+        <span class="hljs-keyword">if</span> (tree[now].cnt &amp;&amp; rank &gt;= lz + <span class="hljs-number">1</span> &amp;&amp; rank &lt;= lz + tree[now].cnt) <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">if</span> (lz &gt;= rank) now = tree[now].l;
+        <span class="hljs-keyword">else</span> &#123;
+            rank = rank - lz - tree[now].cnt;
+            now = tree[now].r;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> tree[now].val;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">int</span> op, x;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;op, &amp;x);
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> == op) <span class="hljs-built_in">insert</span>(root, x);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">2</span> == op) <span class="hljs-built_in">del</span>(root, x);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">3</span> == op) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qrank</span>(x));
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">4</span> == op) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qnum</span>(x));
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">5</span> == op) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qnum</span>(<span class="hljs-built_in">qrank</span>(x) - <span class="hljs-number">1</span>));
+        <span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qnum</span>(<span class="hljs-built_in">qrank</span>(x + <span class="hljs-number">1</span>)));
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<p><strong>fhq-Treap</strong></p>
+<p>treap是单词tree和heap的组合, 表明treap是一种由树和堆组成的数据结构, 所以fhq-Treap的每个节点都必须存储val和key两个值, 其中val表示节点权值, key是随机的一个值, val满足二叉搜索树的性质, 而key满足堆的性质, 由于key是随机的, 所以treap是期望平衡的</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r;   <span class="hljs-comment">// 左右子树</span>
+    <span class="hljs-keyword">int</span> val;    <span class="hljs-comment">// 节点权值</span>
+    <span class="hljs-keyword">int</span> key;    <span class="hljs-comment">// 随机的关键值</span>
+    <span class="hljs-keyword">int</span> sz;     <span class="hljs-comment">// 以该节点为根的子树大小</span>
+&#125;;
+</code></pre></div>
+<p>fhq-Treap只有两个基本操作: 分裂split和合并merge</p>
+<p>分裂分为两种:</p>
+<ul>
+<li>按值val分裂: 把树分裂成两棵树, 其中一棵树上所有节点的权值都小于等于val, 另一颗树上所有节点的权值都大于val</li>
+<li>按大小分裂: 把树分裂成两棵树, 其中一棵树的大小等于给定的大小, 其余的节点在另一棵树里<br>
+接下来我们以按值分裂为例, 假设权值小于等于val的那一棵树的根节点为x, 称为第一棵树, 另一棵树的根节点为y, 称为第二棵树</li>
+</ul>
+<p>根据二叉搜索树的性质, 如果当前节点now的权值小于等于val, 那么当前节点now和now的左子树都属于第一棵树, 然而now的右子树上的节点不一定都属于第一棵树, 那么我们就继续递归分裂now的右子树, 同理, 如果当前节点now的权值大于val, 那么当前节点now和now的右子树都属于第二棵树, 然而now的左子树上的节点不一定都属于第二棵树, 继续递归分裂now的左子树</p>
+<p><img src="/images/1588753-20200318200205386-1891965177.png" alt=""></p>
+<p>注意: 分裂的同时需要更新路径上节点的sz, x和y采用引用传递(比较好写)</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now)</span>
+</span>&#123;
+    tree[now].sz = tree[tree[now].l].sz + tree[tree[now].r].sz + <span class="hljs-number">1</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">split</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now, <span class="hljs-keyword">int</span> val, <span class="hljs-keyword">int</span> &amp;x, <span class="hljs-keyword">int</span> &amp;y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) &#123;
+        x = y = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-keyword">if</span> (tree[now].val &lt;= val) &#123;
+        x = now;
+        <span class="hljs-built_in">split</span>(tree[now].r, val, tree[now].r, y);
+    &#125;
+    <span class="hljs-keyword">else</span> &#123;
+        y = now;
+        <span class="hljs-built_in">split</span>(tree[now].l, val, x, tree[now].l);
+    &#125;
+    <span class="hljs-built_in">update</span>(now);
+&#125;
+</code></pre></div>
+<p>合并时, 以维护小根堆为例, 有两种情况:</p>
+<ul>
+<li>第一棵树根节点x的key值比第二棵树根节点y的key值小, 由于第一棵树上节点的权值都小于第二棵树上节点的权值, 那么根据二叉搜索树和小根堆的性质, 第一棵树就在第二棵树的 “左上方” , 此时就递归合并节点x的右子树和节点y</li>
+<li>第二棵树根节点x的key值比第二棵树根节点y的key值大, 同理, 那么第一棵树就在第二棵树的 “左下方” , 此时递归合并节点x和节点y的左子树</li>
+</ul>
+<p><img src="/images/1588753-20200318215436748-697279789.png" alt=""></p>
+<p>merge(x,y)表示将以x为根的树和以y为根的树合并同时返回合并后的根节点</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">merge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == x || <span class="hljs-number">0</span> == y) <span class="hljs-keyword">return</span> x + y;
+    <span class="hljs-keyword">if</span> (tree[x].key &lt; tree[y].key) &#123;
+        tree[x].r = <span class="hljs-built_in">merge</span>(tree[x].r, y);
+        <span class="hljs-built_in">update</span>(x);
+        <span class="hljs-keyword">return</span> x;
+    &#125;
+    <span class="hljs-keyword">else</span> &#123;
+        tree[y].l = <span class="hljs-built_in">merge</span>(x, tree[y].l);
+        <span class="hljs-built_in">update</span>(y);
+        <span class="hljs-keyword">return</span> y;
+    &#125;
+&#125;
+</code></pre></div>
+<p>有了分裂split和合并merge操作之后, 二叉搜索树的基本操作就能用这两个操作来表示出来, 以插入操作为例, 假设需要插入节点的值为val, 我们先可以将树按val分裂成两棵树, 再将第一棵树, 新节点, 第二棵树按照顺序依次合并成一棵树</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y;
+    <span class="hljs-built_in">split</span>(root, val, x, y);
+    root = <span class="hljs-built_in">merge</span>(<span class="hljs-built_in">merge</span>(x, <span class="hljs-built_in">newnode</span>(val)), y);
+&#125;
+</code></pre></div>
+<p>例题: <a target="_blank" rel="noopener" href="https://darkbzoj.tk/problem/3224">bzoj-3224普通平衡树</a></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">100010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> M = <span class="hljs-number">1000</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r;
+    <span class="hljs-keyword">int</span> val, key, sz;
+&#125;;
+
+node tree[N];
+<span class="hljs-keyword">int</span> cnt, root, t;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    tree[++cnt].val = val;
+    tree[cnt].key = <span class="hljs-built_in">rand</span>() % M;
+    tree[cnt].sz = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now)</span>
+</span>&#123;
+    tree[now].sz = tree[tree[now].l].sz + tree[tree[now].r].sz + <span class="hljs-number">1</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">split</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now, <span class="hljs-keyword">int</span> val, <span class="hljs-keyword">int</span> &amp;x, <span class="hljs-keyword">int</span> &amp;y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) &#123;
+        x = y = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-keyword">if</span> (tree[now].val &lt;= val) &#123;
+        x = now;
+        <span class="hljs-built_in">split</span>(tree[now].r, val, tree[now].r, y);
+    &#125;
+    <span class="hljs-keyword">else</span> &#123;
+        y = now;
+        <span class="hljs-built_in">split</span>(tree[now].l, val, x, tree[now].l);
+    &#125;
+    <span class="hljs-built_in">update</span>(now);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">merge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == x || <span class="hljs-number">0</span> == y) <span class="hljs-keyword">return</span> x + y;
+    <span class="hljs-keyword">if</span> (tree[x].key &lt; tree[y].key) &#123;
+        tree[x].r = <span class="hljs-built_in">merge</span>(tree[x].r, y);
+        <span class="hljs-built_in">update</span>(x);
+        <span class="hljs-keyword">return</span> x;
+    &#125;
+    <span class="hljs-keyword">else</span> &#123;
+        tree[y].l = <span class="hljs-built_in">merge</span>(x, tree[y].l);
+        <span class="hljs-built_in">update</span>(y);
+        <span class="hljs-keyword">return</span> y;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y;
+    <span class="hljs-built_in">split</span>(root, val, x, y);
+    root = <span class="hljs-built_in">merge</span>(<span class="hljs-built_in">merge</span>(x, <span class="hljs-built_in">newnode</span>(val)), y);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">del</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y, z;
+    <span class="hljs-built_in">split</span>(root, val, x, z);
+    <span class="hljs-built_in">split</span>(x, val - <span class="hljs-number">1</span>, x, y);
+    y = <span class="hljs-built_in">merge</span>(tree[y].l, tree[y].r);
+    root = <span class="hljs-built_in">merge</span>(<span class="hljs-built_in">merge</span>(x, y), z);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">qr</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y;
+    <span class="hljs-built_in">split</span>(root, val - <span class="hljs-number">1</span>, x, y);
+    <span class="hljs-keyword">int</span> res = tree[x].sz + <span class="hljs-number">1</span>;
+    root = <span class="hljs-built_in">merge</span>(x, y);
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">qn</span><span class="hljs-params">(<span class="hljs-keyword">int</span> rank)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> now = root;
+    <span class="hljs-keyword">while</span> (now) &#123;
+        <span class="hljs-keyword">if</span> (tree[tree[now].l].sz + <span class="hljs-number">1</span> == rank) <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tree[tree[now].l].sz &gt;= rank)
+            now = tree[now].l;
+        <span class="hljs-keyword">else</span> &#123;
+            rank = rank - tree[tree[now].l].sz - <span class="hljs-number">1</span>;
+            now = tree[now].r;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> tree[now].val;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">pre</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y;
+    <span class="hljs-built_in">split</span>(root, val - <span class="hljs-number">1</span>, x, y);
+    <span class="hljs-keyword">int</span> now = x;
+    <span class="hljs-keyword">while</span> (tree[now].r) now = tree[now].r;
+    <span class="hljs-keyword">int</span> res = tree[now].val;
+    root = <span class="hljs-built_in">merge</span>(x, y);
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">nex</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y;
+    <span class="hljs-built_in">split</span>(root, val, x, y);
+    <span class="hljs-keyword">int</span> now = y;
+    <span class="hljs-keyword">while</span> (tree[now].l) now = tree[now].l;
+    <span class="hljs-keyword">int</span> res = tree[now].val;
+    root = <span class="hljs-built_in">merge</span>(x, y);
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;t);
+    <span class="hljs-keyword">while</span> (t--) &#123;
+        <span class="hljs-keyword">int</span> opt, x;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;opt, &amp;x);
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> == opt) <span class="hljs-built_in">insert</span>(x);
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">2</span> == opt) <span class="hljs-built_in">del</span>(x);
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">3</span> == opt) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qr</span>(x));
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">4</span> == opt) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qn</span>(x));
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">5</span> == opt) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">pre</span>(x));
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">6</span> == opt) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">nex</span>(x));
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<p>fhq-Treap还可以对区间信息进行维护, 包括区间反转, 区间交换等等, 这时就需要按大小进行分裂, fhq-Treap对区间[l,r]操作的核心思想仍然是分裂, 将区间[l,r]直接从树中分裂出来</p>
+<p>fhq-Treap对区间的操作和线段树类似, 需要维护一个懒标记, 当进行分裂和合并时需要下传懒标记</p>
+<p>此时fhq-Treap仍然用随机的关键值key维护堆的性质, 但不再用节点的权值维护二叉树的性质, 而是用该点在序列中的位置来维护二叉树的性质, 显然对这棵树中序遍历一遍就可以得到原序列</p>
+<p>注意: 这个 “该点在序列中的位置” 并不会体现在代码中, 在分裂时而是通过当前节点now左子树的大小与需要分裂的大小sz的大小关系来决定是向左子树移动还是向右子树移动</p>
+<p>分裂时, 如果当前节点now左子树的大小小于还需要分裂的大小sz, 那么当前节点now和now的左子树都应该属于第一棵树, 同时递归分裂now的右子树, 此时还需要分裂的大小sz应该减去刚刚分裂出的树的大小(now左子树的大小+1), 同理, 如果前节点now左子树的大小大于等于还需要分裂的大小sz, 则应该递归分裂now的左子树</p>
+<p>由于这棵树是按该点在序列中的位置来维护二叉树性质的, 所以分裂后第一棵树表示的区间就是[1,sz], 其他节点在第二棵树上</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">split</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now, <span class="hljs-keyword">int</span> sz, <span class="hljs-keyword">int</span> &amp;x, <span class="hljs-keyword">int</span> &amp;y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) x = y = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">else</span> &#123;
+        <span class="hljs-built_in">pushdown</span>(now);
+        <span class="hljs-keyword">if</span> (tree[tree[now].l].sz &lt; sz) &#123;
+            x = now;
+            <span class="hljs-built_in">split</span>(tree[now].r, sz - tree[tree[now].l].sz - <span class="hljs-number">1</span>, tree[now].r, y);
+        &#125;
+        <span class="hljs-keyword">else</span> &#123;
+            y = now;
+            <span class="hljs-built_in">split</span>(tree[now].l, sz, x, tree[now].l);
+        &#125;
+        <span class="hljs-built_in">update</span>(now);
+    &#125;
+&#125;
+</code></pre></div>
+<p>因为仍然使用关键值key维护fhq-Treap堆的性质, 所以合并merge和按值分裂只多了把懒标记向下传递的过程</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">merge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == x || <span class="hljs-number">0</span> == y) <span class="hljs-keyword">return</span> x + y;
+    <span class="hljs-keyword">if</span> (tree[x].key &lt; tree[y].key) &#123;
+        <span class="hljs-built_in">pushdown</span>(x);
+        tree[x].r = <span class="hljs-built_in">merge</span>(tree[x].r, y);
+        <span class="hljs-built_in">update</span>(x);
+        <span class="hljs-keyword">return</span> x;
+    &#125;
+    <span class="hljs-keyword">else</span> &#123;
+        <span class="hljs-built_in">pushdown</span>(y);
+        tree[y].l = <span class="hljs-built_in">merge</span>(x, tree[y].l);
+        <span class="hljs-built_in">update</span>(y);
+        <span class="hljs-keyword">return</span> y;
+    &#125;
+&#125;
+</code></pre></div>
+<p>有了分裂split和合并merge操作之后, 对于区间[l,r], 可以先分裂出[1,r]区间, 再将区间[1,r]分裂为[1,l-1]和[l,r]两个区间</p>
+<p>例题: <a target="_blank" rel="noopener" href="http://poj.org/problem?id=3580">poj-3580 SuperMemo</a></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> M = <span class="hljs-number">1000</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> INF = <span class="hljs-number">0x3f3f3f3f</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r, key, sz, rev;
+    <span class="hljs-keyword">int</span> val, imin, lz;
+&#125;;
+
+node tree[N];
+<span class="hljs-keyword">int</span> cnt, root, t, n, m;
+<span class="hljs-keyword">char</span> s[M];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">flip</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-built_in">swap</span>(tree[x].l, tree[x].r);
+    tree[tree[x].l].rev ^= <span class="hljs-number">1</span>;
+    tree[tree[x].r].rev ^= <span class="hljs-number">1</span>;
+    tree[x].rev = <span class="hljs-number">0</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == x) <span class="hljs-keyword">return</span>;
+    tree[x].val += val;
+    tree[x].imin += val;
+    tree[x].lz += val;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    tree[x].sz = tree[tree[x].l].sz + tree[tree[x].r].sz + <span class="hljs-number">1</span>;
+    tree[x].imin = <span class="hljs-built_in">min</span>(tree[x].val, <span class="hljs-built_in">min</span>(tree[tree[x].l].imin, tree[tree[x].r].imin));
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">pushdown</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (tree[x].rev) <span class="hljs-built_in">flip</span>(x);
+    <span class="hljs-keyword">if</span> (tree[x].lz) &#123;
+        <span class="hljs-built_in">add</span>(tree[x].l, tree[x].lz);
+        <span class="hljs-built_in">add</span>(tree[x].r, tree[x].lz);
+        tree[x].lz = <span class="hljs-number">0</span>;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    tree[++cnt].val = val;
+    tree[cnt].imin = val;
+    tree[cnt].key = <span class="hljs-built_in">rand</span>() % M;
+    tree[cnt].sz = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">split</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now, <span class="hljs-keyword">int</span> sz, <span class="hljs-keyword">int</span> &amp;x, <span class="hljs-keyword">int</span> &amp;y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) x = y = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">else</span> &#123;
+        <span class="hljs-built_in">pushdown</span>(now);
+        <span class="hljs-keyword">if</span> (tree[tree[now].l].sz &lt; sz) &#123;
+            x = now;
+            <span class="hljs-built_in">split</span>(tree[now].r, sz - tree[tree[now].l].sz - <span class="hljs-number">1</span>, tree[now].r, y);
+        &#125;
+        <span class="hljs-keyword">else</span> &#123;
+            y = now;
+            <span class="hljs-built_in">split</span>(tree[now].l, sz, x, tree[now].l);
+        &#125;
+        <span class="hljs-built_in">update</span>(now);
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">merge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == x || <span class="hljs-number">0</span> == y) <span class="hljs-keyword">return</span> x + y;
+    <span class="hljs-keyword">if</span> (tree[x].key &lt; tree[y].key) &#123;
+        <span class="hljs-built_in">pushdown</span>(x);
+        tree[x].r = <span class="hljs-built_in">merge</span>(tree[x].r, y);
+        <span class="hljs-built_in">update</span>(x);
+        <span class="hljs-keyword">return</span> x;
+    &#125;
+    <span class="hljs-keyword">else</span> &#123;
+        <span class="hljs-built_in">pushdown</span>(y);
+        tree[y].l = <span class="hljs-built_in">merge</span>(x, tree[y].l);
+        <span class="hljs-built_in">update</span>(y);
+        <span class="hljs-keyword">return</span> y;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y;
+    <span class="hljs-built_in">split</span>(root, k, x, y);
+    root = <span class="hljs-built_in">merge</span>(<span class="hljs-built_in">merge</span>(x, <span class="hljs-built_in">newnode</span>(val)), y);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">del</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y, z;
+    <span class="hljs-built_in">split</span>(root, k - <span class="hljs-number">1</span>, x, y);
+    <span class="hljs-built_in">split</span>(y, <span class="hljs-number">1</span>, y, z);
+    root = <span class="hljs-built_in">merge</span>(x, z);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">qimin</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y, z;
+    <span class="hljs-built_in">split</span>(root, r, x, z);
+    <span class="hljs-built_in">split</span>(x, l - <span class="hljs-number">1</span>, x, y);
+    <span class="hljs-keyword">int</span> res = tree[y].imin;
+    root = <span class="hljs-built_in">merge</span>(x, <span class="hljs-built_in">merge</span>(y, z));
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">qadd</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y, z;
+    <span class="hljs-built_in">split</span>(root, r, x, z);
+    <span class="hljs-built_in">split</span>(x, l - <span class="hljs-number">1</span>, x, y);
+    <span class="hljs-built_in">add</span>(y, val);
+    root = <span class="hljs-built_in">merge</span>(x, <span class="hljs-built_in">merge</span>(y, z));
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">qreverse</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> x, y, z;
+    <span class="hljs-built_in">split</span>(root, r, x, z);
+    <span class="hljs-built_in">split</span>(x, l - <span class="hljs-number">1</span>, x, y);
+    tree[y].rev ^= <span class="hljs-number">1</span>;
+    root = <span class="hljs-built_in">merge</span>(x, <span class="hljs-built_in">merge</span>(y, z));
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">qrevolve</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r, <span class="hljs-keyword">int</span> len)</span>
+</span>&#123;
+    len %= (r - l + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == len) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">int</span> x, y, z, k;
+    <span class="hljs-built_in">split</span>(root, r, x, k);
+    <span class="hljs-built_in">split</span>(x, l - <span class="hljs-number">1</span>, x, y);
+    <span class="hljs-built_in">split</span>(y, r - l + <span class="hljs-number">1</span> - len, y, z);
+    root = <span class="hljs-built_in">merge</span>(x, <span class="hljs-built_in">merge</span>(<span class="hljs-built_in">merge</span>(z, y), k));
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    tree[<span class="hljs-number">0</span>].val = tree[<span class="hljs-number">0</span>].imin = INF;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">int</span> val;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;val);
+        root = <span class="hljs-built_in">merge</span>(root, <span class="hljs-built_in">newnode</span>(val));
+    &#125;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;m);
+    <span class="hljs-keyword">while</span> (m--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, s + <span class="hljs-number">1</span>);
+        <span class="hljs-keyword">int</span> l, r, k, val;
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;A&#x27;</span> == s[<span class="hljs-number">1</span>]) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>, &amp;l, &amp;r, &amp;val);
+            <span class="hljs-built_in">qadd</span>(l, r, val);
+        &#125;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;R&#x27;</span> == s[<span class="hljs-number">1</span>] &amp;&amp; <span class="hljs-string">&#x27;E&#x27;</span> == s[<span class="hljs-number">4</span>]) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;l, &amp;r);
+            <span class="hljs-built_in">qreverse</span>(l, r);
+        &#125;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;R&#x27;</span> == s[<span class="hljs-number">1</span>] &amp;&amp; <span class="hljs-string">&#x27;O&#x27;</span> == s[<span class="hljs-number">4</span>]) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>, &amp;l, &amp;r, &amp;k);
+            <span class="hljs-built_in">qrevolve</span>(l, r, k);
+        &#125;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;I&#x27;</span> == s[<span class="hljs-number">1</span>]) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;l, &amp;val);
+            <span class="hljs-built_in">insert</span>(l, val);
+        &#125;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;D&#x27;</span> == s[<span class="hljs-number">1</span>]) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;l);
+            <span class="hljs-built_in">del</span>(l);
+        &#125;
+        <span class="hljs-keyword">else</span> &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;l, &amp;r);
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qimin</span>(l, r));
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<p>fhq-Treap最大的缺点就是常数很大, 有时候会被卡, Splay常数小, 不容易被卡</p>
+<p><strong>AVL树</strong></p>
+<p>AVL树为了维持树的平衡, 引入了平衡因子BF的概念, 平衡因子=左子树树高-右子树树高(右子树树高-左子树树高)</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r;   <span class="hljs-comment">// 左右子树</span>
+    <span class="hljs-keyword">int</span> val;    <span class="hljs-comment">// 节点权值</span>
+    <span class="hljs-keyword">int</span> h;      <span class="hljs-comment">// 树高</span>
+    <span class="hljs-keyword">int</span> sz;     <span class="hljs-comment">// 以该节点为根的子树大小</span>
+&#125;;
+</code></pre></div>
+<p>AVL树中每个节点的平衡因子只能为-1, 0或1, 当某个节点的平衡因子过大或者过小时, 则通过树旋转的方式来让树恢复平衡, 显然AVL树的树高为<span class="markdown-them-math-inline">$O(logn)$</span>, 每次操作的时间复杂度为<span class="markdown-them-math-inline">$O(logn)$</span></p>
+<p>向一棵平衡的AVL数中插入或者删除一个节点, 在没有调整前, 树中每个节点平衡因子的取值只能为-2, -1, 0, 1或2</p>
+<p>那么以下四种情况需要调整:</p>
+<p>LL: 在当前节点now左子树的左子树上插入节点导致树不平衡, 此时now的BF&gt;1, now左子树的BF&gt;0(插入之前可能为0或者1), 右旋当前节点now使树平衡<br>
+LR: 在当前节点now左子树的右子树上插入节点导致树不平衡, 此时now的BF&gt;1, 而now右子树的BF&lt;=0(插入之前可能为1, 0, -1), 先左旋now的左子树, 再右旋当前节点使树平衡<br>
+RL: 在当前节点now右子树的左子树上插入节点导致树不平衡, 先右旋now的右子树, 再左旋当前节点使树平衡<br>
+RR: 在当前节点now右子树的右子树上插入节点导致树不平衡, 左旋当前节点 now使树平衡<br>
+旋转之后需要更新当前节点now和now左右子树的大小、树高</p>
+<p>zag表示左旋, zig表示右旋, check检查当前节点now是否平衡</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">calc</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> tree[tree[now].l].h - tree[tree[now].r].h;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">zag</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> r = tree[now].r;
+    tree[now].r = tree[r].l;
+    tree[r].l = now;
+    now = r;
+    <span class="hljs-built_in">update</span>(tree[now].l);
+    <span class="hljs-built_in">update</span>(now);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">zig</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> l = tree[now].l;
+    tree[now].l = tree[l].r;
+    tree[l].r = now;
+    now = l;
+    <span class="hljs-built_in">update</span>(tree[now].r);
+    <span class="hljs-built_in">update</span>(now);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">check</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> nf = <span class="hljs-built_in">calc</span>(now);
+    <span class="hljs-keyword">if</span> (nf &gt; <span class="hljs-number">1</span>) &#123;
+        <span class="hljs-keyword">int</span> lf = <span class="hljs-built_in">calc</span>(tree[now].l);
+        <span class="hljs-keyword">if</span> (lf &gt; <span class="hljs-number">0</span>) <span class="hljs-built_in">zig</span>(now);
+        <span class="hljs-keyword">else</span> &#123;
+            <span class="hljs-built_in">zag</span>(tree[now].l);
+            <span class="hljs-built_in">zig</span>(now);
+        &#125;
+    &#125;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nf &lt; <span class="hljs-number">-1</span>) &#123;
+        <span class="hljs-keyword">int</span> rf = <span class="hljs-built_in">calc</span>(tree[now].r);
+        <span class="hljs-keyword">if</span> (rf &lt; <span class="hljs-number">0</span>) <span class="hljs-built_in">zag</span>(now);
+        <span class="hljs-keyword">else</span> &#123;
+            <span class="hljs-built_in">zig</span>(tree[now].r);
+            <span class="hljs-built_in">zag</span>(now);
+        &#125;
+    &#125;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (now) <span class="hljs-built_in">update</span>(now);
+&#125;
+</code></pre></div>
+<p>AVL的插入操作和二叉搜索树几乎没有区别, 只是在插入后, 自下而上回溯检查路径上的节点是否平衡, 所以采用头递归的方式插入</p>
+<p>对于删除操作, 如果需要删除的节点只有一个儿子节点或者没有儿子节点, 那么直接删除就可以了, 对于有双儿子的节点, AVL树有两种删除方法:</p>
+<p>将需要删除的节点旋转到叶子节点, 直接删除即可<br>
+先找到需要删除节点的后继节点, 用后继节点代替自己的位置, 由于后继节点一定没有左儿子, 所以后继节点直接删除即可<br>
+无论哪种方法, 同样在删除后, 需要自下而上回溯检查路径上的节点是否平衡</p>
+<p>查询某个数的排名qrank(x)和查询某个排名上的数qnum(x)和替罪羊树差不多, 只是替罪羊树每个节点可能是多个相同的数, 而AVL每个节点都只表示一个数</p>
+<p>例题: <a target="_blank" rel="noopener" href="https://darkbzoj.tk/problem/3224">bzoj-3224普通平衡树</a></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">100010</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r, val;
+    <span class="hljs-keyword">int</span> h, sz;  
+&#125;;
+
+node tree[N];
+<span class="hljs-keyword">int</span> cnt, root, n;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    now = ++cnt;
+    tree[now].val = val;
+    tree[now].sz = <span class="hljs-number">1</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now)</span>
+</span>&#123;
+    tree[now].sz = tree[tree[now].l].sz + tree[tree[now].r].sz + <span class="hljs-number">1</span>;
+    tree[now].h = <span class="hljs-built_in">max</span>(tree[tree[now].l].h, tree[tree[now].r].h) + <span class="hljs-number">1</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">calc</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> tree[tree[now].l].h - tree[tree[now].r].h;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">zag</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> r = tree[now].r;
+    tree[now].r = tree[r].l;
+    tree[r].l = now;
+    now = r;
+    <span class="hljs-built_in">update</span>(tree[now].l);
+    <span class="hljs-built_in">update</span>(now);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">zig</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> l = tree[now].l;
+    tree[now].l = tree[l].r;
+    tree[l].r = now;
+    now = l;
+    <span class="hljs-built_in">update</span>(tree[now].r);
+    <span class="hljs-built_in">update</span>(now);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">check</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> nf = <span class="hljs-built_in">calc</span>(now);
+    <span class="hljs-keyword">if</span> (nf &gt; <span class="hljs-number">1</span>) &#123;
+        <span class="hljs-keyword">int</span> lf = <span class="hljs-built_in">calc</span>(tree[now].l);
+        <span class="hljs-keyword">if</span> (lf &gt; <span class="hljs-number">0</span>) <span class="hljs-built_in">zig</span>(now);
+        <span class="hljs-keyword">else</span> &#123;
+            <span class="hljs-built_in">zag</span>(tree[now].l);
+            <span class="hljs-built_in">zig</span>(now);
+        &#125;
+    &#125;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nf &lt; <span class="hljs-number">-1</span>) &#123;
+        <span class="hljs-keyword">int</span> rf = <span class="hljs-built_in">calc</span>(tree[now].r);
+        <span class="hljs-keyword">if</span> (rf &lt; <span class="hljs-number">0</span>) <span class="hljs-built_in">zag</span>(now);
+        <span class="hljs-keyword">else</span> &#123;
+            <span class="hljs-built_in">zig</span>(tree[now].r);
+            <span class="hljs-built_in">zag</span>(now);
+        &#125;
+    &#125;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (now) <span class="hljs-built_in">update</span>(now);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) <span class="hljs-built_in">newnode</span>(now, val);
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (val &lt; tree[now].val) <span class="hljs-built_in">insert</span>(tree[now].l, val);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">insert</span>(tree[now].r, val);
+    <span class="hljs-built_in">check</span>(now);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> fa)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == tree[now].l) &#123;
+        res = now;
+        tree[fa].l = tree[now].r;
+    &#125;
+    <span class="hljs-keyword">else</span> &#123;
+        res = <span class="hljs-built_in">find</span>(tree[now].l, now);
+        <span class="hljs-built_in">check</span>(now);
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">del</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (val == tree[now].val) &#123;
+        <span class="hljs-keyword">int</span> l = tree[now].l, r = tree[now].r;
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == l || <span class="hljs-number">0</span> == r) now = l + r;
+        <span class="hljs-keyword">else</span> &#123;
+            now = <span class="hljs-built_in">find</span>(r, r);
+            <span class="hljs-keyword">if</span> (now != r) tree[now].r = r;
+            tree[now].l = l;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (val &lt; tree[now].val) <span class="hljs-built_in">del</span>(tree[now].l, val);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">del</span>(tree[now].r, val);
+    <span class="hljs-built_in">check</span>(now);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">qrank</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> now = root, rank = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (now) &#123;
+        <span class="hljs-keyword">if</span> (val &lt;= tree[now].val) now = tree[now].l;
+        <span class="hljs-keyword">else</span> &#123;
+            rank = rank + tree[tree[now].l].sz + <span class="hljs-number">1</span>;
+            now = tree[now].r;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> rank;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">qnum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> rank)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> now = root;
+    <span class="hljs-keyword">while</span> (now) &#123;
+        <span class="hljs-keyword">if</span> (tree[tree[now].l].sz + <span class="hljs-number">1</span> == rank) <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tree[tree[now].l].sz &gt;= rank) now = tree[now].l;
+        <span class="hljs-keyword">else</span> &#123;
+            rank = rank - tree[tree[now].l].sz - <span class="hljs-number">1</span>;
+            now = tree[now].r;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> tree[now].val;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">int</span> op, x;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;op, &amp;x);
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> == op) <span class="hljs-built_in">insert</span>(root, x);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">2</span> == op) <span class="hljs-built_in">del</span>(root, x);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">3</span> == op) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qrank</span>(x));
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">4</span> == op) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qnum</span>(x));
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">5</span> == op) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qnum</span>(<span class="hljs-built_in">qrank</span>(x) - <span class="hljs-number">1</span>));
+        <span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qnum</span>(<span class="hljs-built_in">qrank</span>(x + <span class="hljs-number">1</span>)));
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<p><strong>Splay</strong></p>
+<p>在Splay上一系列操作都基于伸展操作, 伸展操作能够让出现频率(包括查询, 插入, 删除)较高的元素能够更靠近根节点, 从而使查询、插入、删除整体的时间的变少</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r;   <span class="hljs-comment">// 左右子树</span>
+    <span class="hljs-keyword">int</span> val;    <span class="hljs-comment">// 节点权值</span>
+    <span class="hljs-keyword">int</span> sz;     <span class="hljs-comment">// 以该节点为根的子树大小</span>
+    <span class="hljs-keyword">int</span> cnt;    <span class="hljs-comment">// 数据出现的次数</span>
+&#125;;
+</code></pre></div>
+<p>Splay在每次操作后, 一般把节点伸展到根节点处, 而伸展操作又是通过左旋和右旋来实现的, 分为以下六种情况, 每种情况都是将x节点伸展到根节点处</p>
+<p><img src="/images/1588753-20200319163714589-1349866726.png" alt=""></p>
+<p>情况1: 对y右旋就可以将x节点伸展到根节点处, 称为zig</p>
+<p>情况2: 对y左旋就可以将x节点伸展到根节点处, 称为zag</p>
+<p>情况3: 先对节点z右旋, 再对节点y右旋即可, 称为zig-zig</p>
+<p>情况4: 与情况3相反, 先对节点左旋, 再对节点y左旋即可, 称为zag-zag</p>
+<p>情况5: 先左旋节点y, 再右旋节点z即可, 称为zag-zig</p>
+<p>情况6: 与情况5相反, 先右旋节点y, 再左旋节点z, 称为zig-zag</p>
+<p><img src="/images/1588753-20200319165751103-218677334.png" alt=""></p>
+<p>如果需要将x节点伸展到y节点处, 我们只需要递归把x节点伸展到z节点处, 然后按照情况3处理即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">splaying</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> &amp;y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (x == y) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">int</span> &amp;l = spl[y].l, &amp;r = spl[y].r;
+    <span class="hljs-keyword">if</span> (x == l) <span class="hljs-built_in">zig</span>(y);
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (x == r) <span class="hljs-built_in">zag</span>(y);
+    <span class="hljs-keyword">else</span> &#123;
+        <span class="hljs-keyword">if</span> (spl[x].val &lt; spl[y].val) &#123;
+            <span class="hljs-keyword">if</span>(spl[x].val &lt; spl[l].val) &#123;
+                <span class="hljs-built_in">splaying</span>(x, spl[l].l);
+                <span class="hljs-built_in">zig</span>(y), <span class="hljs-built_in">zig</span>(y);
+            &#125;
+            <span class="hljs-keyword">else</span> &#123;
+                <span class="hljs-built_in">splaying</span>(x, spl[l].r);
+                <span class="hljs-built_in">zag</span>(l), <span class="hljs-built_in">zig</span>(y);
+            &#125;
+        &#125;
+        <span class="hljs-keyword">else</span> &#123;
+            <span class="hljs-keyword">if</span> (spl[x].val &gt; spl[r].val) &#123;
+                <span class="hljs-built_in">splaying</span>(x, spl[r].r);
+                <span class="hljs-built_in">zag</span>(y), <span class="hljs-built_in">zag</span>(y);
+            &#125;
+            <span class="hljs-keyword">else</span> &#123;
+                <span class="hljs-built_in">splaying</span>(x, spl[r].l);
+                <span class="hljs-built_in">zig</span>(r), <span class="hljs-built_in">zag</span>(y);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre></div>
+<p>注意: zig、zag函数的参数是引用传递, 旋转后节点会发生改变, 所以情况3执行的是zig(y), zig(y), splaying函数递归的出口是情况1和情况2</p>
+<p>splay的插入操作和二叉树的插入操作差不多, 插入后, 将新插入的节点旋转到根节点即可</p>
+<p>对于删除操作, splay则是先把需要删除的节点now伸展到根节点, 找到节点now的后继节点, 将后继节点伸展为根节点的右儿子, 显然被伸展过的后继节点没有左儿子, 此时我们只需要将后继节点的左儿子指向根节点的左儿子, 将根节点指向这个后继节点即可, 删除后需要更新根节点的sz</p>
+<p><img src="/images/1588753-20200319171955492-2122972566.png" alt=""></p>
+<p>查询某个数的排名qrank(x)和查询某个排名上的数qnum(x)和替罪羊树差不多, 只是在查询之后, 需要将查询到的节点伸展到根节点</p>
+<p>例题: <a target="_blank" rel="noopener" href="https://darkbzoj.tk/problem/3224">bzoj-3224普通平衡树</a></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">100010</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r, val;
+    <span class="hljs-keyword">int</span> sz, cnt;
+&#125;;
+
+node spl[N];
+<span class="hljs-keyword">int</span> cnt, root, n;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    now = ++cnt;
+    spl[now].val = val;
+    spl[now].sz++;
+    spl[now].cnt++;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now)</span>
+</span>&#123;
+    spl[now].sz = spl[spl[now].l].sz + spl[spl[now].r].sz + spl[now].cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">zig</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> l = spl[now].l;
+    spl[now].l = spl[l].r;
+    spl[l].r = now;
+    now = l;
+    <span class="hljs-built_in">update</span>(spl[now].r);
+    <span class="hljs-built_in">update</span>(now);
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">zag</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> r = spl[now].r;
+    spl[now].r = spl[r].l;
+    spl[r].l = now;
+    now = r;
+    <span class="hljs-built_in">update</span>(spl[now].l);
+    <span class="hljs-built_in">update</span>(now);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">splaying</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> &amp;y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (x == y) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">int</span> &amp;l = spl[y].l, &amp;r = spl[y].r;
+    <span class="hljs-keyword">if</span> (x == l) <span class="hljs-built_in">zig</span>(y);
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (x == r) <span class="hljs-built_in">zag</span>(y);
+    <span class="hljs-keyword">else</span> &#123;
+        <span class="hljs-keyword">if</span> (spl[x].val &lt; spl[y].val) &#123;
+            <span class="hljs-keyword">if</span>(spl[x].val &lt; spl[l].val) &#123;
+                <span class="hljs-built_in">splaying</span>(x, spl[l].l);
+                <span class="hljs-built_in">zig</span>(y), <span class="hljs-built_in">zig</span>(y);
+            &#125;
+            <span class="hljs-keyword">else</span> &#123;
+                <span class="hljs-built_in">splaying</span>(x, spl[l].r);
+                <span class="hljs-built_in">zag</span>(l), <span class="hljs-built_in">zig</span>(y);
+            &#125;
+        &#125;
+        <span class="hljs-keyword">else</span> &#123;
+            <span class="hljs-keyword">if</span> (spl[x].val &gt; spl[r].val) &#123;
+                <span class="hljs-built_in">splaying</span>(x, spl[r].r);
+                <span class="hljs-built_in">zag</span>(y), <span class="hljs-built_in">zag</span>(y);
+            &#125;
+            <span class="hljs-keyword">else</span> &#123;
+                <span class="hljs-built_in">splaying</span>(x, spl[r].l);
+                <span class="hljs-built_in">zig</span>(r), <span class="hljs-built_in">zag</span>(y);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">delnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now)</span>
+</span>&#123;
+    <span class="hljs-built_in">splaying</span>(now, root);
+    <span class="hljs-keyword">if</span> (spl[now].cnt &gt; <span class="hljs-number">1</span>) &#123;
+        spl[now].sz--;
+        spl[now].cnt--;
+    &#125;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (spl[root].r) &#123;
+        <span class="hljs-keyword">int</span> p = spl[root].r;
+        <span class="hljs-keyword">while</span> (spl[p].l) p = spl[p].l;
+        <span class="hljs-built_in">splaying</span>(p, spl[root].r);
+        spl[spl[root].r].l = spl[root].l;
+        root = spl[root].r;
+        <span class="hljs-built_in">update</span>(root);
+    &#125;
+    <span class="hljs-keyword">else</span> root = spl[root].l;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) &#123;
+        <span class="hljs-built_in">newnode</span>(now, val);
+        <span class="hljs-built_in">splaying</span>(now, root);
+    &#125;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (val &lt; spl[now].val) <span class="hljs-built_in">insert</span>(spl[now].l, val);
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (val &gt; spl[now].val) <span class="hljs-built_in">insert</span>(spl[now].r, val);
+    <span class="hljs-keyword">else</span> &#123;
+        spl[now].sz++;
+        spl[now].cnt++;
+        <span class="hljs-built_in">splaying</span>(now, root);
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">del</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now, <span class="hljs-keyword">int</span> &amp;val)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (spl[now].val == val) <span class="hljs-built_in">delnode</span>(now);
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (val &lt; spl[now].val) <span class="hljs-built_in">del</span>(spl[now].l, val);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">del</span>(spl[now].r, val);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">qrank</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> now = root, rank = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (now) &#123;
+        <span class="hljs-keyword">if</span> (spl[now].val == val) &#123;
+            rank += spl[spl[now].l].sz;
+            <span class="hljs-built_in">splaying</span>(now, root);
+            <span class="hljs-keyword">break</span>;
+        &#125;
+        <span class="hljs-keyword">if</span> (val &lt;= spl[now].val) now = spl[now].l;
+        <span class="hljs-keyword">else</span> &#123;
+            rank = rank + spl[spl[now].l].sz + spl[now].cnt;
+            now = spl[now].r;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> rank;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">qnum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> rank)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> now = root;
+    <span class="hljs-keyword">while</span> (now) &#123;
+        <span class="hljs-keyword">int</span> lz = spl[spl[now].l].sz;
+        <span class="hljs-keyword">if</span> (lz + <span class="hljs-number">1</span> &lt;= rank &amp;&amp; rank &lt;= lz + spl[now].cnt) &#123;
+            <span class="hljs-built_in">splaying</span>(now, root);
+            <span class="hljs-keyword">break</span>;
+        &#125;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (lz &gt;= rank) now = spl[now].l;
+        <span class="hljs-keyword">else</span> &#123;
+            rank = rank - lz - spl[now].cnt;
+            now = spl[now].r;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> spl[now].val;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">int</span> op, x;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;op, &amp;x);
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> == op) <span class="hljs-built_in">insert</span>(root, x);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">2</span> == op) <span class="hljs-built_in">del</span>(root, x);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">3</span> == op) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qrank</span>(x));
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">4</span> == op) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qnum</span>(x));
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">5</span> == op) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qnum</span>(<span class="hljs-built_in">qrank</span>(x) - <span class="hljs-number">1</span>));
+        <span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qnum</span>(<span class="hljs-built_in">qrank</span>(x + <span class="hljs-number">1</span>)));
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<p>splay也能像fhq-Treap一样能够对区间进行操作, 同样按照元素在序列中的下标来维护二叉树的性质, 当对区间[l,r]操作时, 可以先将下标为l-1的节点伸展到根节点, 将下标为r+1的节点伸展为根节点的右儿子, 根据二叉搜索树的性质, 显然根节点右儿子的左子树表示的区间就是[l,r], 我们就可以像fhq-Treap、线段树一样用懒标记解决区间问题</p>
+<p><img src="/images/1588753-20200320152418362-1602592872.png" alt=""></p>
+<p>当需要在下标为x的元素后面插入一个新的元素时, 我们可以先把下标为x的节点伸展到根节点, 再将下标为x+1的节点伸展为根节点的右儿子, 根据二叉树的性质, 此时根节点右儿子的左子树为空, 所以将这个新节点变为根节点右儿子的左子树即可</p>
+<p>当需要删除下标为x的元素时, 可以先把下标为x-1的节点伸展到根节点, 再将下标为x+1的节点伸展为根节点的右儿子, 根据二叉树的性质有, 根节点右儿子的左子树就是我们需要删除的那个元素, 直接将根节点右儿子的左子树变为空即可</p>
+<p>注意: 对于splay区间操作, 一般在序列前后各加一个哨兵, 方便处理, 但由于在序列开始加入了哨兵, 当处理序列上的区间[l,r]时, 在splay上的区间应该是[l+1,r+1]</p>
+<p>例题: <a target="_blank" rel="noopener" href="https://darkbzoj.tk/problem/3223">bzoj-3223 文艺平衡树</a></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;vector&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">100010</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> fa, sz, ch[<span class="hljs-number">2</span>], rev;
+&#125;;
+
+node spl[N];
+<span class="hljs-keyword">int</span> n, cnt, root, m;
+vector&lt;<span class="hljs-keyword">int</span>&gt; v;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">ident</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> spl[spl[x].fa].ch[<span class="hljs-number">1</span>] == x;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">connect</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> fa, <span class="hljs-keyword">int</span> k)</span>
+</span>&#123;
+    spl[fa].ch[k] = x;
+    spl[x].fa = fa;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    spl[x].sz = spl[spl[x].ch[<span class="hljs-number">0</span>]].sz + spl[spl[x].ch[<span class="hljs-number">1</span>]].sz + <span class="hljs-number">1</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">pushdown</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == spl[x].rev) <span class="hljs-keyword">return</span>;
+    <span class="hljs-built_in">swap</span>(spl[x].ch[<span class="hljs-number">0</span>], spl[x].ch[<span class="hljs-number">1</span>]);
+    spl[spl[x].ch[<span class="hljs-number">0</span>]].rev ^= <span class="hljs-number">1</span>;
+    spl[spl[x].ch[<span class="hljs-number">1</span>]].rev ^= <span class="hljs-number">1</span>;
+    spl[x].rev = <span class="hljs-number">0</span>;
+&#125;;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">rotate</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> f = spl[x].fa, ff = spl[f].fa, k = <span class="hljs-built_in">ident</span>(x);
+    <span class="hljs-built_in">connect</span>(spl[x].ch[k ^ <span class="hljs-number">1</span>], f, k);
+    <span class="hljs-built_in">connect</span>(x, ff, <span class="hljs-built_in">ident</span>(f));
+    <span class="hljs-built_in">connect</span>(f, x, k ^ <span class="hljs-number">1</span>);
+    <span class="hljs-built_in">update</span>(f);
+    <span class="hljs-built_in">update</span>(x);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">splaying</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> t)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == t) root = x;
+    <span class="hljs-keyword">while</span> (spl[x].fa != t) &#123;
+        <span class="hljs-keyword">int</span> f = spl[x].fa, ff = spl[f].fa;
+        <span class="hljs-keyword">if</span> (ff != t) &#123;
+            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">ident</span>(f) == <span class="hljs-built_in">ident</span>(x)) <span class="hljs-built_in">rotate</span>(f);
+            <span class="hljs-keyword">else</span> <span class="hljs-built_in">rotate</span>(x);
+        &#125;
+        <span class="hljs-built_in">rotate</span>(x);
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> now = root;
+    x--;
+    <span class="hljs-built_in">pushdown</span>(now);
+    <span class="hljs-keyword">while</span> (x != spl[spl[now].ch[<span class="hljs-number">0</span>]].sz) &#123;
+        <span class="hljs-keyword">if</span> (spl[spl[now].ch[<span class="hljs-number">0</span>]].sz &lt; x) &#123;
+            x = x - spl[spl[now].ch[<span class="hljs-number">0</span>]].sz - <span class="hljs-number">1</span>;
+            now = spl[now].ch[<span class="hljs-number">1</span>];
+        &#125;
+        <span class="hljs-keyword">else</span> now = spl[now].ch[<span class="hljs-number">0</span>];
+        <span class="hljs-built_in">pushdown</span>(now);
+    &#125;
+    <span class="hljs-keyword">return</span> now;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">build</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (l &gt; r) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-built_in">connect</span>(<span class="hljs-built_in">build</span>(l, mid - <span class="hljs-number">1</span>), mid, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">connect</span>(<span class="hljs-built_in">build</span>(mid + <span class="hljs-number">1</span>, r), mid, <span class="hljs-number">1</span>);
+    spl[mid].rev = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">update</span>(mid);
+    <span class="hljs-keyword">return</span> mid;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == now) <span class="hljs-keyword">return</span>;
+    <span class="hljs-built_in">pushdown</span>(now);
+    <span class="hljs-built_in">dfs</span>(spl[now].ch[<span class="hljs-number">0</span>]);
+    v.<span class="hljs-built_in">push_back</span>(now);
+    <span class="hljs-built_in">dfs</span>(spl[now].ch[<span class="hljs-number">1</span>]);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);
+    root = <span class="hljs-built_in">build</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">2</span>);
+    <span class="hljs-keyword">while</span> (m--) &#123;
+        <span class="hljs-keyword">int</span> l, r;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;l, &amp;r);
+        <span class="hljs-keyword">int</span> L = <span class="hljs-built_in">find</span>(l), R = <span class="hljs-built_in">find</span>(r + <span class="hljs-number">2</span>);
+        <span class="hljs-built_in">splaying</span>(L, <span class="hljs-number">0</span>);
+        <span class="hljs-built_in">splaying</span>(R, root);
+        spl[spl[R].ch[<span class="hljs-number">0</span>]].rev ^= <span class="hljs-number">1</span>;
+    &#125;
+    <span class="hljs-built_in">dfs</span>(root);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; (<span class="hljs-keyword">int</span>)v.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>; i++) &#123;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d&quot;</span>, v[i] - <span class="hljs-number">1</span>);
+        <span class="hljs-built_in">printf</span>(i == (<span class="hljs-keyword">int</span>)v.<span class="hljs-built_in">size</span>() - <span class="hljs-number">2</span> ? <span class="hljs-string">&quot;\n&quot;</span> : <span class="hljs-string">&quot; &quot;</span>);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<p>例题: <a target="_blank" rel="noopener" href="http://poj.org/problem?id=3580">poj-3580 SuperMemo</a></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> M = <span class="hljs-number">20</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> INF = <span class="hljs-number">0x3f3f3f3f</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> ch[<span class="hljs-number">2</span>], fa, sz;
+    <span class="hljs-keyword">int</span> val, imin, rev, lz;
+&#125;;
+
+node spl[N];
+<span class="hljs-keyword">int</span> n, m, cnt, root, a[N];
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">clear</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    spl[x].ch[<span class="hljs-number">0</span>] = spl[x].ch[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span>;
+    spl[x].fa = spl[x].sz = spl[x].val = <span class="hljs-number">0</span>;
+    spl[x].imin = spl[x].rev = spl[x].lz = <span class="hljs-number">0</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    spl[++cnt].sz = <span class="hljs-number">1</span>;
+    spl[cnt].val = val;
+    spl[cnt].imin = val;
+    <span class="hljs-keyword">return</span> cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">ident</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> spl[spl[x].fa].ch[<span class="hljs-number">1</span>] == x;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    spl[x].sz = spl[spl[x].ch[<span class="hljs-number">0</span>]].sz + spl[spl[x].ch[<span class="hljs-number">1</span>]].sz + <span class="hljs-number">1</span>;
+    spl[x].imin = spl[x].val;
+    <span class="hljs-keyword">if</span> (spl[x].ch[<span class="hljs-number">0</span>]) spl[x].imin = <span class="hljs-built_in">min</span>(spl[x].imin, spl[spl[x].ch[<span class="hljs-number">0</span>]].imin);
+    <span class="hljs-keyword">if</span> (spl[x].ch[<span class="hljs-number">1</span>]) spl[x].imin = <span class="hljs-built_in">min</span>(spl[x].imin, spl[spl[x].ch[<span class="hljs-number">1</span>]].imin);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">connect</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> fa, <span class="hljs-keyword">int</span> k)</span>
+</span>&#123;
+    spl[fa].ch[k] = x;
+    spl[x].fa = fa;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">flip</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    spl[spl[x].ch[<span class="hljs-number">0</span>]].rev ^= <span class="hljs-number">1</span>;
+    spl[spl[x].ch[<span class="hljs-number">1</span>]].rev ^= <span class="hljs-number">1</span>;
+    <span class="hljs-built_in">swap</span>(spl[x].ch[<span class="hljs-number">0</span>], spl[x].ch[<span class="hljs-number">1</span>]);
+    spl[x].rev = <span class="hljs-number">0</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> val)</span>
+</span>&#123;
+    spl[x].val += val;
+    spl[x].imin += val;
+    spl[x].lz += val;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">pushdown</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == x) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">if</span> (spl[x].rev) <span class="hljs-built_in">flip</span>(x);
+    <span class="hljs-keyword">if</span> (spl[x].lz) &#123;
+        <span class="hljs-built_in">add</span>(spl[x].ch[<span class="hljs-number">0</span>], spl[x].lz);
+        <span class="hljs-built_in">add</span>(spl[x].ch[<span class="hljs-number">1</span>], spl[x].lz);
+        spl[x].lz = <span class="hljs-number">0</span>;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">build</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r, <span class="hljs-keyword">int</span> fa)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (l &gt; r) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">int</span> mid = (l + r) &gt;&gt; <span class="hljs-number">1</span>, now = ++cnt;
+    spl[now].fa = fa;
+    spl[now].val = a[mid];
+    spl[now].ch[<span class="hljs-number">0</span>] = <span class="hljs-built_in">build</span>(l, mid - <span class="hljs-number">1</span>, now);
+    spl[now].ch[<span class="hljs-number">1</span>] = <span class="hljs-built_in">build</span>(mid + <span class="hljs-number">1</span>, r, now);
+    <span class="hljs-built_in">update</span>(now);
+    <span class="hljs-keyword">return</span> now;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> now = root;
+    <span class="hljs-keyword">while</span> (now) &#123;
+        <span class="hljs-built_in">pushdown</span>(now);
+        <span class="hljs-keyword">if</span> (x &lt;= spl[spl[now].ch[<span class="hljs-number">0</span>]].sz) now = spl[now].ch[<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">else</span> &#123;
+            x = x - spl[spl[now].ch[<span class="hljs-number">0</span>]].sz - <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == x) <span class="hljs-keyword">break</span>;
+            now = spl[now].ch[<span class="hljs-number">1</span>];
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> now;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">rotate</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> f = spl[x].fa, ff = spl[f].fa, k = <span class="hljs-built_in">ident</span>(x);
+    <span class="hljs-built_in">pushdown</span>(f);
+    <span class="hljs-built_in">pushdown</span>(x);
+    <span class="hljs-built_in">connect</span>(spl[x].ch[k ^ <span class="hljs-number">1</span>], f, k);
+    <span class="hljs-built_in">connect</span>(x, ff, <span class="hljs-built_in">ident</span>(f));
+    <span class="hljs-built_in">connect</span>(f, x, k ^ <span class="hljs-number">1</span>);
+    <span class="hljs-built_in">update</span>(f);
+    <span class="hljs-built_in">update</span>(x);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">splaying</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> t)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == t) root = x;
+    <span class="hljs-keyword">while</span> (spl[x].fa != t) &#123;
+        <span class="hljs-keyword">int</span> f = spl[x].fa, ff = spl[f].fa;
+        <span class="hljs-keyword">if</span> (ff != t) &#123;
+            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">ident</span>(f) == <span class="hljs-built_in">ident</span>(x)) <span class="hljs-built_in">rotate</span>(f);
+            <span class="hljs-keyword">else</span> <span class="hljs-built_in">rotate</span>(x);
+        &#125;
+        <span class="hljs-built_in">rotate</span>(x);
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">qadd</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r, <span class="hljs-keyword">int</span> d)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> ql = <span class="hljs-built_in">find</span>(l), qr = <span class="hljs-built_in">find</span>(r + <span class="hljs-number">2</span>);
+    <span class="hljs-built_in">splaying</span>(ql, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">splaying</span>(qr, root);
+    spl[spl[spl[root].ch[<span class="hljs-number">1</span>]].ch[<span class="hljs-number">0</span>]].imin += d;
+    spl[spl[spl[root].ch[<span class="hljs-number">1</span>]].ch[<span class="hljs-number">0</span>]].val += d;
+    spl[spl[spl[root].ch[<span class="hljs-number">1</span>]].ch[<span class="hljs-number">0</span>]].lz += d;
+    <span class="hljs-built_in">update</span>(spl[root].ch[<span class="hljs-number">1</span>]);
+    <span class="hljs-built_in">update</span>(root);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">qreverse</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (l == r) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">int</span> ql = <span class="hljs-built_in">find</span>(l), qr = <span class="hljs-built_in">find</span>(r + <span class="hljs-number">2</span>);
+    <span class="hljs-built_in">splaying</span>(ql, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">splaying</span>(qr, root);
+    spl[spl[spl[root].ch[<span class="hljs-number">1</span>]].ch[<span class="hljs-number">0</span>]].rev ^= <span class="hljs-number">1</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">qrevolve</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r, <span class="hljs-keyword">int</span> d)</span>
+</span>&#123;
+    d %= (r - l + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == d) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">int</span> ql = <span class="hljs-built_in">find</span>(r - d + <span class="hljs-number">1</span>), qr = <span class="hljs-built_in">find</span>(r + <span class="hljs-number">2</span>);
+    <span class="hljs-built_in">splaying</span>(ql, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">splaying</span>(qr, root);
+    <span class="hljs-keyword">int</span> now = spl[spl[root].ch[<span class="hljs-number">1</span>]].ch[<span class="hljs-number">0</span>];
+    spl[spl[root].ch[<span class="hljs-number">1</span>]].ch[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">update</span>(spl[root].ch[<span class="hljs-number">1</span>]);
+    <span class="hljs-built_in">update</span>(root);
+    ql = <span class="hljs-built_in">find</span>(l), qr = <span class="hljs-built_in">find</span>(l + <span class="hljs-number">1</span>);
+    <span class="hljs-built_in">splaying</span>(ql, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">splaying</span>(qr, root);
+    <span class="hljs-built_in">connect</span>(now, spl[root].ch[<span class="hljs-number">1</span>], <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">update</span>(spl[root].ch[<span class="hljs-number">1</span>]);
+    <span class="hljs-built_in">update</span>(root);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">qinsert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> d)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> ql = <span class="hljs-built_in">find</span>(x + <span class="hljs-number">1</span>), qr = <span class="hljs-built_in">find</span>(x + <span class="hljs-number">2</span>);
+    <span class="hljs-built_in">splaying</span>(ql, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">splaying</span>(qr, root);
+    <span class="hljs-built_in">connect</span>(<span class="hljs-built_in">newnode</span>(d), spl[root].ch[<span class="hljs-number">1</span>], <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">update</span>(spl[root].ch[<span class="hljs-number">1</span>]);
+    <span class="hljs-built_in">update</span>(root);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">qdel</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> ql = <span class="hljs-built_in">find</span>(x), qr = <span class="hljs-built_in">find</span>(x + <span class="hljs-number">2</span>);
+    <span class="hljs-built_in">splaying</span>(ql, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">splaying</span>(qr, root);
+    <span class="hljs-keyword">int</span> del = spl[spl[root].ch[<span class="hljs-number">1</span>]].ch[<span class="hljs-number">0</span>];
+    <span class="hljs-built_in">clear</span>(del);
+    spl[spl[root].ch[<span class="hljs-number">1</span>]].ch[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">update</span>(spl[root].ch[<span class="hljs-number">1</span>]);
+    <span class="hljs-built_in">update</span>(root);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">qimin</span><span class="hljs-params">(<span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> ql = <span class="hljs-built_in">find</span>(l), qr = <span class="hljs-built_in">find</span>(r + <span class="hljs-number">2</span>);
+    <span class="hljs-built_in">splaying</span>(ql, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">splaying</span>(qr, root);
+    <span class="hljs-keyword">return</span> spl[spl[spl[root].ch[<span class="hljs-number">1</span>]].ch[<span class="hljs-number">0</span>]].imin;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n + <span class="hljs-number">1</span>; i++) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;a[i]);
+    a[<span class="hljs-number">1</span>] = -INF, a[n + <span class="hljs-number">2</span>] = INF;
+    root = <span class="hljs-built_in">build</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">2</span>, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;m);
+    <span class="hljs-keyword">while</span> (m--) &#123;
+        <span class="hljs-keyword">char</span> s[M];
+        <span class="hljs-keyword">int</span> x, y, d;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, s + <span class="hljs-number">1</span>);
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;A&#x27;</span> == s[<span class="hljs-number">1</span>]) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>, &amp;x, &amp;y, &amp;d);
+            <span class="hljs-built_in">qadd</span>(x, y, d);
+        &#125;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;R&#x27;</span> == s[<span class="hljs-number">1</span>] &amp;&amp; <span class="hljs-string">&#x27;E&#x27;</span> == s[<span class="hljs-number">4</span>]) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;x, &amp;y);
+            <span class="hljs-built_in">qreverse</span>(x, y);
+        &#125;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;R&#x27;</span> == s[<span class="hljs-number">1</span>] &amp;&amp; <span class="hljs-string">&#x27;O&#x27;</span> == s[<span class="hljs-number">4</span>]) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>, &amp;x, &amp;y, &amp;d);
+            <span class="hljs-built_in">qrevolve</span>(x, y, d);
+        &#125;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;I&#x27;</span> == s[<span class="hljs-number">1</span>]) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;x, &amp;d);
+            <span class="hljs-built_in">qinsert</span>(x, d);
+        &#125;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;D&#x27;</span> == s[<span class="hljs-number">1</span>]) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;x);
+            <span class="hljs-built_in">qdel</span>(x);
+        &#125;
+        <span class="hljs-keyword">else</span> &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;x, &amp;y);
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">qimin</span>(x, y));
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<p>练习:</p>
+<ol>
+<li>
+<p><a target="_blank" rel="noopener" href="http://lydsy.com/JudgeOnline/problem.php?id=1503">bzoj - 1503 [NOI2004]郁闷的出纳员</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3850">luogu - 3850 [TJOI2007]书架</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2286">luogu - 2286 [HNOI2004]宠物收养场</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="http://lydsy.com/JudgeOnline/problem.php?id=1588">bzoj - 1588 [HNOI2002]营业额统计</a></p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../04/02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          后缀数组
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../02/27/2019%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89-%20H.%20XOR(%E7%BA%BF%E6%80%A7%E5%9F%BA)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          2019牛客暑期多校训练营 (第一场) - H. XOR(线性基)
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../04/13/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/">后缀自动机</a>
+          </li>
+        
+          <li>
+            <a href="../../../04/09/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/">二分图匹配</a>
+          </li>
+        
+          <li>
+            <a href="../../../04/02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/">后缀数组</a>
+          </li>
+        
+          <li>
+            <a href="">平衡树入门</a>
+          </li>
+        
+          <li>
+            <a href="../../../02/27/2019%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89-%20H.%20XOR(%E7%BA%BF%E6%80%A7%E5%9F%BA)/">2019牛客暑期多校训练营 (第一场) - H. XOR(线性基)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>

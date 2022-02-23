@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>后缀自动机 | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="后缀自动机二·重复旋律5
+题目链接: HihoCoder - 1445
+题意: 求一个串所有不同子串的个数
+思路: 文本串S的后缀自动机是一部恰好只能识别S全部子串的机器, 所以统计所有不同子串的个数, 只需要将每个状态内子串的个数相加即可, 而每个状态内子串的个数为sam[i].longest-s">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+      <a class="main-nav-link" href="../../../../about">About</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-后缀自动机" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2020-04-13T14:39:00.000Z" itemprop="datePublished">2020-04-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      后缀自动机
+    </h1>
+  
+
+      </header>
+    
+    
+<div id="article-toc">
+    <h2 class="widget-title">目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA%E4%BA%8C%C2%B7%E9%87%8D%E5%A4%8D%E6%97%8B%E5%BE%8B5"><span class="toc-number">1.</span> <span class="toc-text">后缀自动机二·重复旋律5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA%E4%B8%89%C2%B7%E9%87%8D%E5%A4%8D%E6%97%8B%E5%BE%8B6"><span class="toc-number">2.</span> <span class="toc-text">后缀自动机三·重复旋律6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%9B%9B%C2%B7%E9%87%8D%E5%A4%8D%E6%97%8B%E5%BE%8B7"><span class="toc-number">3.</span> <span class="toc-text">后缀自动机四·重复旋律7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA%E4%BA%94%C2%B7%E9%87%8D%E5%A4%8D%E6%97%8B%E5%BE%8B8"><span class="toc-number">4.</span> <span class="toc-text">后缀自动机五·重复旋律8</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#string-and%20times"><span class="toc-number">5.</span> <span class="toc-text">String and Times</span></a></li></ol>
+</div>
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="后缀自动机二·重复旋律5">后缀自动机二·重复旋律5</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="https://hihocoder.com/problemset/problem/1445">HihoCoder - 1445</a></p>
+<p>题意: 求一个串所有不同子串的个数</p>
+<p>思路: 文本串S的后缀自动机是一部恰好只能识别S全部子串的机器, 所以统计所有不同子串的个数, 只需要将每个状态内子串的个数相加即可, 而每个状态内子串的个数为sam[i].longest-sam[i].shortest+1</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">1000010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> M = <span class="hljs-number">26</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span>
+&#123;</span>
+    <span class="hljs-keyword">int</span> trans[M], slink;
+    <span class="hljs-keyword">int</span> sst, lst;
+&#125;;
+
+<span class="hljs-keyword">int</span> n;
+<span class="hljs-keyword">char</span> s[N];
+node sam[N &lt;&lt; <span class="hljs-number">1</span>];
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sst, <span class="hljs-keyword">int</span> lst, <span class="hljs-keyword">int</span> *trans, <span class="hljs-keyword">int</span> slink)</span>
+</span>&#123;
+    sam[n].sst = sst;
+    sam[n].lst = lst;
+    sam[n].slink = slink;
+    <span class="hljs-keyword">if</span> (trans) <span class="hljs-built_in">memcpy</span>(sam[n].trans, trans, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam[n].trans));
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">memset</span>(sam[n].trans, <span class="hljs-number">-1</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam[n].trans));
+    <span class="hljs-keyword">return</span> n++;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> c, <span class="hljs-keyword">int</span> u)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> z = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">-1</span>, sam[u].lst + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>), v = u;
+    <span class="hljs-keyword">while</span>(<span class="hljs-number">-1</span> != v &amp;&amp; <span class="hljs-number">-1</span> == sam[v].trans[c]) &#123;
+        sam[v].trans[c] = z;
+        v = sam[v].slink;
+    &#125;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> == v) &#123;
+        sam[z].sst = <span class="hljs-number">1</span>;
+        sam[z].slink = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span> z;
+    &#125;
+    <span class="hljs-keyword">int</span> x = sam[v].trans[c];
+    <span class="hljs-keyword">if</span> (sam[v].lst + <span class="hljs-number">1</span> == sam[x].lst) &#123;
+        sam[z].sst = sam[x].lst + <span class="hljs-number">1</span>;
+        sam[z].slink = x;
+        <span class="hljs-keyword">return</span> z;
+    &#125;
+    <span class="hljs-keyword">int</span> y = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">-1</span>, sam[v].lst + <span class="hljs-number">1</span>, sam[x].trans, sam[x].slink);
+    sam[x].sst = sam[y].lst + <span class="hljs-number">1</span>;
+    sam[x].slink = y;
+    sam[z].sst = sam[y].lst + <span class="hljs-number">1</span>;
+    sam[z].slink = y;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">-1</span> != v &amp;&amp; sam[v].trans[c] == x) &#123;
+        sam[v].trans[c] = y;
+        v = sam[v].slink;
+    &#125;
+    sam[y].sst = sam[sam[y].slink].lst + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> z;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, s + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">int</span> u = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>), len = <span class="hljs-built_in">strlen</span>(s + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++)
+        u = <span class="hljs-built_in">insert</span>(s[i] - <span class="hljs-string">&#x27;a&#x27;</span>, u);
+    ll res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; n; i++) &#123;
+        ll t = sam[i].lst - sam[i].sst + <span class="hljs-number">1</span>;
+        res += t;
+    &#125;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld&quot;</span>, res);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="后缀自动机三·重复旋律6">后缀自动机三·重复旋律6</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="https://hihocoder.com/problemset/problem/1449">HihoCoder - 1449</a></p>
+<p>题意: 给你一个串, 求出长度为k的子串中出现次数最多的子串的出现次数, 求出所有k的答案</p>
+<p>思路: 假设现在已经求出后缀自动机中每个状态endpos的大小, res[1], res[2], … res[length(s)]一定单调递减(因为一个长度为i的子串出现了, 则长度为i-1、i-2…1的子串一定也都出现了), 所以我们只需要更新后缀自动机每个状态中longest对应的答案(即res[sam[i].longest] = max(res[sam[i].longest], sam[i].endpos))后, 从后向前更新答案即可</p>
+<p>现在考虑如何求出后缀自动机中每个状态endpos的大小, 我们站在sam[i].slink的角度, 将起点做为根节点, 将绿色节点表示向自动机中插入字符时分裂出来的节点, 粉色节点表示成其他节点, 对于粉色的节点, 父节点的endpos大小恰好等于所有子节点们的endpos大小之和再加1, 而对于绿色节点, 父节点的endpos大小恰好等于所有子节点们的endpos大小之和, 由于叶子节点只可能为粉色, 所以叶子节点的endpos大小为1, 利用slink反向建树, dfs求出所有状态的endpos即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cmath&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">2000010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> M = <span class="hljs-number">26</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span>
+&#123;</span>
+    <span class="hljs-keyword">int</span> trans[M], slink;
+    <span class="hljs-keyword">int</span> sst, lst, flag;
+    ll edpos;
+&#125;;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Edge</span> &#123;</span>
+    <span class="hljs-keyword">int</span> to, nex;
+&#125;;
+
+<span class="hljs-keyword">int</span> n, cnt, head[N];
+ll imax[N], res[N];
+<span class="hljs-keyword">char</span> s[N];
+node sam[N &lt;&lt; <span class="hljs-number">1</span>];
+Edge edge[<span class="hljs-number">2</span> * N];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add_edge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> v)</span>
+</span>&#123;
+    edge[++cnt].to = v;
+    edge[cnt].nex = head[u];
+    head[u] = cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">build</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; n; i++) &#123;
+        <span class="hljs-keyword">int</span> to = sam[i].slink;
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> != to) &#123;
+            <span class="hljs-built_in">add_edge</span>(i, to);
+            <span class="hljs-built_in">add_edge</span>(to, i);
+        &#125;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> fa)</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = head[u]; <span class="hljs-number">0</span> != i; i = edge[i].nex) &#123;
+        <span class="hljs-keyword">int</span> v = edge[i].to;
+        <span class="hljs-keyword">if</span> (v == fa) <span class="hljs-keyword">continue</span>;
+        <span class="hljs-built_in">dfs</span>(v, u);
+        sam[u].edpos += sam[v].edpos;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sst, <span class="hljs-keyword">int</span> lst, <span class="hljs-keyword">int</span> *trans, <span class="hljs-keyword">int</span> slink, <span class="hljs-keyword">int</span> flag)</span>
+</span>&#123;
+    sam[n].sst = sst;
+    sam[n].lst = lst;
+    sam[n].slink = slink;
+    sam[n].flag = flag;
+    sam[n].edpos = flag;
+    <span class="hljs-keyword">if</span> (trans) <span class="hljs-built_in">memcpy</span>(sam[n].trans, trans, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam[n].trans));
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">memset</span>(sam[n].trans, <span class="hljs-number">-1</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam[n].trans));
+    <span class="hljs-keyword">return</span> n++;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> c, <span class="hljs-keyword">int</span> u)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> z = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">-1</span>, sam[u].lst + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>), v = u;
+    <span class="hljs-keyword">while</span>(<span class="hljs-number">-1</span> != v &amp;&amp; <span class="hljs-number">-1</span> == sam[v].trans[c]) &#123;
+        sam[v].trans[c] = z;
+        v = sam[v].slink;
+    &#125;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> == v) &#123;
+        sam[z].sst = <span class="hljs-number">1</span>;
+        sam[z].slink = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span> z;
+    &#125;
+    <span class="hljs-keyword">int</span> x = sam[v].trans[c];
+    <span class="hljs-keyword">if</span> (sam[v].lst + <span class="hljs-number">1</span> == sam[x].lst) &#123;
+        sam[z].sst = sam[x].lst + <span class="hljs-number">1</span>;
+        sam[z].slink = x;
+        <span class="hljs-keyword">return</span> z;
+    &#125;
+    <span class="hljs-keyword">int</span> y = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">-1</span>, sam[v].lst + <span class="hljs-number">1</span>, sam[x].trans, sam[x].slink, <span class="hljs-number">0</span>);
+    sam[x].sst = sam[y].lst + <span class="hljs-number">1</span>;
+    sam[x].slink = y;
+    sam[z].sst = sam[y].lst + <span class="hljs-number">1</span>;
+    sam[z].slink = y;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">-1</span> != v &amp;&amp; sam[v].trans[c] == x) &#123;
+        sam[v].trans[c] = y;
+        v = sam[v].slink;
+    &#125;
+    sam[y].sst = sam[sam[y].slink].lst + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> z;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, s + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">int</span> u = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>), len = <span class="hljs-built_in">strlen</span>(s + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++)
+        u = <span class="hljs-built_in">insert</span>(s[i] - <span class="hljs-string">&#x27;a&#x27;</span>, u);
+    <span class="hljs-built_in">build</span>();
+    <span class="hljs-built_in">dfs</span>(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; n; i++)
+        res[sam[i].lst] = <span class="hljs-built_in">max</span>(res[sam[i].lst], sam[i].edpos);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = len - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">1</span>; i--)
+        res[i] = <span class="hljs-built_in">max</span>(res[i], res[i + <span class="hljs-number">1</span>]);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++)
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res[i]);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="后缀自动机四·重复旋律7">后缀自动机四·重复旋律7</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="https://hihocoder.com/problemset/problem/1457">HihoCoder - 1457</a></p>
+<p>题意: 给你很多十进制串, 求出所有串中不同子串的和(即把十进制子串看成数字, 然后求和, 允许有前导0), 答案模1000000007</p>
+<p>思路: 先考虑只有一个串的情况, 对这个串建立sam, 设每个节点中子串的和为sum, 我们站在trans的角度考虑这个问题, 利用dp的思想, 每读入一个数字, 则下一个节点的sum应该加上这个节点的sum<em>10+读入的数字</em>该节点的子串个数, 显然可以用拓扑排序来解决这个问题</p>
+<p>再来考虑多个串的情况, 和后缀数组类似, 我们将所有字符串拼接起来, 中间用一个没有出现过的字符隔开, 对这个新的字符串建立sam, 和上面的分析一样, 我们站在trans的角度来求解, 但需要考虑到一个节点中的某些子串可能含有这个没有出现过的字符, 这部分子串是不对答案有贡献的, 所以现在需要解决的是如何维护每个节点内真实的子串个数vnum,  其实一个节点中如果有某个子串s的话, 则从自动机0开始逐个喂入s的字符的话, 则最终自动机将停止在这个节点, 即读入子串的过程其实就是在自动机上画出路径的过程, 所以一个节点中的每个子串和这些从0出发通过trans跳转到达此节点的路径一一对应, 所以再用一个拓扑排序来维护vnum即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stack&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">2000010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> M = <span class="hljs-number">11</span>;
+<span class="hljs-keyword">const</span> ll mod = <span class="hljs-number">1000000007</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> trans[M], slink;
+    <span class="hljs-keyword">int</span> sst, lst;
+    ll sum, vnum;
+&#125;;
+
+node sam[N &lt;&lt; <span class="hljs-number">1</span>];
+<span class="hljs-keyword">int</span> T, n, cal[N], len, deg[N];
+<span class="hljs-keyword">char</span> s[N];
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sst, <span class="hljs-keyword">int</span> lst, <span class="hljs-keyword">int</span> *trans, <span class="hljs-keyword">int</span> slink)</span>
+</span>&#123;
+    sam[n].sst = sst;
+    sam[n].lst = lst;
+    sam[n].slink = slink;
+    <span class="hljs-keyword">if</span> (trans) <span class="hljs-built_in">memcpy</span>(sam[n].trans, trans, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam[n].trans));
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">memset</span>(sam[n].trans, <span class="hljs-number">-1</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam[n].trans));
+    <span class="hljs-keyword">return</span> n++;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> c, <span class="hljs-keyword">int</span> u)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> z = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">-1</span>, sam[u].lst + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>), v = u;
+    <span class="hljs-keyword">while</span>(<span class="hljs-number">-1</span> != v &amp;&amp; <span class="hljs-number">-1</span> == sam[v].trans[c]) &#123;
+        sam[v].trans[c] = z;
+        v = sam[v].slink;
+    &#125;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> == v) &#123;
+        sam[z].sst = <span class="hljs-number">1</span>;
+        sam[z].slink = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span> z;
+    &#125;
+    <span class="hljs-keyword">int</span> x = sam[v].trans[c];
+    <span class="hljs-keyword">if</span> (sam[v].lst + <span class="hljs-number">1</span> == sam[x].lst) &#123;
+        sam[z].sst = sam[x].lst + <span class="hljs-number">1</span>;
+        sam[z].slink = x;
+        <span class="hljs-keyword">return</span> z;
+    &#125;
+    <span class="hljs-keyword">int</span> y = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">-1</span>, sam[v].lst + <span class="hljs-number">1</span>, sam[x].trans, sam[x].slink);
+    sam[x].sst = sam[y].lst + <span class="hljs-number">1</span>;
+    sam[x].slink = y;
+    sam[z].sst = sam[y].lst + <span class="hljs-number">1</span>;
+    sam[z].slink = y;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">-1</span> != v &amp;&amp; sam[v].trans[c] == x) &#123;
+        sam[v].trans[c] = y;
+        v = sam[v].slink;
+    &#125;
+    sam[y].sst = sam[sam[y].slink].lst + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> z;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">topsort</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) &#123;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; M; j++) &#123;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> == sam[i].trans[j]) <span class="hljs-keyword">continue</span>;
+            deg[sam[i].trans[j]]++;
+        &#125;
+    &#125;
+    stack&lt;<span class="hljs-keyword">int</span>&gt; st;
+    st.<span class="hljs-built_in">push</span>(<span class="hljs-number">0</span>);
+    sam[<span class="hljs-number">0</span>].vnum = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (!st.<span class="hljs-built_in">empty</span>()) &#123;
+        <span class="hljs-keyword">int</span> t = st.<span class="hljs-built_in">top</span>();
+        st.<span class="hljs-built_in">pop</span>();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; M; i++) &#123;
+            <span class="hljs-keyword">int</span> to = sam[t].trans[i];
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> == to) <span class="hljs-keyword">continue</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">10</span> != i) sam[to].vnum += sam[t].vnum;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == --deg[to]) st.<span class="hljs-built_in">push</span>(to);
+        &#125;
+    &#125;
+&#125;
+
+<span class="hljs-function">ll <span class="hljs-title">solve</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) &#123;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; M; j++) &#123;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> == sam[i].trans[j]) <span class="hljs-keyword">continue</span>;
+            deg[sam[i].trans[j]]++;
+        &#125;
+    &#125;
+    stack&lt;<span class="hljs-keyword">int</span>&gt; st;
+    st.<span class="hljs-built_in">push</span>(<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">while</span> (!st.<span class="hljs-built_in">empty</span>()) &#123;
+        <span class="hljs-keyword">int</span> t = st.<span class="hljs-built_in">top</span>();
+        st.<span class="hljs-built_in">pop</span>();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; M; i++) &#123;
+            <span class="hljs-keyword">int</span> to = sam[t].trans[i];
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> == to) <span class="hljs-keyword">continue</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">10</span> != i) &#123;
+                sam[to].sum += (sam[t].sum * <span class="hljs-number">10</span> + sam[t].vnum * i);
+                sam[to].sum %= mod;
+            &#125;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == --deg[to]) st.<span class="hljs-built_in">push</span>(to);
+        &#125;
+    &#125;
+    ll res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; n; i++) &#123;
+        res += sam[i].sum;
+        res %= mod;
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, s + <span class="hljs-number">1</span>);
+        <span class="hljs-keyword">int</span> L = <span class="hljs-built_in">strlen</span>(s + <span class="hljs-number">1</span>);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= L; i++) &#123;
+            cal[++len] = s[i] - <span class="hljs-string">&#x27;0&#x27;</span>;
+            s[i] = <span class="hljs-string">&#x27;\0&#x27;</span>;
+        &#125;
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> != T) cal[++len] = <span class="hljs-number">10</span>;
+    &#125;
+    <span class="hljs-keyword">int</span> u = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++) u = <span class="hljs-built_in">insert</span>(cal[i], u);
+    <span class="hljs-built_in">topsort</span>();
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, <span class="hljs-built_in">solve</span>());
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="后缀自动机五·重复旋律8">后缀自动机五·重复旋律8</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="https://vjudge.net/problem/HihoCoder-1465">HihoCoder - 1465</a></p>
+<p>题意: 求若干串T的循环同构串在另一长串S中各自做为子串出现的次数, 如果出现多次则重复计算</p>
+<p>思路: 我们先对S构建后缀自动机, 对于T串, 我们将它复制一份接在后面, 然后从T[1]开始一个字符一个字符的插入后缀自动机, 维护两个变量u和l, 其中l是最大的使得T[i-l+1,…,i]能读入sam之后不会出现无路可走的情况的数, u是T[i-l+1,…,i]所属的sam节点, 当插入T[i+1]时, 我们从u沿着slik走, 走到第一个节点v使得v.trans[T[i+1]-‘a’] = x, x!=null, 那么新的l=|longest(v)|+1, 新的u=x, 但是需要考虑的问题就是如果此时l&gt;=n, T[i+1-l+1,…,i+1]会在u中, 但T[i+1-n+1,…,i+1]不一定在u中, 那么T[i+1-n+1,…,i+1]就会是T[i+1-l+1,…,i+1]的一个后缀, 显然T[i+1-n+1,…,i+1]的endpos集合的大小(即出现的次数)&gt;=T[i+1-l+1,…,i+1]的endpos集合的大小=|u.endpos|, 所以我们此时仍然需要从u沿着slink走, 直到v是slink-path(u)上最后的那个满足v.longest&gt;=n的点位置, 那么此时T[i+1-n+1,…,i+1]就一定在v中, |v.endpos|就是出现的次数</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> M = <span class="hljs-number">26</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> trans[M], slink;
+    <span class="hljs-keyword">int</span> sst, lst, edpos;
+    <span class="hljs-keyword">bool</span> flag;
+&#125;;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Edge</span> &#123;</span>
+    <span class="hljs-keyword">int</span> to, nex;
+&#125;;
+
+<span class="hljs-keyword">char</span> s[N], t[N &lt;&lt; <span class="hljs-number">1</span>];
+<span class="hljs-keyword">int</span> n, len, lt, T, head[N], cnt, vis[N &lt;&lt; <span class="hljs-number">1</span>];
+node sam[N &lt;&lt; <span class="hljs-number">1</span>];
+Edge edge[N &lt;&lt; <span class="hljs-number">1</span>];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add_edge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> v)</span>
+</span>&#123;
+    edge[++cnt].to = v;
+    edge[cnt].nex = head[u];
+    head[u] = cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">build</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; n; i++) &#123;
+        <span class="hljs-keyword">int</span> to = sam[i].slink;
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> != to) &#123;
+            <span class="hljs-built_in">add_edge</span>(i, to);
+            <span class="hljs-built_in">add_edge</span>(to, i);
+        &#125;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> fa)</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = head[u]; <span class="hljs-number">0</span> != i; i = edge[i].nex) &#123;
+        <span class="hljs-keyword">int</span> v = edge[i].to;
+        <span class="hljs-keyword">if</span> (v == fa) <span class="hljs-keyword">continue</span>;
+        <span class="hljs-built_in">dfs</span>(v, u);
+        sam[u].edpos += sam[v].edpos;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sst, <span class="hljs-keyword">int</span> lst, <span class="hljs-keyword">int</span> *trans, <span class="hljs-keyword">int</span> slink, <span class="hljs-keyword">int</span> flag)</span>
+</span>&#123;
+    sam[n].sst = sst;
+    sam[n].lst = lst;
+    sam[n].slink = slink;
+    sam[n].flag = flag;
+    sam[n].edpos = flag;
+    <span class="hljs-keyword">if</span> (trans) <span class="hljs-built_in">memcpy</span>(sam[n].trans, trans, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam[n].trans));
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">memset</span>(sam[n].trans, <span class="hljs-number">-1</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam[n].trans));
+    <span class="hljs-keyword">return</span> n++;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> c, <span class="hljs-keyword">int</span> u)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> z = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">-1</span>, sam[u].lst + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>), v = u;
+    <span class="hljs-keyword">while</span>(<span class="hljs-number">-1</span> != v &amp;&amp; <span class="hljs-number">-1</span> == sam[v].trans[c]) &#123;
+        sam[v].trans[c] = z;
+        v = sam[v].slink;
+    &#125;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> == v) &#123;
+        sam[z].sst = <span class="hljs-number">1</span>;
+        sam[z].slink = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span> z;
+    &#125;
+    <span class="hljs-keyword">int</span> x = sam[v].trans[c];
+    <span class="hljs-keyword">if</span> (sam[v].lst + <span class="hljs-number">1</span> == sam[x].lst) &#123;
+        sam[z].sst = sam[x].lst + <span class="hljs-number">1</span>;
+        sam[z].slink = x;
+        <span class="hljs-keyword">return</span> z;
+    &#125;
+    <span class="hljs-keyword">int</span> y = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">-1</span>, sam[v].lst + <span class="hljs-number">1</span>, sam[x].trans, sam[x].slink, <span class="hljs-number">0</span>);
+    sam[x].sst = sam[y].lst + <span class="hljs-number">1</span>;
+    sam[x].slink = y;
+    sam[z].sst = sam[y].lst + <span class="hljs-number">1</span>;
+    sam[z].slink = y;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">-1</span> != v &amp;&amp; sam[v].trans[c] == x) &#123;
+        sam[v].trans[c] = y;
+        v = sam[v].slink;
+    &#125;
+    sam[y].sst = sam[sam[y].slink].lst + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> z;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">solve</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">memset</span>(vis, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(vis));
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>, u = <span class="hljs-number">0</span>, l = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++) &#123;
+        <span class="hljs-keyword">int</span> c = t[i] - <span class="hljs-string">&#x27;a&#x27;</span>;
+        <span class="hljs-keyword">while</span> (u &amp;&amp; <span class="hljs-number">-1</span> == sam[u].trans[c]) &#123;
+            u = sam[u].slink;
+            l = sam[u].lst;
+        &#125;
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> != sam[u].trans[c]) &#123;
+            u = sam[u].trans[c];
+            l++;
+        &#125;
+        <span class="hljs-keyword">else</span> u = l = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span> (l &gt; lt) &#123;
+            <span class="hljs-keyword">while</span> (sam[sam[u].slink].lst &gt;= lt) &#123;
+                u = sam[u].slink;
+                l = sam[u].lst;
+            &#125;
+        &#125;
+        <span class="hljs-keyword">if</span> (l &gt;= lt &amp;&amp; <span class="hljs-number">0</span> == vis[u]) &#123;
+            vis[u] = <span class="hljs-number">1</span>;
+            res += sam[u].edpos;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, s + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">int</span> u = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>), ls = <span class="hljs-built_in">strlen</span>(s + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= ls; i++)
+        u = <span class="hljs-built_in">insert</span>(s[i] - <span class="hljs-string">&#x27;a&#x27;</span>, u);
+    <span class="hljs-built_in">build</span>();
+    <span class="hljs-built_in">dfs</span>(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>);
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, t + <span class="hljs-number">1</span>);
+        lt = <span class="hljs-built_in">strlen</span>(t + <span class="hljs-number">1</span>);
+        len = lt;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; lt; i++) t[++len] = t[i];
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">solve</span>());
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++) t[i] = <span class="hljs-string">&#x27;\0&#x27;</span>;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="string-and times">String and Times</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="https://nanti.jisuanke.com/t/A2018">计蒜客 A2018</a></p>
+<p>题意: 给你一个串, 求该串出现[l,r]次的子串个数</p>
+<p>思路: 对串构建后缀自动机, 求出每个状态的|endpos|, 如果对于节点u, |u.endpos|<span class="markdown-them-math-inline">$\in$</span>[l,r], 那么这个状态节点对答案的贡献就是u.longest-u.shortest+1</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cmath&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> M = <span class="hljs-number">26</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span>
+&#123;</span>
+    <span class="hljs-keyword">int</span> trans[M], slink;
+    <span class="hljs-keyword">int</span> sst, lst, flag;
+    ll edpos;
+&#125;;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Edge</span> &#123;</span>
+    <span class="hljs-keyword">int</span> to, nex;
+&#125;;
+
+<span class="hljs-keyword">int</span> n, T, cnt, head[N];
+ll l, r;
+<span class="hljs-keyword">char</span> s[N];
+node sam[N &lt;&lt; <span class="hljs-number">1</span>];
+Edge edge[<span class="hljs-number">2</span> * N];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add_edge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> v)</span>
+</span>&#123;
+    edge[++cnt].to = v;
+    edge[cnt].nex = head[u];
+    head[u] = cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">build</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; n; i++) &#123;
+        <span class="hljs-keyword">int</span> to = sam[i].slink;
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> != to) &#123;
+            <span class="hljs-built_in">add_edge</span>(i, to);
+            <span class="hljs-built_in">add_edge</span>(to, i);
+        &#125;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> fa)</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = head[u]; <span class="hljs-number">0</span> != i; i = edge[i].nex) &#123;
+        <span class="hljs-keyword">int</span> v = edge[i].to;
+        <span class="hljs-keyword">if</span> (v == fa) <span class="hljs-keyword">continue</span>;
+        <span class="hljs-built_in">dfs</span>(v, u);
+        sam[u].edpos += sam[v].edpos;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sst, <span class="hljs-keyword">int</span> lst, <span class="hljs-keyword">int</span> *trans, <span class="hljs-keyword">int</span> slink, <span class="hljs-keyword">int</span> flag)</span>
+</span>&#123;
+    sam[n].sst = sst;
+    sam[n].lst = lst;
+    sam[n].slink = slink;
+    sam[n].flag = flag;
+    sam[n].edpos = flag;
+    <span class="hljs-keyword">if</span> (trans) <span class="hljs-built_in">memcpy</span>(sam[n].trans, trans, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam[n].trans));
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">memset</span>(sam[n].trans, <span class="hljs-number">-1</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam[n].trans));
+    <span class="hljs-keyword">return</span> n++;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> c, <span class="hljs-keyword">int</span> u)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> z = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">-1</span>, sam[u].lst + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>), v = u;
+    <span class="hljs-keyword">while</span>(<span class="hljs-number">-1</span> != v &amp;&amp; <span class="hljs-number">-1</span> == sam[v].trans[c]) &#123;
+        sam[v].trans[c] = z;
+        v = sam[v].slink;
+    &#125;
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> == v) &#123;
+        sam[z].sst = <span class="hljs-number">1</span>;
+        sam[z].slink = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span> z;
+    &#125;
+    <span class="hljs-keyword">int</span> x = sam[v].trans[c];
+    <span class="hljs-keyword">if</span> (sam[v].lst + <span class="hljs-number">1</span> == sam[x].lst) &#123;
+        sam[z].sst = sam[x].lst + <span class="hljs-number">1</span>;
+        sam[z].slink = x;
+        <span class="hljs-keyword">return</span> z;
+    &#125;
+    <span class="hljs-keyword">int</span> y = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">-1</span>, sam[v].lst + <span class="hljs-number">1</span>, sam[x].trans, sam[x].slink, <span class="hljs-number">0</span>);
+    sam[x].sst = sam[y].lst + <span class="hljs-number">1</span>;
+    sam[x].slink = y;
+    sam[z].sst = sam[y].lst + <span class="hljs-number">1</span>;
+    sam[z].slink = y;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">-1</span> != v &amp;&amp; sam[v].trans[c] == x) &#123;
+        sam[v].trans[c] = y;
+        v = sam[v].slink;
+    &#125;
+    sam[y].sst = sam[sam[y].slink].lst + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> z;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">while</span> (<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s%lld%lld&quot;</span>, s + <span class="hljs-number">1</span>, &amp;l, &amp;r) != EOF) &#123;
+        <span class="hljs-keyword">int</span> u = <span class="hljs-built_in">newnode</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>), ls = <span class="hljs-built_in">strlen</span>(s + <span class="hljs-number">1</span>);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= ls; i++)
+            u = <span class="hljs-built_in">insert</span>(s[i] - <span class="hljs-string">&#x27;A&#x27;</span>, u);
+        <span class="hljs-built_in">build</span>();
+        <span class="hljs-built_in">dfs</span>(<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>);
+        ll res = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; n; i++)
+            <span class="hljs-keyword">if</span> (sam[i].edpos &gt;= l &amp;&amp; sam[i].edpos &lt;= r)
+                res += sam[i].lst - sam[i].sst + <span class="hljs-number">1</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
+        <span class="hljs-built_in">memset</span>(sam, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(sam));
+        <span class="hljs-built_in">memset</span>(s, <span class="hljs-string">&#x27;\0&#x27;</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(s));
+        <span class="hljs-built_in">memset</span>(head, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(head));
+        cnt = n = <span class="hljs-number">0</span>;
+    &#125;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="../../09/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          二分图匹配
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="">后缀自动机</a>
+          </li>
+        
+          <li>
+            <a href="../../09/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/">二分图匹配</a>
+          </li>
+        
+          <li>
+            <a href="../../02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/">后缀数组</a>
+          </li>
+        
+          <li>
+            <a href="../../../03/19/%E5%B9%B3%E8%A1%A1%E6%A0%91%E5%85%A5%E9%97%A8/">平衡树入门</a>
+          </li>
+        
+          <li>
+            <a href="../../../02/27/2019%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89-%20H.%20XOR(%E7%BA%BF%E6%80%A7%E5%9F%BA)/">2019牛客暑期多校训练营 (第一场) - H. XOR(线性基)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>

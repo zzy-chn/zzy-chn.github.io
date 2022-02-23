@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>二分图匹配 | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="过山车
+题目链接: hdu - 2063
+题意: 求二分图的最大匹配
+思路: 二分图最大匹配模板题, 利用匈牙利算法解决, 其核心是通过不停地找增广路来增加匹配中的匹配边和匹配点, 找不到增广路时, 达到最大匹配
+#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;algo">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+      <a class="main-nav-link" href="../../../../about">About</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-二分图匹配" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2020-04-09T09:42:00.000Z" itemprop="datePublished">2020-04-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      二分图匹配
+    </h1>
+  
+
+      </header>
+    
+    
+<div id="article-toc">
+    <h2 class="widget-title">目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E5%B1%B1%E8%BD%A6"><span class="toc-number">1.</span> <span class="toc-text">过山车</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#antenna-placement"><span class="toc-number">2.</span> <span class="toc-text">Antenna Placement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#treasure-exploration"><span class="toc-number">3.</span> <span class="toc-text">Treasure Exploration</span></a></li></ol>
+</div>
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="过山车">过山车</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=2063">hdu - 2063</a></p>
+<p>题意: 求二分图的最大匹配</p>
+<p>思路: 二分图最大匹配模板题, 利用匈牙利算法解决, 其核心是通过不停地找增广路来增加匹配中的匹配边和匹配点, 找不到增广路时, 达到最大匹配</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">1010</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> to, nex;
+&#125;;
+
+node edge[N * N];
+<span class="hljs-keyword">int</span> k, n, m, used[N], nex[N];
+<span class="hljs-keyword">int</span> cnt, head[N];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add_edge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> v)</span>
+</span>&#123;
+    edge[++cnt].to = v;
+    edge[cnt].nex = head[u];
+    head[u] = cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u)</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = head[u]; <span class="hljs-number">0</span> != i; i = edge[i].nex) &#123;
+        <span class="hljs-keyword">int</span> v = edge[i].to;
+        <span class="hljs-keyword">if</span> (!used[v]) &#123;
+            used[v] = <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span> (nex[v] == <span class="hljs-number">0</span> || <span class="hljs-built_in">find</span>(nex[v])) &#123;
+                nex[v] = u;
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+            &#125;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">match</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-built_in">memset</span>(used, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(used));
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">find</span>(i)) res++;
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">while</span> (<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;k) &amp;&amp; k) &#123;
+        cnt = <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">memset</span>(head, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(head));
+        <span class="hljs-built_in">memset</span>(nex, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(nex));
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);
+        <span class="hljs-keyword">while</span> (k--) &#123;
+            <span class="hljs-keyword">int</span> u, v;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;u, &amp;v);
+            <span class="hljs-built_in">add_edge</span>(u, n + v);
+        &#125;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">match</span>());
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="antenna-placement">Antenna Placement</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="http://poj.org/problem?id=3020">poj - 3020</a></p>
+<p>题意: 在平面上有若干点, 可以用一个圆圈覆盖相邻的两个点, 问最少需要多少圆圈能将所有点覆盖</p>
+<p>思路: 二分图求最小路径覆盖, 关键在于如何建图, 可以采用黑白相间染色的办法, 被染成黑色的点放在一个集合, 被染成白色的点放在另一个集合, 将相邻的黑色点和白色点之间连一条边, 求出最大匹配数, 二分图最小路径覆盖数=点的总数-二分图最大匹配数</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">50</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> M = <span class="hljs-number">410</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> nex, to;
+&#125;;
+
+<span class="hljs-keyword">int</span> T, h, w, n, m, b[N][N];
+<span class="hljs-keyword">int</span> used[M], nex[M], head[M], cnt;
+node edge[M * M];
+<span class="hljs-keyword">char</span> s[N][N];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add_edge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> v)</span>
+</span>&#123;
+    edge[++cnt].to = v;
+    edge[cnt].nex = head[u];
+    head[u] = cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u)</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = head[u]; <span class="hljs-number">0</span> != i; i = edge[i].nex) &#123;
+        <span class="hljs-keyword">int</span> v = edge[i].to;
+        <span class="hljs-keyword">if</span> (used[v]) <span class="hljs-keyword">continue</span>;
+        used[v] = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == nex[v] || <span class="hljs-built_in">find</span>(nex[v])) &#123;
+            nex[v] = u;
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">match</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-built_in">memset</span>(used, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(used));
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">find</span>(i)) res++;
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span>
+</span>&#123;
+    cnt = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">memset</span>(nex, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(nex));
+    <span class="hljs-built_in">memset</span>(head, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(head));
+    <span class="hljs-built_in">memset</span>(b, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(b));
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">init</span>();
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;h, &amp;w);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= h; i++) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, s[i] + <span class="hljs-number">1</span>);
+        n = m = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= h; i++) &#123;
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = <span class="hljs-number">1</span>; k &lt;= w; k++) &#123;
+                <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;*&#x27;</span> != s[i][k]) <span class="hljs-keyword">continue</span>;
+                <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == (i + k) % <span class="hljs-number">2</span>) b[i][k] = ++n;
+                <span class="hljs-keyword">else</span> b[i][k] = ++m;
+            &#125;
+        &#125;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= h; i++) &#123;
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = <span class="hljs-number">1</span>; k &lt;= w; k++) &#123;
+                <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;*&#x27;</span> != s[i][k] || <span class="hljs-number">0</span> != (i + k) % <span class="hljs-number">2</span>) <span class="hljs-keyword">continue</span>;
+                <span class="hljs-keyword">if</span> (b[i - <span class="hljs-number">1</span>][k]) <span class="hljs-built_in">add_edge</span>(b[i][k], n + b[i - <span class="hljs-number">1</span>][k]);
+                <span class="hljs-keyword">if</span> (b[i + <span class="hljs-number">1</span>][k]) <span class="hljs-built_in">add_edge</span>(b[i][k], n + b[i + <span class="hljs-number">1</span>][k]);
+                <span class="hljs-keyword">if</span> (b[i][k + <span class="hljs-number">1</span>]) <span class="hljs-built_in">add_edge</span>(b[i][k], n + b[i][k + <span class="hljs-number">1</span>]);
+                <span class="hljs-keyword">if</span> (b[i][k - <span class="hljs-number">1</span>]) <span class="hljs-built_in">add_edge</span>(b[i][k], n + b[i][k - <span class="hljs-number">1</span>]);
+            &#125;
+        &#125;
+        <span class="hljs-keyword">int</span> res = <span class="hljs-built_in">match</span>();
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, n + m - res);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="treasure-exploration">Treasure Exploration</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="http://poj.org/problem?id=2594">poj - 2594</a></p>
+<p>题意: 给出一个由n个点m条边组成的有向无环图, 求最少需要多少路径, 使得这些路径可以覆盖所有点, 每个点可以被多条路径覆盖</p>
+<p>思路: 二分图求最小路径覆盖, 因为有的点可以被多条路径覆盖, 可能存在相交路径, 所以先要用floyd求出传递闭包, 将求最小可相交路径转换成最小不可相交路径, 然后再用二分图求最小路径覆盖, 最小路径覆盖数=点的总数-二分图最大匹配数</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">510</span>;
+
+<span class="hljs-keyword">int</span> n, m, f[N][N];
+<span class="hljs-keyword">int</span> used[N], nex[N];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">floyd</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = <span class="hljs-number">1</span>; k &lt;= n; k++)
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">1</span>; j &lt;= n; j++)
+                f[i][j] |= (f[i][k] &amp; f[k][j]);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u)</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">if</span> (!used[i] &amp;&amp; f[u][i]) &#123;
+            used[i] = <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == nex[i] || <span class="hljs-built_in">find</span>(nex[i])) &#123;
+                nex[i] = u;
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+            &#125;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">match</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-built_in">memset</span>(used, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(used));
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">find</span>(i)) res++;
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">while</span> (<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;m) &amp;&amp; <span class="hljs-number">0</span> != (n + m)) &#123;
+        <span class="hljs-built_in">memset</span>(nex, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(nex));
+        <span class="hljs-built_in">memset</span>(f, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(f));
+        <span class="hljs-keyword">while</span> (m--) &#123;
+            <span class="hljs-keyword">int</span> u, v;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;u, &amp;v);
+            f[u][v] = <span class="hljs-number">1</span>;
+        &#125;
+        <span class="hljs-built_in">floyd</span>();
+        <span class="hljs-keyword">int</span> res = <span class="hljs-built_in">match</span>();
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, n - res);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../13/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          后缀自动机
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          后缀数组
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../13/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/">后缀自动机</a>
+          </li>
+        
+          <li>
+            <a href="">二分图匹配</a>
+          </li>
+        
+          <li>
+            <a href="../../02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/">后缀数组</a>
+          </li>
+        
+          <li>
+            <a href="../../../03/19/%E5%B9%B3%E8%A1%A1%E6%A0%91%E5%85%A5%E9%97%A8/">平衡树入门</a>
+          </li>
+        
+          <li>
+            <a href="../../../02/27/2019%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89-%20H.%20XOR(%E7%BA%BF%E6%80%A7%E5%9F%BA)/">2019牛客暑期多校训练营 (第一场) - H. XOR(线性基)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>

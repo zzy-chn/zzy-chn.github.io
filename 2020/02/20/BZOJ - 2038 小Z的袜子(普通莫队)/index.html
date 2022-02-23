@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>BZOJ - 2038 小Z的袜子(普通莫队) | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="题目链接: 小Z的袜子
+题意: $n$只袜子, $m$个询问, 每次回答有多大概率在$[L,R]$区间内抽到两只颜色相同的袜子
+思路: 普通莫队, 如果两个询问左端点在一个块内, 则按询问右端点排序, 否则按照所在块的序号排序, 维护一个数组$num$, 表示在区间$[L,R]$中, 颜色为$c$的">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+      <a class="main-nav-link" href="../../../../about">About</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-BZOJ - 2038 小Z的袜子(普通莫队)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2020-02-20T08:06:00.000Z" itemprop="datePublished">2020-02-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      BZOJ - 2038 小Z的袜子(普通莫队)
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>题目链接: <a target="_blank" rel="noopener" href="https://lydsy.com/JudgeOnline/problem.php?id=2038">小Z的袜子</a></p>
+<p>题意: <span class="markdown-them-math-inline">$n$</span>只袜子, <span class="markdown-them-math-inline">$m$</span>个询问, 每次回答有多大概率在<span class="markdown-them-math-inline">$[L,R]$</span>区间内抽到两只颜色相同的袜子</p>
+<p>思路: 普通莫队, 如果两个询问左端点在一个块内, 则按询问右端点排序, 否则按照所在块的序号排序, 维护一个数组<span class="markdown-them-math-inline">$num$</span>, 表示在区间<span class="markdown-them-math-inline">$[L,R]$</span>中, 颜色为<span class="markdown-them-math-inline">$c$</span>的袜子有<span class="markdown-them-math-inline">$num[c]$</span>只, 令变量<span class="markdown-them-math-inline">$res=\sum_{c}num[c]*(num[c]-1)/2$</span>, 显然对于每个区间<span class="markdown-them-math-inline">$[L,R]$</span>抽到同色袜子的概率就是<span class="markdown-them-math-inline">$\frac{res}{C_{R-L+1}^{2}}$</span>, 每次移动区间时修改<span class="markdown-them-math-inline">$num[c]$</span>, 同时更新<span class="markdown-them-math-inline">$res$</span>即可, 时间复杂度<span class="markdown-them-math-inline">$O(n^{\frac{3}{2}})$</span></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cmath&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">50010</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r, id;
+&#125;;
+
+<span class="hljs-keyword">int</span> n, m, a[N];
+<span class="hljs-keyword">int</span> block, belong[N], tot, l[N], r[N];
+ll num[N], res, mol[N], den[N];
+node q[N];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">build</span><span class="hljs-params">()</span>
+</span>&#123;
+    block = <span class="hljs-built_in">sqrt</span>(n);
+    tot = n / block;
+    <span class="hljs-keyword">if</span> (n % block) tot++;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= tot; i++) &#123;
+        l[i] = (i - <span class="hljs-number">1</span>) * block + <span class="hljs-number">1</span>;
+        r[i] = i * block;
+    &#125;
+    r[tot] = n;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+        belong[i] = (i - <span class="hljs-number">1</span>) / block + <span class="hljs-number">1</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(node a, node b)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (belong[a.l] != belong[b.l])
+        <span class="hljs-keyword">return</span> belong[a.l] &lt; belong[b.l];
+    <span class="hljs-keyword">return</span> a.r &lt; b.r;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    res = res - num[a[x]] * (num[a[x]] - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>;
+    num[a[x]]++;
+    res = res + num[a[x]] * (num[a[x]] - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sub</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    res = res - num[a[x]] * (num[a[x]] - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>;
+    num[a[x]]--;
+    res = res + num[a[x]] * (num[a[x]] - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>;
+&#125;
+
+<span class="hljs-function">ll <span class="hljs-title">c</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> (ll)n * (n - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>;
+&#125;
+
+<span class="hljs-function">ll <span class="hljs-title">gcd</span><span class="hljs-params">(ll a, ll b)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> == b ? a : <span class="hljs-built_in">gcd</span>(b, a % b);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);
+    <span class="hljs-built_in">build</span>();
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;a[i]);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;q[i].l, &amp;q[i].r);
+        den[i] = <span class="hljs-built_in">c</span>(q[i].r - q[i].l + <span class="hljs-number">1</span>);
+        q[i].id = i;
+    &#125;
+    <span class="hljs-built_in">sort</span>(q + <span class="hljs-number">1</span>, q + m + <span class="hljs-number">1</span>, cmp);
+    <span class="hljs-keyword">int</span> L = <span class="hljs-number">1</span>, R = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) &#123;
+        <span class="hljs-keyword">while</span> (q[i].l &lt; L) <span class="hljs-built_in">add</span>(--L);
+        <span class="hljs-keyword">while</span> (q[i].r &gt; R) <span class="hljs-built_in">add</span>(++R);
+        <span class="hljs-keyword">while</span> (q[i].l &gt; L) <span class="hljs-built_in">sub</span>(L++);
+        <span class="hljs-keyword">while</span> (q[i].r &lt; R) <span class="hljs-built_in">sub</span>(R--);
+        mol[q[i].id] = res;
+    &#125;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) &#123;
+        ll d = <span class="hljs-built_in">gcd</span>(mol[i], den[i]);
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == mol[i]) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;0/1\n&quot;</span>);
+        <span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld/%lld\n&quot;</span>, mol[i] / d, den[i] / d);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../27/2019%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89-%20H.%20XOR(%E7%BA%BF%E6%80%A7%E5%9F%BA)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          2019牛客暑期多校训练营 (第一场) - H. XOR(线性基)
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../10/BZOJ%20-%201257%20%E4%BD%99%E6%95%B0%E4%B9%8B%E5%92%8C(%E6%95%B0%E5%AD%A6)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          BZOJ - 1257 余数之和(数学)
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../04/13/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/">后缀自动机</a>
+          </li>
+        
+          <li>
+            <a href="../../../04/09/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/">二分图匹配</a>
+          </li>
+        
+          <li>
+            <a href="../../../04/02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/">后缀数组</a>
+          </li>
+        
+          <li>
+            <a href="../../../03/19/%E5%B9%B3%E8%A1%A1%E6%A0%91%E5%85%A5%E9%97%A8/">平衡树入门</a>
+          </li>
+        
+          <li>
+            <a href="../../27/2019%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89-%20H.%20XOR(%E7%BA%BF%E6%80%A7%E5%9F%BA)/">2019牛客暑期多校训练营 (第一场) - H. XOR(线性基)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>

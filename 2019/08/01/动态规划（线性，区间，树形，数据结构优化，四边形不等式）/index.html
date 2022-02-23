@@ -7,10 +7,10 @@
   <title>动态规划 (线性, 区间, 树形, 数据结构优化, 四边形不等式)  | zzy&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <meta name="description" content="A - To The Max, hdu1081
+  <meta name="description" content="To The Max, hdu1081
 求最大子矩阵和, 把二维转换到一维, 把每一行的某些列的和看作一个元素, 这样就成了一维下的最大子段和, 预处理每行的前缀和, 暴力枚举每行的的列数情况即可
 #include &amp;lt;iostream&amp;gt;
-#include &amp;lt;algorith">
+#include &amp;lt;algorithm&amp;gt">
   
   
   
@@ -74,12 +74,12 @@
     
 <div id="article-toc">
     <h2 class="widget-title">目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#a--%20to%20the%20max,%20hdu1081"><span class="toc-number">1.</span> <span class="toc-text">A - To The Max, hdu1081</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#b--%20buy%20low,%20buy%20lower,%20poj1952"><span class="toc-number">2.</span> <span class="toc-text">B - BUY LOW, BUY LOWER, poj1952</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#c--%20monkey%20and%20banana,%20hdu1069"><span class="toc-number">3.</span> <span class="toc-text">C - Monkey and Banana, hdu1069</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#d--%20trip,%20poj1934"><span class="toc-number">4.</span> <span class="toc-text">D - Trip, poj1934</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#e--%20polygon,%20poj1179"><span class="toc-number">5.</span> <span class="toc-text">E - Polygon, poj1179</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#f--%20palindrome%20subsequence,%20hdu4632"><span class="toc-number">6.</span> <span class="toc-text">F - Palindrome subsequence, hdu4632</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#g--%20you%20are%20the%20one,%20hdu4283"><span class="toc-number">7.</span> <span class="toc-text">G - You Are the One, hdu4283</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#h--%20anniversary%20party,%20poj2342"><span class="toc-number">8.</span> <span class="toc-text">H - Anniversary party, poj2342</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#i--%20accumulation%20degree,%20poj3585"><span class="toc-number">9.</span> <span class="toc-text">I - Accumulation Degree, poj3585</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#j--%20computer,%20hdu2196"><span class="toc-number">10.</span> <span class="toc-text">J - Computer, hdu2196</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k--%20tree%20painting,%20codeforces1187e"><span class="toc-number">11.</span> <span class="toc-text">K - Tree Painting, CodeForces1187E</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#to-the%20max,%20hdu1081"><span class="toc-number">1.</span> <span class="toc-text">To The Max, hdu1081</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#buy-low,%20buy%20lower,%20poj1952"><span class="toc-number">2.</span> <span class="toc-text">BUY LOW, BUY LOWER, poj1952</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#monkey-and%20banana,%20hdu1069"><span class="toc-number">3.</span> <span class="toc-text">Monkey and Banana, hdu1069</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trip,-poj1934"><span class="toc-number">4.</span> <span class="toc-text">Trip, poj1934</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#polygon,-poj1179"><span class="toc-number">5.</span> <span class="toc-text">Polygon, poj1179</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#palindrome-subsequence,%20hdu4632"><span class="toc-number">6.</span> <span class="toc-text">Palindrome subsequence, hdu4632</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#you-are%20the%20one,%20hdu4283"><span class="toc-number">7.</span> <span class="toc-text">You Are the One, hdu4283</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#anniversary-party,%20poj2342"><span class="toc-number">8.</span> <span class="toc-text">Anniversary party, poj2342</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#accumulation-degree,%20poj3585"><span class="toc-number">9.</span> <span class="toc-text">Accumulation Degree, poj3585</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#computer,-hdu2196"><span class="toc-number">10.</span> <span class="toc-text">Computer, hdu2196</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tree-painting,%20codeforces1187e"><span class="toc-number">11.</span> <span class="toc-text">Tree Painting, CodeForces1187E</span></a></li></ol>
 </div>
 
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h2 id="a-- to the max, hdu1081">A - To The Max, hdu1081</h2>
+        <h2 id="to-the max, hdu1081">To The Max, hdu1081</h2>
 <p>求最大子矩阵和, 把二维转换到一维, 把每一行的某些列的和看作一个元素, 这样就成了一维下的最大子段和, 预处理每行的前缀和, 暴力枚举每行的的列数情况即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -116,7 +116,7 @@
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="b-- buy low, buy lower, poj1952">B - BUY LOW, BUY LOWER, poj1952</h2>
+<h2 id="buy-low, buy lower, poj1952">BUY LOW, BUY LOWER, poj1952</h2>
 <p>最长下降子序列很简单就能求出, 但是还要额外求一个方案数</p>
 <p>设<span class="markdown-them-math-inline">$dp[i]$</span>为以<span class="markdown-them-math-inline">$i$</span>结尾的最长下降子序列的长度, <span class="markdown-them-math-inline">$num[i]$</span>为以<span class="markdown-them-math-inline">$i$</span>结尾的最长下降子序列的个数</p>
 <p>所以状态转移方程为<span class="markdown-them-math-inline">$dp[i] = max(dp[i], dp[j] + 1)(c[j]&gt;c[i])$</span>, <span class="markdown-them-math-inline">$num[i] += num[j](c[j]&gt;c[i]\ \&amp;\&amp;\ dp[j]+1==dp[i])$</span></p>
@@ -153,7 +153,7 @@
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="c-- monkey and banana, hdu1069">C - Monkey and Banana, hdu1069</h2>
+<h2 id="monkey-and banana, hdu1069">Monkey and Banana, hdu1069</h2>
 <p>矩阵嵌套的变形, 每个立方体有六个面, 每个面都能作为底面, 预处理一下, 就跟矩阵嵌套一样了, 排个序后动态规划</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -204,7 +204,7 @@ node c[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="d-- trip, poj1934">D - Trip, poj1934</h2>
+<h2 id="trip,-poj1934">Trip, poj1934</h2>
 <p>最长公共子序列问题 (LCS) , 当<span class="markdown-them-math-inline">$a[i]==b[j]$</span>时, <span class="markdown-them-math-inline">$dp[i][j]=d[i-1][j-1]+1$</span>, 当<span class="markdown-them-math-inline">$a[i]!=b[j]$</span>时, <span class="markdown-them-math-inline">$dp[i][j]=max(dp[i-1][j],dp[i][j-1])$</span></p>
 <p>但是最坑的是需要输出方案数, 一开始想的是暴搜, 但肯定会超时</p>
 <p>但仔细想一想, 其实有很多的搜索是不必要的, 比如两个串的某两个位置的字符不相等, 这样就没必要继续向前一位搜索了, 我们就可以直接跳到当前位置前有公共字符的位置继续搜索</p>
@@ -278,7 +278,7 @@ vector&lt;string&gt; res;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="e-- polygon, poj1179">E - Polygon, poj1179</h2>
+<h2 id="polygon,-poj1179">Polygon, poj1179</h2>
 <p>感觉像一个加强版的成环石子合并, 先来回顾一下成环的石子合并</p>
 <p>将原序列复制一份放在后面, 枚举起点<span class="markdown-them-math-inline">$i$</span>, 用区间合并去计算区间<span class="markdown-them-math-inline">$[i,i+n]$</span>这个区间的最大值</p>
 <p>这题就是把区间合并中对两个区间的操作换了下, 石子合并是两个区间值相加, 这题两个区间值能够相加, 相乘, 而且区间值可能为负, 这就导致我们要记录一个最大值一个最小值</p>
@@ -358,7 +358,7 @@ vector&lt;string&gt; res;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="f-- palindrome subsequence, hdu4632">F - Palindrome subsequence, hdu4632</h2>
+<h2 id="palindrome-subsequence, hdu4632">Palindrome subsequence, hdu4632</h2>
 <p>求一个字符串的回文子序列的数目</p>
 <p>设<span class="markdown-them-math-inline">$dp[i][j]$</span>为字符串<span class="markdown-them-math-inline">$s$</span>中从<span class="markdown-them-math-inline">$i$</span>到<span class="markdown-them-math-inline">$j$</span>的回文子序列的数目</p>
 <p><span class="markdown-them-math-inline">$dp[i][j]$</span>有<span class="markdown-them-math-inline">$dp[i+1][j]$</span>和<span class="markdown-them-math-inline">$dp[i][j-1]$</span>转移过来, 但考虑到有重叠部分<span class="markdown-them-math-inline">$i+1$</span>到<span class="markdown-them-math-inline">$j-1$</span>, 所以<span class="markdown-them-math-inline">$dp[i][j] = (dp[i + 1][j] + dp[i][j - 1] - dp[i + 1][j - 1] + MOD) \% MOD$</span></p>
@@ -394,7 +394,7 @@ vector&lt;string&gt; res;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="g-- you are the one, hdu4283">G - You Are the One, hdu4283</h2>
+<h2 id="you-are the one, hdu4283">You Are the One, hdu4283</h2>
 <p>设<span class="markdown-them-math-inline">$dp[l][r]$</span>表示在不考虑其他人的情况下第<span class="markdown-them-math-inline">$l$</span>个人到第<span class="markdown-them-math-inline">$r$</span>个人产生的不开心值总和, 预处理一个数组<span class="markdown-them-math-inline">$sum[i]$</span>表示前<span class="markdown-them-math-inline">$i$</span>个人的屌丝值总和</p>
 <p>枚举<span class="markdown-them-math-inline">$l$</span>到<span class="markdown-them-math-inline">$r$</span>的分割点<span class="markdown-them-math-inline">$k$</span>, 两种情况</p>
 <ul>
@@ -455,7 +455,7 @@ vector&lt;string&gt; res;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="h-- anniversary party, poj2342">H - Anniversary party, poj2342</h2>
+<h2 id="anniversary-party, poj2342">Anniversary party, poj2342</h2>
 <p>设<span class="markdown-them-math-inline">$dp[u][0]$</span>表示选择<span class="markdown-them-math-inline">$u$</span>节点时子树欢乐值的最大值, <span class="markdown-them-math-inline">$dp[u][1]$</span>表示不选择<span class="markdown-them-math-inline">$u$</span>节点时子树快乐值的最大值</p>
 <p>设<span class="markdown-them-math-inline">$v$</span>是<span class="markdown-them-math-inline">$u$</span>的子节点, 两种情况</p>
 <ul>
@@ -507,7 +507,7 @@ vector&lt;<span class="hljs-keyword">int</span>&gt; nex[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="i-- accumulation degree, poj3585">I - Accumulation Degree, poj3585</h2>
+<h2 id="accumulation-degree, poj3585">Accumulation Degree, poj3585</h2>
 <p>换根的板子都差不多, 用链式前向星存图, 关键是公式如何推导</p>
 <p>设<span class="markdown-them-math-inline">$dp[u]$</span>表示第一次深搜得出每个节点最大的流量, <span class="markdown-them-math-inline">$res[u]$</span>表示以<span class="markdown-them-math-inline">$u$</span>为根节点时该结点最大的流量</p>
 <p>第二次深搜, 对于每一个子节点<span class="markdown-them-math-inline">$v$</span>有两种情况</p>
@@ -597,7 +597,7 @@ node edge[<span class="hljs-number">2</span> * N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="j-- computer, hdu2196">J - Computer, hdu2196</h2>
+<h2 id="computer,-hdu2196">Computer, hdu2196</h2>
 <p>换根的题, 不过不能只记录一个根节点到叶子节点的最大值, 还要记录一个根节点到到叶子节点的第二大的值, 顺便记录一下每个节点的最大值是从哪个子节点转移过来的</p>
 <p>设<span class="markdown-them-math-inline">$maxn[i]$</span>和<span class="markdown-them-math-inline">$smaxn[i]$</span>分别表示<span class="markdown-them-math-inline">$i$</span>节点到叶子节点的最大值和第二大的值, <span class="markdown-them-math-inline">$m\_id[i]$</span>和<span class="markdown-them-math-inline">$sm\_id[i]$</span>分别表示<span class="markdown-them-math-inline">$i$</span>节点的最大值和第二大的值从哪个节点转移过来</p>
 <p>当从父节点<span class="markdown-them-math-inline">$u$</span>向子节点<span class="markdown-them-math-inline">$v$</span>转移的时候, 有两种情况</p>
@@ -696,7 +696,7 @@ node edge[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="k-- tree painting, codeforces1187e">K - Tree Painting, CodeForces1187E</h2>
+<h2 id="tree-painting, codeforces1187e">Tree Painting, CodeForces1187E</h2>
 <p>设<span class="markdown-them-math-inline">$sum[i]$</span>表示第一次深搜后第<span class="markdown-them-math-inline">$i$</span>个节点子树的节点数量, 设<span class="markdown-them-math-inline">$res[i]$</span>表示以<span class="markdown-them-math-inline">$i$</span>为根节点时答案</p>
 <p>假设第一次从节点<span class="markdown-them-math-inline">$1$</span>开始深搜, 则有<span class="markdown-them-math-inline">$res[1]=n+dp[2]+dp[3]+...+dp[n]$</span></p>
 <p>当从<span class="markdown-them-math-inline">$1$</span>转移到它的子节点<span class="markdown-them-math-inline">$2$</span>时有<span class="markdown-them-math-inline">$res[2]=n+dp[3]+...+dp[n]+dp[1]-dp[2]$</span></p>
@@ -815,23 +815,23 @@ node edge[<span class="hljs-number">2</span> * N];
       <ul>
         
           <li>
-            <a href="../../../../2020/01/15/Codeforces%20Round608%20(Div.%202)%20-%20D.%20Portals(%E8%B4%AA%E5%BF%83)/">Codeforces Round608 (Div. 2) - D. Portals(贪心)</a>
+            <a href="../../../../2020/04/13/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/">后缀自动机</a>
           </li>
         
           <li>
-            <a href="../../../../2020/01/10/Codeforces%20Round606%20(Div.%202)%20-%20E.%20Two%20Fairs(%E5%89%B2%E7%82%B9+dfs)/">Codeforces Round606 (Div. 2) - E. Two Fairs(割点+dfs)</a>
+            <a href="../../../../2020/04/09/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/">二分图匹配</a>
           </li>
         
           <li>
-            <a href="../../../12/29/Codeforces%20Round603%20(Div.%202)%20-%20E.%20Editor(%E7%BA%BF%E6%AE%B5%E6%A0%91)/">Codeforces Round603 (Div. 2) - E. Editor(线段树)</a>
+            <a href="../../../../2020/04/02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/">后缀数组</a>
           </li>
         
           <li>
-            <a href="../../../12/25/Educational%20Codeforces%20Round%2077%20(Rated%20for%20Div.%202)%20-%20D.%20A%20Game%20with%20Traps(%E4%BA%8C%E5%88%86)/">Educational Codeforces Round 77 (Rated for Div. 2) - D. A Game with Traps(二分)</a>
+            <a href="../../../../2020/03/19/%E5%B9%B3%E8%A1%A1%E6%A0%91%E5%85%A5%E9%97%A8/">平衡树入门</a>
           </li>
         
           <li>
-            <a href="../../../12/13/Codeforces%20Round600%20(Div.%202)%20-%20D.%20Harmonious%20Graph(%E5%B9%B6%E6%9F%A5%E9%9B%86)/">Codeforces Round600 (Div. 2) - D. Harmonious Graph(并查集)</a>
+            <a href="../../../../2020/02/27/2019%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89-%20H.%20XOR(%E7%BA%BF%E6%80%A7%E5%9F%BA)/">2019牛客暑期多校训练营 (第一场) - H. XOR(线性基)</a>
           </li>
         
       </ul>

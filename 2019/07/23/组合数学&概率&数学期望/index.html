@@ -7,10 +7,10 @@
   <title>组合数学&amp;概率&amp;数学期望 | zzy&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <meta name="description" content="A - 容斥原理 (CodeForces - 451E)
+  <meta name="description" content="容斥原理 (CodeForces - 451E)
 二进制状态压缩暴力枚举哪几个花选的个数超过了总个数, 卢卡斯定理求组合数, 容斥原理求答案
 可以先把每个花的数量当成无限个, 这样就是一个多重集的组合数$ans=C_{n+m-1}^{n-1}$
-所以要减去有一种花超过花的数量的情况, 加上有">
+所以要减去有一种花超过花的数量的情况, 加上有两种花超">
   
   
   
@@ -74,12 +74,12 @@
     
 <div id="article-toc">
     <h2 class="widget-title">目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#a--%20%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86%20(codeforces%20-%20451e)"><span class="toc-number">1.</span> <span class="toc-text">A - 容斥原理 (CodeForces - 451E)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#b--%20%E5%8D%B1%E9%99%A9%E7%9A%84%E7%BB%84%E5%90%88%20(critical%20mass,%20uva580)"><span class="toc-number">2.</span> <span class="toc-text">B - 危险的组合 (Critical Mass, UVa580)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#c--%20%E6%9D%86%E5%AD%90%E7%9A%84%E6%8E%92%E5%BA%8F%20(pole%20arrangement,%20uva1638)"><span class="toc-number">3.</span> <span class="toc-text">C - 杆子的排序 (Pole Arrangement, UVa1638)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#d--%20%E6%AF%94%E8%B5%9B%E5%90%8D%E6%AC%A1%20(race,%20uva12034)"><span class="toc-number">4.</span> <span class="toc-text">D - 比赛名次 (Race, UVa12034)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#e--%20%E9%BA%BB%E7%90%83%E7%B9%81%E8%A1%8D%20(tribbles,%20uva11021)"><span class="toc-number">5.</span> <span class="toc-text">E - 麻球繁衍 (Tribbles, UVa11021)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#f--%20%E7%8E%A9%E7%BA%B8%E7%89%8C%20(expect%20the%20expected,%20uva11427)"><span class="toc-number">6.</span> <span class="toc-text">F - 玩纸牌 (Expect the Expected, UVa11427)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#g--%20%E5%BE%97%E5%88%B01%20(race%20to%201,%20uva11762)"><span class="toc-number">7.</span> <span class="toc-text">G - 得到1 (Race to 1, UVa11762)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#h--%20%E5%86%B3%E6%96%97%20(headshot,%20uva1636)"><span class="toc-number">8.</span> <span class="toc-text">H - 决斗 (Headshot, UVa1636)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#i--%20%E5%A5%B6%E7%89%9B%E5%92%8C%E8%BD%BF%E8%BD%A6%20(cows%20and%20cars,%20uva10491)"><span class="toc-number">9.</span> <span class="toc-text">I - 奶牛和轿车 (Cows and Cars, UVa10491)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#j--%20%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87%20(probability%7Cgiven,%20uva11181)"><span class="toc-number">10.</span> <span class="toc-text">J - 条件概率 (Probability|Given, UVa11181)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k--%20%E7%BA%B8%E7%89%8C%E6%B8%B8%E6%88%8F%20(double%20patience,%20uva1637)"><span class="toc-number">11.</span> <span class="toc-text">K - 纸牌游戏 (Double Patience, UVa1637)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#l--%20%E8%BF%87%E6%B2%B3%20(crossing%20rivers,%20uva12230)"><span class="toc-number">12.</span> <span class="toc-text">L - 过河 (Crossing Rivers, UVa12230)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#m--%20%E7%B3%96%E6%9E%9C%20(candy,%20uva1639)"><span class="toc-number">13.</span> <span class="toc-text">M - 糖果 (Candy, UVa1639)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#n--%20%E4%BC%98%E6%83%A0%E5%88%B8%20(coupons,%20uva10288)"><span class="toc-number">14.</span> <span class="toc-text">N - 优惠券 (Coupons, UVa10288)</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86-(codeforces%20-%20451e)"><span class="toc-number">1.</span> <span class="toc-text">容斥原理 (CodeForces - 451E)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%B1%E9%99%A9%E7%9A%84%E7%BB%84%E5%90%88-(critical%20mass,%20uva580)"><span class="toc-number">2.</span> <span class="toc-text">危险的组合 (Critical Mass, UVa580)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%86%E5%AD%90%E7%9A%84%E6%8E%92%E5%BA%8F-(pole%20arrangement,%20uva1638)"><span class="toc-number">3.</span> <span class="toc-text">杆子的排序 (Pole Arrangement, UVa1638)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%94%E8%B5%9B%E5%90%8D%E6%AC%A1-(race,%20uva12034)"><span class="toc-number">4.</span> <span class="toc-text">比赛名次 (Race, UVa12034)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BA%BB%E7%90%83%E7%B9%81%E8%A1%8D-(tribbles,%20uva11021)"><span class="toc-number">5.</span> <span class="toc-text">麻球繁衍 (Tribbles, UVa11021)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%A9%E7%BA%B8%E7%89%8C-(expect%20the%20expected,%20uva11427)"><span class="toc-number">6.</span> <span class="toc-text">玩纸牌 (Expect the Expected, UVa11427)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%97%E5%88%B01-(race%20to%201,%20uva11762)"><span class="toc-number">7.</span> <span class="toc-text">得到1 (Race to 1, UVa11762)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%B3%E6%96%97-(headshot,%20uva1636)"><span class="toc-number">8.</span> <span class="toc-text">决斗 (Headshot, UVa1636)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A5%B6%E7%89%9B%E5%92%8C%E8%BD%BF%E8%BD%A6-(cows%20and%20cars,%20uva10491)"><span class="toc-number">9.</span> <span class="toc-text">奶牛和轿车 (Cows and Cars, UVa10491)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87-(probability%7Cgiven,%20uva11181)"><span class="toc-number">10.</span> <span class="toc-text">条件概率 (Probability|Given, UVa11181)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%B8%E7%89%8C%E6%B8%B8%E6%88%8F-(double%20patience,%20uva1637)"><span class="toc-number">11.</span> <span class="toc-text">纸牌游戏 (Double Patience, UVa1637)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%B2%B3-(crossing%20rivers,%20uva12230)"><span class="toc-number">12.</span> <span class="toc-text">过河 (Crossing Rivers, UVa12230)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%96%E6%9E%9C-(candy,%20uva1639)"><span class="toc-number">13.</span> <span class="toc-text">糖果 (Candy, UVa1639)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E6%83%A0%E5%88%B8-(coupons,%20uva10288)"><span class="toc-number">14.</span> <span class="toc-text">优惠券 (Coupons, UVa10288)</span></a></li></ol>
 </div>
 
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h2 id="a-- 容斥原理 (codeforces - 451e)">A - 容斥原理 (CodeForces - 451E)</h2>
+        <h2 id="容斥原理-(codeforces - 451e)">容斥原理 (CodeForces - 451E)</h2>
 <p>二进制状态压缩暴力枚举哪几个花选的个数超过了总个数, 卢卡斯定理求组合数, 容斥原理求答案</p>
 <p>可以先把每个花的数量当成无限个, 这样就是一个多重集的组合数<span class="markdown-them-math-inline">$ans=C_{n+m-1}^{n-1}$</span></p>
 <p>所以要减去有一种花超过花的数量的情况, 加上有两种花超过花的数量的情况, 减去有三种花超过花的数量的情况…</p>
@@ -144,7 +144,7 @@ ll n, s, f[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="b-- 危险的组合 (critical mass, uva580)">B - 危险的组合 (Critical Mass, UVa580)</h2>
+<h2 id="危险的组合-(critical mass, uva580)">危险的组合 (Critical Mass, UVa580)</h2>
 <p>设答案为<span class="markdown-them-math-inline">$f(n)$</span>, 分两种情况:</p>
 <ul>
 <li>当加入第<span class="markdown-them-math-inline">$n$</span>个元素时组成三个放在一起的U, 那么第<span class="markdown-them-math-inline">$n - 1, n - 2$</span>都为U, 第<span class="markdown-them-math-inline">$n - 3$</span>为L, 保证前<span class="markdown-them-math-inline">$n-4$</span>个元素不会出现三个U放在一起, 所以此时有<span class="markdown-them-math-inline">$2^{n-4} - f(n - 4)$</span>种可能</li>
@@ -184,7 +184,7 @@ ll n, s, f[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="c-- 杆子的排序 (pole arrangement, uva1638)">C - 杆子的排序 (Pole Arrangement, UVa1638)</h2>
+<h2 id="杆子的排序-(pole arrangement, uva1638)">杆子的排序 (Pole Arrangement, UVa1638)</h2>
 <p>设有<span class="markdown-them-math-inline">$n$</span>个杆子, 从左边看能看到<span class="markdown-them-math-inline">$l$</span>根, 从右边看能<span class="markdown-them-math-inline">$r$</span>跟时的答案是<span class="markdown-them-math-inline">$f(n,l,r)$</span>, 插入高度为n的杆子不好讨论, 所以考虑插入高度为1的杆子时的有三种情况:</p>
 <ul>
 <li>插到最左边, 则从左边能看见, 从右边看不见, 这时有<span class="markdown-them-math-inline">$f(n-1,l-1,r)$</span>种可能</li>
@@ -223,7 +223,7 @@ ll n, s, f[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="d-- 比赛名次 (race, uva12034)">D - 比赛名次 (Race, UVa12034)</h2>
+<h2 id="比赛名次-(race, uva12034)">比赛名次 (Race, UVa12034)</h2>
 <p>设答案为<span class="markdown-them-math-inline">$f(n)$</span>, 假设第一名有<span class="markdown-them-math-inline">$i$</span>个人, 则有<span class="markdown-them-math-inline">$C(n,i)$</span>种可能, 接下来的有<span class="markdown-them-math-inline">$f(n-i)$</span>种可能性, 所以答案<span class="markdown-them-math-inline">$f(n)=\sum_{i=1}^{i=n} C(n,i)*f(n-i)$</span>, 打个表即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 
@@ -262,7 +262,7 @@ ll n, s, f[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="e-- 麻球繁衍 (tribbles, uva11021)">E - 麻球繁衍 (Tribbles, UVa11021)</h2>
+<h2 id="麻球繁衍-(tribbles, uva11021)">麻球繁衍 (Tribbles, UVa11021)</h2>
 <p>由于每只的麻球的后代独立存活, 所以只用求出一个麻球<span class="markdown-them-math-inline">$m$</span>天后全部死亡的概率<span class="markdown-them-math-inline">$f(m)$</span>, 最后的答案就是<span class="markdown-them-math-inline">$f(m)^{k}$</span></p>
 <p>第一天出生的麻球会在<span class="markdown-them-math-inline">$m-1$</span>后全部死亡, 所以<span class="markdown-them-math-inline">$f(m)=P_{0} + P_{1}*f(m-1)+P_{2}*f(m-1)^{2} + ...+P_{n-1}*f(m-1)^{n-1}$</span></p>
 <p>第二天出生的麻球会在<span class="markdown-them-math-inline">$m-2$</span>后全部死亡, 所以<span class="markdown-them-math-inline">$f(m-1)=P_{0} + P_{1}*f(m-2)+P_{2}*f(m-2)^{2} + ...+P_{n-1}*f(m-2)^{n-1}$</span></p>
@@ -299,7 +299,7 @@ ll n, s, f[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="f-- 玩纸牌 (expect the expected, uva11427)">F - 玩纸牌 (Expect the Expected, UVa11427)</h2>
+<h2 id="玩纸牌-(expect the expected, uva11427)">玩纸牌 (Expect the Expected, UVa11427)</h2>
 <p>设<span class="markdown-them-math-inline">$p(i,j)$</span>表示玩<span class="markdown-them-math-inline">$i$</span>局赢<span class="markdown-them-math-inline">$j$</span>局的概率, 所以当<span class="markdown-them-math-inline">$j&gt;0$</span>时, <span class="markdown-them-math-inline">$p(i,j)=p(i-1,j-1)*\frac{a}{b}+p(i-1,j)*(1-\frac{a}{b})$</span>, 当<span class="markdown-them-math-inline">$j=0$</span>时, 第<span class="markdown-them-math-inline">$i$</span>局输, 所以<span class="markdown-them-math-inline">$p(i,j)=p(i-1,j)*(1-\frac{a}{b})$</span></p>
 <p>设每天晚上垂头丧气去睡觉的概率为<span class="markdown-them-math-inline">$q$</span>, 所以<span class="markdown-them-math-inline">$q=\sum_{i=0}^{i*b\leqslant a*n}p(n,i)$</span></p>
 <p>设数学期望为<span class="markdown-them-math-inline">$E$</span>天, 第一天晚上有两种情况发生:</p>
@@ -342,7 +342,7 @@ ll n, s, f[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="g-- 得到1 (race to 1, uva11762)">G - 得到1 (Race to 1, UVa11762)</h2>
+<h2 id="得到1-(race to 1, uva11762)">得到1 (Race to 1, UVa11762)</h2>
 <p>设<span class="markdown-them-math-inline">$f(x)$</span>为当前数为<span class="markdown-them-math-inline">$x$</span>时接下来需要操作的次数, 不超过<span class="markdown-them-math-inline">$x$</span>的素数个数为<span class="markdown-them-math-inline">$p(x)$</span>, 不超过<span class="markdown-them-math-inline">$x$</span>而且能被<span class="markdown-them-math-inline">$x$</span>整除的素数个数为<span class="markdown-them-math-inline">$g(x)$</span></p>
 <p>每一次选取都要操作一次, 所以由全概率公式有<span class="markdown-them-math-inline">$f(x)=1+[1-\frac{g(x)}{p(x)}]*f(x)+\sum _{0=x\%y}\frac{f(\frac{x}{y})}{p}$</span></p>
 <p>化简后得<span class="markdown-them-math-inline">$f(x)=\frac{p(x)+\sum _{0=x\%y}\frac{f(\frac{x}{y})}{p}}{g(x)}$</span></p>
@@ -397,7 +397,7 @@ ll n, s, f[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="h-- 决斗 (headshot, uva1636)">H - 决斗 (Headshot, UVa1636)</h2>
+<h2 id="决斗-(headshot, uva1636)">决斗 (Headshot, UVa1636)</h2>
 <p>设字符串的长度为<span class="markdown-them-math-inline">$n$</span>, 子串中00的个数为<span class="markdown-them-math-inline">$a$</span>, 0的个数为<span class="markdown-them-math-inline">$b$</span>, 分别求直接再抠一枪和随机转一下的条件概率</p>
 <ul>
 <li>直接再抠一枪, 因为第一个是0, 所以在第一个是0的条件下再抠一枪还是0的概率是<span class="markdown-them-math-inline">$\frac{a}{b}$</span></li>
@@ -426,7 +426,7 @@ string s;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="i-- 奶牛和轿车 (cows and cars, uva10491)">I - 奶牛和轿车 (Cows and Cars, UVa10491)</h2>
+<h2 id="奶牛和轿车-(cows and cars, uva10491)">奶牛和轿车 (Cows and Cars, UVa10491)</h2>
 <p>和三门问题一样</p>
 <ul>
 <li>第一次选到牛的概率为<span class="markdown-them-math-inline">$\frac{a}{a+b}$</span>, 打开<span class="markdown-them-math-inline">$c$</span>扇门后换门选到车的概率为<span class="markdown-them-math-inline">$\frac{b}{a+b-c-1}$</span></li>
@@ -448,7 +448,7 @@ string s;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="j-- 条件概率 (probability|given, uva11181)">J - 条件概率 (Probability|Given, UVa11181)</h2>
+<h2 id="条件概率-(probability|given, uva11181)">条件概率 (Probability|Given, UVa11181)</h2>
 <p>条件概率的公式为<span class="markdown-them-math-inline">$p(E_{i}|E)=\frac{p(E_{i} E)}{p(E)}$</span></p>
 <p>所以要通过深搜算出<span class="markdown-them-math-inline">$n$</span>个人中<span class="markdown-them-math-inline">$r$</span>买物品的概率<span class="markdown-them-math-inline">$p(E)$</span>, 算出第<span class="markdown-them-math-inline">$i$</span>个人买物品的同时有<span class="markdown-them-math-inline">$r$</span>个人买物品的概率<span class="markdown-them-math-inline">$p(E_{i} E)$</span></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
@@ -507,7 +507,7 @@ string s;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="k-- 纸牌游戏 (double patience, uva1637)">K - 纸牌游戏 (Double Patience, UVa1637)</h2>
+<h2 id="纸牌游戏-(double patience, uva1637)">纸牌游戏 (Double Patience, UVa1637)</h2>
 <p>用九元组vector<int> cnt(9,4)来存储状态, 用map&lt; vector<int> cnt, double &gt; mp来映射一个状态的成功的概率</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -564,7 +564,7 @@ map&lt; vector&lt;<span class="hljs-keyword">int</span>&gt;, <span class="hljs-k
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="l-- 过河 (crossing rivers, uva12230)">L - 过河 (Crossing Rivers, UVa12230)</h2>
+<h2 id="过河-(crossing rivers, uva12230)">过河 (Crossing Rivers, UVa12230)</h2>
 <p>由于船在每个位置概率是相等的, 所以过每条河的时间为<span class="markdown-them-math-inline">$\frac{L}{v}$</span>到<span class="markdown-them-math-inline">$\frac{3* L}{v}$</span>均匀分布, 因此过河时间为<span class="markdown-them-math-inline">$\frac{2* L}{v}$</span>, 再加上<span class="markdown-them-math-inline">$D-sum(L)$</span></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iomanip&gt;</span></span>
@@ -593,7 +593,7 @@ map&lt; vector&lt;<span class="hljs-keyword">int</span>&gt;, <span class="hljs-k
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="m-- 糖果 (candy, uva1639)">M - 糖果 (Candy, UVa1639)</h2>
+<h2 id="糖果-(candy, uva1639)">糖果 (Candy, UVa1639)</h2>
 <p>假设最后一次打开第一个盒子, 此时第二个盒子有<span class="markdown-them-math-inline">$i$</span>颗糖, 则在这之前一共打开过<span class="markdown-them-math-inline">$2*n-i$</span>次盒子, 其中有<span class="markdown-them-math-inline">$n$</span>次打开第一个盒子, 最后一次要打开第一个盒子, 所以概率为<span class="markdown-them-math-inline">$C_{2*n-i}^{n}*p^{n+1}*(1-p)^{n-i}$</span></p>
 <p>取对数有<span class="markdown-them-math-inline">$v1(i)=In(C_{2*n-i}^{n})+(n+1)*In(p)+(n-i)*In(1-p)$</span>, 化简的<span class="markdown-them-math-inline">$In(C_{2*n-i}^{n})=In\frac{(2*n-i)!}{n!*(n-i)!}=\sum _{k=1}^{2*n-i}In(k)-\sum _{k=1}^{n}In(k)$</span></p>
 <p>所以<span class="markdown-them-math-inline">$v1(i)=\sum _{k=1}^{2*n-i}In(k)-\sum _{k=1}^{n}In(k)+(n+1)*In(p)+(n-i)*In(1-p)$</span></p>
@@ -632,7 +632,7 @@ map&lt; vector&lt;<span class="hljs-keyword">int</span>&gt;, <span class="hljs-k
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="n-- 优惠券 (coupons, uva10288)">N - 优惠券 (Coupons, UVa10288)</h2>
+<h2 id="优惠券-(coupons, uva10288)">优惠券 (Coupons, UVa10288)</h2>
 <p>当已经拿到<span class="markdown-them-math-inline">$k$</span>张后, 拿第<span class="markdown-them-math-inline">$k+1$</span>张时, 拿到的概率为<span class="markdown-them-math-inline">$Q=\frac{n-k}{n}$</span></p>
 <p>设拿到第<span class="markdown-them-math-inline">$k+1$</span>的期望为<span class="markdown-them-math-inline">$E$</span>, 分两种情况:</p>
 <ul>
@@ -734,23 +734,23 @@ ll num_pre, num_n_up, num_n_down;
       <ul>
         
           <li>
-            <a href="../../../../2020/01/15/Codeforces%20Round608%20(Div.%202)%20-%20D.%20Portals(%E8%B4%AA%E5%BF%83)/">Codeforces Round608 (Div. 2) - D. Portals(贪心)</a>
+            <a href="../../../../2020/04/13/%E5%90%8E%E7%BC%80%E8%87%AA%E5%8A%A8%E6%9C%BA/">后缀自动机</a>
           </li>
         
           <li>
-            <a href="../../../../2020/01/10/Codeforces%20Round606%20(Div.%202)%20-%20E.%20Two%20Fairs(%E5%89%B2%E7%82%B9+dfs)/">Codeforces Round606 (Div. 2) - E. Two Fairs(割点+dfs)</a>
+            <a href="../../../../2020/04/09/%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D/">二分图匹配</a>
           </li>
         
           <li>
-            <a href="../../../12/29/Codeforces%20Round603%20(Div.%202)%20-%20E.%20Editor(%E7%BA%BF%E6%AE%B5%E6%A0%91)/">Codeforces Round603 (Div. 2) - E. Editor(线段树)</a>
+            <a href="../../../../2020/04/02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/">后缀数组</a>
           </li>
         
           <li>
-            <a href="../../../12/25/Educational%20Codeforces%20Round%2077%20(Rated%20for%20Div.%202)%20-%20D.%20A%20Game%20with%20Traps(%E4%BA%8C%E5%88%86)/">Educational Codeforces Round 77 (Rated for Div. 2) - D. A Game with Traps(二分)</a>
+            <a href="../../../../2020/03/19/%E5%B9%B3%E8%A1%A1%E6%A0%91%E5%85%A5%E9%97%A8/">平衡树入门</a>
           </li>
         
           <li>
-            <a href="../../../12/13/Codeforces%20Round600%20(Div.%202)%20-%20D.%20Harmonious%20Graph(%E5%B9%B6%E6%9F%A5%E9%9B%86)/">Codeforces Round600 (Div. 2) - D. Harmonious Graph(并查集)</a>
+            <a href="../../../../2020/02/27/2019%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89-%20H.%20XOR(%E7%BA%BF%E6%80%A7%E5%9F%BA)/">2019牛客暑期多校训练营 (第一场) - H. XOR(线性基)</a>
           </li>
         
       </ul>
