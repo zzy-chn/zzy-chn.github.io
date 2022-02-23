@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>莫比乌斯反演 | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="莫比乌斯反演:
+
+
+$F(n)=\sum_{d|n}f(d) \Rightarrow f(n)=\sum_{d|n}\mu(d)F(\frac{n}{d})$
+
+
+$F(n)=\sum_{n|d}f(d) \Rightarrow f(n)=\sum_{n|d}\mu(\frac{d}{n})F(d)">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-莫比乌斯反演" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2020-06-05T03:59:00.000Z" itemprop="datePublished">2020-06-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      莫比乌斯反演
+    </h1>
+  
+
+      </header>
+    
+    
+<div id="article-toc">
+    <h2 class="widget-title">目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%5Bpoi2007%5Dzap"><span class="toc-number">1.</span> <span class="toc-text">[POI2007]Zap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yy%E7%9A%84gcd"><span class="toc-number">2.</span> <span class="toc-text">YY的GCD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%5Bhaoi2011%5Dproblem-b"><span class="toc-number">3.</span> <span class="toc-text">[HAOI2011]Problem b</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%5Bsdoi2014%5D%E6%95%B0%E8%A1%A8"><span class="toc-number">4.</span> <span class="toc-text">[Sdoi2014]数表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#crash%E7%9A%84%E6%95%B0%E5%AD%97%E8%A1%A8%E6%A0%BC"><span class="toc-number">5.</span> <span class="toc-text">Crash的数字表格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#at5200-%5Bagc038c%5D%20lcms"><span class="toc-number">6.</span> <span class="toc-text">AT5200 [AGC038C] LCMs</span></a></li></ol>
+</div>
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>莫比乌斯反演:</p>
+<ol>
+<li>
+<p><span class="markdown-them-math-inline">$F(n)=\sum_{d|n}f(d) \Rightarrow f(n)=\sum_{d|n}\mu(d)F(\frac{n}{d})$</span></p>
+</li>
+<li>
+<p><span class="markdown-them-math-inline">$F(n)=\sum_{n|d}f(d) \Rightarrow f(n)=\sum_{n|d}\mu(\frac{d}{n})F(d)$</span></p>
+</li>
+</ol>
+<h2 id="[poi2007]zap">[POI2007]Zap</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="http://lydsy.com/JudgeOnline/problem.php?id=1101">bzoj - 1101</a></p>
+<p>题意: 对于给定的整数a, b和d, 有多少正整数对x, y, 满足x<span class="markdown-them-math-inline">$\leq$</span>a, y<span class="markdown-them-math-inline">$\leq$</span>b, 并且gcd(x,y)=d</p>
+<p>思路: 设<span class="markdown-them-math-inline">$F(n)$</span>表示gcd(x,y)为n的倍数(包括n本身)的数量, <span class="markdown-them-math-inline">$f(n)$</span>表示gcd(x,y)为n的数量</p>
+<p>显然有<span class="markdown-them-math-inline">$F(n)=\sum_{n|d}f(d)$</span></p>
+<p>所以由莫比乌斯反演得<span class="markdown-them-math-inline">$f(n)=\sum_{n|d}\mu(\frac{d}{n})F(d)$</span>, 而<span class="markdown-them-math-inline">$F(d)=\left \lfloor \frac{a}{d} \right \rfloor  \left \lfloor \frac{b}{d} \right \rfloor$</span>(根据<span class="markdown-them-math-inline">$F(n)$</span>的定义理解)</p>
+<p>代入<span class="markdown-them-math-inline">$f(n)=\sum_{n|d}\mu(\frac{d}{n}) \left \lfloor \frac{a}{d} \right \rfloor \left \lfloor \frac{b}{d} \right \rfloor$</span></p>
+<p>令<span class="markdown-them-math-inline">$k=\frac{d}{n}$</span>可得<span class="markdown-them-math-inline">$f(n)=\sum_{k=1}^{min(\left \lfloor \frac{a}{n} \right \rfloor , \left \lfloor \frac{b}{n} \right \rfloor)}\mu(k) \left \lfloor \frac{a}{kn} \right \rfloor  \left \lfloor \frac{b}{kn} \right \rfloor$</span></p>
+<p>预处理出<span class="markdown-them-math-inline">$\mu(k)$</span>的前缀和, 然后整除分块计算即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">500010</span>;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">int</span> isp[N], p[N], mu[N], sum[N];
+<span class="hljs-keyword">int</span> tot, T, a, b, d;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span>
+</span>&#123;
+    mu[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">if</span> (!isp[i]) &#123;
+            p[++tot] = i;
+            mu[i] = <span class="hljs-number">-1</span>;
+        &#125;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">1</span>; j &lt;= tot &amp;&amp; p[j] &lt;= n / i; j++) &#123;
+            isp[i * p[j]] = <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == i % p[j]) &#123;
+                mu[i * p[j]] = <span class="hljs-number">0</span>;
+                <span class="hljs-keyword">break</span>;   
+            &#125;
+            <span class="hljs-keyword">else</span> mu[i * p[j]] = -mu[i];
+        &#125;
+    &#125;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) sum[i] = sum[i - <span class="hljs-number">1</span>] + mu[i];
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">init</span>(N - <span class="hljs-number">5</span>);
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>, &amp;a, &amp;b, &amp;d);
+        ll res = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> l = <span class="hljs-number">1</span>, r = <span class="hljs-number">1</span>; l &lt;= <span class="hljs-built_in">min</span>(a / d, b / d); l = r + <span class="hljs-number">1</span>) &#123;
+            r = <span class="hljs-built_in">min</span>(a / (a / l), b / (b / l));
+            res += <span class="hljs-number">1ll</span> * (sum[r] - sum[l - <span class="hljs-number">1</span>]) * (a / (l * d)) * (b / (l * d));
+        &#125;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="yy的gcd">YY的GCD</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="https://darkbzoj.tk/problem/2820">bzoj - 2820</a></p>
+<p>题意: 对于给定的整数n, m, 有多少正整数对x, y, 满足x<span class="markdown-them-math-inline">$\leq$</span>n, y<span class="markdown-them-math-inline">$\leq$</span>m, 并且gcd(x,y)为质数</p>
+<p>思路: 设<span class="markdown-them-math-inline">$F(n)$</span>表示gcd(x,y)为n的倍数(包括n本身)的数量, <span class="markdown-them-math-inline">$f(n)$</span>表示gcd(x,y)为n的数量</p>
+<p>显然有<span class="markdown-them-math-inline">$F(n)=\sum_{n|d}f(d)$</span></p>
+<p>所以由莫比乌斯反演得<span class="markdown-them-math-inline">$f(n)=\sum_{n|d}\mu(\frac{d}{n})F(d)$</span>, 而<span class="markdown-them-math-inline">$F(d)=\left \lfloor \frac{a}{d} \right \rfloor  \left \lfloor \frac{b}{d} \right \rfloor$</span>(根据<span class="markdown-them-math-inline">$F(n)$</span>的定义理解)</p>
+<p>代入<span class="markdown-them-math-inline">$f(n)=\sum_{n|d}\mu(\frac{d}{n}) \left \lfloor \frac{a}{d} \right \rfloor \left \lfloor \frac{b}{d} \right \rfloor$</span></p>
+<p>所以<span class="markdown-them-math-inline">$res=\sum_{p\in prime}f(p)=\sum_{p\in prime}\sum_{p|d}\mu(\frac{d}{p}) \left \lfloor \frac{a}{d} \right \rfloor \left \lfloor \frac{b}{d} \right \rfloor$</span></p>
+<p>因为对于质数p的每个倍数d求<span class="markdown-them-math-inline">$\mu(\frac{d}{p}) \left \lfloor \frac{a}{d} \right \rfloor \left \lfloor \frac{b}{d} \right \rfloor$</span>所得到的值和对于d的每个质因子p求<span class="markdown-them-math-inline">$\mu(\frac{d}{p}) \left \lfloor \frac{a}{d} \right \rfloor \left \lfloor \frac{b}{d} \right \rfloor$</span>所得到的值是一样的</p>
+<p>所以<span class="markdown-them-math-inline">$res=\sum_{d=1}^{min(n,m)} \sum_{p\in{prime}\ p|d} \mu(\frac{d}{p}) \left \lfloor \frac{a}{d} \right \rfloor \left \lfloor \frac{b}{d} \right \rfloor$</span></p>
+<p>用整数分块化简后得<span class="markdown-them-math-inline">$\sum_{d=1}^{min(n,m)}(\left \lfloor \frac{a}{d} \right \rfloor \left \lfloor \frac{b}{d} \right \rfloor \sum_{p\in{prime}\ p|d} \mu(\frac{d}{p}))$</span></p>
+<p>令<span class="markdown-them-math-inline">$c(d)=\sum_{p\in{prime}\ p|d} \mu(\frac{d}{p})$</span></p>
+<p>预处理出<span class="markdown-them-math-inline">$c(d)$</span>的前缀和<span class="markdown-them-math-inline">$sum(d)$</span>, 利用整数分块计算即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">10000010</span>;
+
+<span class="hljs-keyword">int</span> isp[N], p[N], mu[N];
+<span class="hljs-keyword">int</span> T, tot, n, m;
+ll sum[N];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span>
+</span>&#123;
+    mu[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">if</span> (!isp[i]) &#123;
+            p[++tot] = i;
+            mu[i] = <span class="hljs-number">-1</span>;
+        &#125;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">1</span>; j &lt;= tot &amp;&amp; p[j] &lt;= n / i; j++) &#123;
+            isp[i * p[j]] = <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == i % p[j]) &#123;
+                mu[i * p[j]] = <span class="hljs-number">0</span>;
+                <span class="hljs-keyword">break</span>;
+            &#125;
+            <span class="hljs-keyword">else</span> mu[i * p[j]] = -mu[i];
+        &#125;
+    &#125;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= tot; i++)
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">1</span>; p[i] * j &lt;= n; j++)
+            sum[p[i] * j] += mu[j];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) sum[i] += sum[i - <span class="hljs-number">1</span>];
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">init</span>(N - <span class="hljs-number">5</span>);
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);
+        ll res = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> l = <span class="hljs-number">1</span>, r = <span class="hljs-number">0</span>; l &lt;= <span class="hljs-built_in">min</span>(n, m); l = r + <span class="hljs-number">1</span>) &#123;
+            r = <span class="hljs-built_in">min</span>(n / (n / l), m / (m / l));
+            res = res + <span class="hljs-number">1ll</span> * (sum[r] - sum[l - <span class="hljs-number">1</span>]) * (n / l) * (m / l);
+        &#125;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="[haoi2011]problem-b">[HAOI2011]Problem b</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="http://lydsy.com/JudgeOnline/problem.php?id=2301">bzoj - 2301</a></p>
+<p>题意: 对于给定的整数a, b, c, d和k, 有多少正整数对x, y, 满足a<span class="markdown-them-math-inline">$\leq$</span>x<span class="markdown-them-math-inline">$\leq$</span>b, c<span class="markdown-them-math-inline">$\leq$</span>y<span class="markdown-them-math-inline">$\leq$</span>d, 并且gcd(x,y)=k</p>
+<p>思路: 利用第1题的结果和容斥原理即可得到答案, <span class="markdown-them-math-inline">$res=solve(b,d)-solve(a-1,d)-solve(b,c-1)+solve(a-1,c-1)$</span></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">50010</span>;
+
+<span class="hljs-keyword">int</span> isp[N], p[N], mu[N], sum[N];
+<span class="hljs-keyword">int</span> tot, T, a, b, c, d, k;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">read</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> s = <span class="hljs-number">0</span>, f = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">char</span> ch = <span class="hljs-built_in">getchar</span>();
+    <span class="hljs-keyword">while</span> (ch &lt; <span class="hljs-string">&#x27;0&#x27;</span> || ch &gt; <span class="hljs-string">&#x27;9&#x27;</span>) &#123;
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;-&#x27;</span> == ch) f = <span class="hljs-number">-1</span>;
+        ch = <span class="hljs-built_in">getchar</span>();
+    &#125;
+    <span class="hljs-keyword">while</span> (ch &gt;= <span class="hljs-string">&#x27;0&#x27;</span> &amp;&amp; ch &lt;= <span class="hljs-string">&#x27;9&#x27;</span>) &#123;
+        s = s * <span class="hljs-number">10</span> + ch - <span class="hljs-string">&#x27;0&#x27;</span>;
+        ch = <span class="hljs-built_in">getchar</span>();
+    &#125;
+    <span class="hljs-keyword">return</span> s * f;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">write</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (x &lt; <span class="hljs-number">0</span>) &#123;
+        <span class="hljs-built_in">putchar</span>(<span class="hljs-string">&#x27;-&#x27;</span>);
+        x = -x;
+    &#125;
+    <span class="hljs-keyword">if</span> (x &gt; <span class="hljs-number">9</span>) <span class="hljs-built_in">write</span>(x / <span class="hljs-number">10</span>);
+    <span class="hljs-built_in">putchar</span>(x % <span class="hljs-number">10</span> + <span class="hljs-string">&#x27;0&#x27;</span>);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span>
+</span>&#123;
+    mu[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">if</span> (!isp[i]) &#123;
+            p[++tot] = i;
+            mu[i] = <span class="hljs-number">-1</span>;
+        &#125;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">1</span>; j &lt;= tot &amp;&amp; p[j] &lt;= n / i; j++) &#123;
+            isp[i * p[j]] = <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == i % p[j]) &#123;
+                mu[i * p[j]] = <span class="hljs-number">0</span>;
+                <span class="hljs-keyword">break</span>;   
+            &#125;
+            <span class="hljs-keyword">else</span> mu[i * p[j]] = -mu[i];
+        &#125;
+    &#125;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) sum[i] = sum[i - <span class="hljs-number">1</span>] + mu[i];
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">solve</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b, <span class="hljs-keyword">int</span> n)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>, ta = a / n, tb = b / n;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> l = <span class="hljs-number">1</span>, r = <span class="hljs-number">1</span>; l &lt;= <span class="hljs-built_in">min</span>(ta, tb); l = r + <span class="hljs-number">1</span>) &#123;
+        r = <span class="hljs-built_in">min</span>(a / (a / l), b / (b / l));
+        res += (sum[r] - sum[l - <span class="hljs-number">1</span>]) * (a / (n * l)) * (b / (n * l));
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">init</span>(N - <span class="hljs-number">5</span>);
+    T = <span class="hljs-built_in">read</span>();
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        a = <span class="hljs-built_in">read</span>(), b = <span class="hljs-built_in">read</span>(), c = <span class="hljs-built_in">read</span>(), d = <span class="hljs-built_in">read</span>(), k = <span class="hljs-built_in">read</span>();
+        <span class="hljs-keyword">int</span> res = <span class="hljs-built_in">solve</span>(b, d, k) - <span class="hljs-built_in">solve</span>(a - <span class="hljs-number">1</span>, d, k) - <span class="hljs-built_in">solve</span>(b, c - <span class="hljs-number">1</span>, k) + <span class="hljs-built_in">solve</span>(a - <span class="hljs-number">1</span>, c - <span class="hljs-number">1</span>, k);
+        <span class="hljs-built_in">write</span>(res);
+        <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;&quot;</span>);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="[sdoi2014]数表">[Sdoi2014]数表</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="http://lydsy.com/JudgeOnline/problem.php?id=3529">bzoj - 3529</a></p>
+<p>题意: 有一张n*m的数表, 其第i行第j列的数值为能同时整除i和j的所有自然数之和, 给定a, 计算表中不大于a的数之和</p>
+<p>思路: 假设n&lt;m, 先不考虑不大于a的这个约束条件, 那么<span class="markdown-them-math-inline">$res=\sum_{i=1}^{n}\sum_{j=1}^{m}\sigma (gcd(i,j))$</span>, 其中<span class="markdown-them-math-inline">$\sigma $</span>表示约数之和</p>
+<p>令<span class="markdown-them-math-inline">$d=gcd(i,j)$</span>, 枚举d可得<span class="markdown-them-math-inline">$res=\sum_{d=1}^{n}\sum_{i=1}^{n}\sum_{j=1}^{m}\sigma(d)[gcd(i,j)=d]$</span></p>
+<p>将<span class="markdown-them-math-inline">$\sigma(d)$</span>提前得<span class="markdown-them-math-inline">$res=\sum_{d=1}^{n}[\sigma(d)\sum_{i=1}^{n}\sum_{j=1}^{m}[gcd(i,j)=d]]$</span></p>
+<p>后半部分<span class="markdown-them-math-inline">$\sum_{i=1}^{n}\sum_{j=1}^{m}[gcd(i,j)=d]$</span>相当于求有多少对i, j满足i<span class="markdown-them-math-inline">$\leq n$</span>, <span class="markdown-them-math-inline">$j\leq m$</span>且<span class="markdown-them-math-inline">$gcd(i,j)=d$</span></p>
+<p>后半部分用莫比乌斯化简一下得<span class="markdown-them-math-inline">$res=\sum_{d=1}^{n}[\sigma(d)\sum_{k=1}^{\left \lfloor \frac{n}{d} \right \rfloor} \mu(k) \left \lfloor \frac{n}{kd} \right \rfloor \left \lfloor \frac{m}{kd} \right \rfloor]$</span></p>
+<p>令<span class="markdown-them-math-inline">$T=kd$</span>得<span class="markdown-them-math-inline">$res=\sum_{d=1}^{n}[\sigma(d)\sum_{T=1\ d|T}^{n} \mu(\frac{T}{d}) \left \lfloor \frac{n}{T} \right \rfloor \left \lfloor \frac{m}{T} \right \rfloor]$</span></p>
+<p>交换一下顺序得<span class="markdown-them-math-inline">$res=\sum_{T=1}^{n}[\left \lfloor \frac{n}{T} \right \rfloor \left \lfloor \frac{m}{T} \right \rfloor \sum_{d=1\ d|T}^{n}\sigma(d) \mu(\frac{T}{d})]$</span></p>
+<p>现在考虑限制条件, 只有当<span class="markdown-them-math-inline">$\sigma(d)\leq a$</span>时, <span class="markdown-them-math-inline">$\sigma(d) \mu(\frac{T}{d})$</span>才对答案有贡献, 所以我们先预处理出<span class="markdown-them-math-inline">$\sigma(d)$</span>, 对询问按a排序, 对<span class="markdown-them-math-inline">$\sigma(d)$</span>排序, 当a变大时, 某些<span class="markdown-them-math-inline">$\sigma(d) \mu(\frac{T}{d})$</span>开始对答案产生贡献, 此时枚举d得倍数T, 然后用树状数组维护<span class="markdown-them-math-inline">$\sigma(d) \mu(\frac{T}{d})$</span>的前缀和就可以计算出<span class="markdown-them-math-inline">$\sum_{d=1\ d|T}^{n}\sigma(d) \mu(\frac{T}{d})$</span>, 这个d对别的询问也会产生贡献(询问是按a排序的), 对于每个询问用整数分块计算</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">100010</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> n, m, a, id;
+&#125;;
+
+<span class="hljs-keyword">int</span> T, c[N], mu[N], res[N];
+<span class="hljs-keyword">int</span> isp[N], p[N], tot;
+node q[N], d[N];
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(node a, node b)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> a.a &lt; b.a;
+&#125;
+
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span>
+</span>&#123;
+    mu[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">if</span> (!isp[i]) &#123;
+            p[++tot] = i;
+            mu[i] = <span class="hljs-number">-1</span>;
+        &#125;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">1</span>; j &lt;= tot &amp;&amp; p[j] &lt;= n / i; j++) &#123;
+            isp[i * p[j]] = <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == i % p[j]) &#123;
+                mu[i * p[j]] = <span class="hljs-number">0</span>;
+                <span class="hljs-keyword">break</span>;
+            &#125;
+            mu[i * p[j]] = -mu[i];
+        &#125;
+    &#125;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        d[i].id = i;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = i; j &lt;= n; j += i) &#123;
+            d[j].a += i;
+        &#125;
+    &#125;
+    <span class="hljs-built_in">sort</span>(d + <span class="hljs-number">1</span>, d + n + <span class="hljs-number">1</span>, cmp);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">lowbit</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> x &amp; (-x);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> v)</span>
+</span>&#123;
+    <span class="hljs-keyword">while</span> (x &lt;= N - <span class="hljs-number">5</span>) &#123;
+        c[x] += v;
+        x += <span class="hljs-built_in">lowbit</span>(x);
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">ask</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (x &gt; <span class="hljs-number">0</span>) &#123;
+        res += c[x];
+        x -= <span class="hljs-built_in">lowbit</span>(x);
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">solve</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n, <span class="hljs-keyword">int</span> m)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> l = <span class="hljs-number">1</span>, r = <span class="hljs-number">1</span>; l &lt;= n; l = r + <span class="hljs-number">1</span>) &#123;
+        r = <span class="hljs-built_in">min</span>(n / (n / l), m / (m / l));
+        res += (n / l) * (m / l) * (<span class="hljs-built_in">ask</span>(r) - <span class="hljs-built_in">ask</span>(l - <span class="hljs-number">1</span>));
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">init</span>(N - <span class="hljs-number">5</span>);
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= T; i++) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>, &amp;q[i].n, &amp;q[i].m, &amp;q[i].a);
+        <span class="hljs-keyword">if</span> (q[i].n &gt; q[i].m) <span class="hljs-built_in">swap</span>(q[i].n, q[i].m);
+        q[i].id = i;
+    &#125;
+    <span class="hljs-built_in">sort</span>(q + <span class="hljs-number">1</span>, q + T + <span class="hljs-number">1</span>, cmp);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>, j = <span class="hljs-number">1</span>; i &lt;= T; i++) &#123;
+        <span class="hljs-keyword">while</span> (j &lt;= N - <span class="hljs-number">5</span> &amp;&amp; d[j].a &lt;= q[i].a) &#123;
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = d[j].id; k &lt;= N - <span class="hljs-number">5</span>; k += d[j].id) &#123;
+                <span class="hljs-built_in">add</span>(k, d[j].a * mu[k / d[j].id]);
+            &#125;
+            j++;
+        &#125;
+        res[q[i].id] = <span class="hljs-built_in">solve</span>(q[i].n, q[i].m);
+    &#125;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= T; i++) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, res[i] &amp; (~(<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">31</span>)));
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="crash的数字表格">Crash的数字表格</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="http://lydsy.com/JudgeOnline/problem.php?id=2154">bzoj - 2154</a></p>
+<p>题意: 有一张n*m的数表, 其第i行第j列的数值为lcm(i,j), 求数表内所有数的和</p>
+<p>思路: 假设n&lt;m, <span class="markdown-them-math-inline">$res=\sum_{i=1}^{n} \sum_{j=1}^{m} lcm(i,j)=\sum_{i=1}^{n}\sum_{j=1}^{m}\frac{ij}{gcd(i,j)}$</span></p>
+<p>令<span class="markdown-them-math-inline">$d=gcd(i,j)$</span>, 枚举d得<span class="markdown-them-math-inline">$res=\sum_{d=1}^{n}\sum_{i=1}^{n} \sum_{j=1}^{m} \frac{ij}{d} [gcd(i,j)=d]=\sum_{d=1}^{n}\sum_{i=1}^{\left \lfloor \frac{n}{d} \right \rfloor} \sum_{j=1}^{\left \lfloor \frac{m}{d} \right \rfloor} ijd [gcd(i,j)=1]$</span></p>
+<p>把d移到前面有<span class="markdown-them-math-inline">$res=\sum_{d=1}^{n}[d\sum_{i=1}^{\left \lfloor \frac{n}{d} \right \rfloor} \sum_{j=1}^{\left \lfloor \frac{m}{d} \right \rfloor} ij [gcd(i,j)=1]]$</span></p>
+<p>根据莫比乌斯得性质得<span class="markdown-them-math-inline">$res=\sum_{d=1}^{n}[d\sum_{i=1}^{\left \lfloor \frac{n}{d} \right \rfloor} \sum_{j=1}^{\left \lfloor \frac{m}{d} \right \rfloor} ij \sum_{k|gcd(i,j)}\mu(k)]$</span></p>
+<p>枚举k得<span class="markdown-them-math-inline">$res=\sum_{d=1}^{n}[d\sum_{k=1}^{\left \lfloor \frac{n}{d} \right \rfloor} \sum_{i=1}^{\left \lfloor \frac{n}{dk} \right \rfloor} \sum_{j=1}^{\left \lfloor \frac{m}{dk} \right \rfloor} ijk^{2}\mu(k)]$</span></p>
+<p>移一下项得<span class="markdown-them-math-inline">$res=\sum_{d=1}^{n}[d\sum_{k=1}^{\left \lfloor \frac{n}{d} \right \rfloor} [ k^{2}\mu(k) \sum_{i=1}^{\left \lfloor \frac{n}{dk} \right \rfloor} i \sum_{j=1}^{\left \lfloor \frac{m}{dk} \right \rfloor} j]]$</span></p>
+<p>可以发现<span class="markdown-them-math-inline">$\sum_{i=1}^{\left \lfloor \frac{n}{dk} \right \rfloor} i$</span>和<span class="markdown-them-math-inline">$\sum_{j=1}^{\left \lfloor \frac{m}{dk} \right \rfloor} j$</span>都是等差数列求和, <span class="markdown-them-math-inline">$\sum_{k=1}^{\left \lfloor \frac{n}{d} \right \rfloor} k^{2}\mu(k)$</span>可以通过预处理前缀和来求, 两次整数分块即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">10000010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> mod = <span class="hljs-number">20101009</span>;
+
+<span class="hljs-keyword">int</span> isp[N], p[N], sum[N], mu[N];
+<span class="hljs-keyword">int</span> tot, n, m;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span>
+</span>&#123;
+    mu[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">if</span> (!isp[i]) &#123;
+            p[++tot] = i;
+            mu[i] = <span class="hljs-number">-1</span>;
+        &#125;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">1</span>; j &lt;= tot &amp;&amp; p[j] &lt;= n / i; j++) &#123;
+            isp[i * p[j]] = <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == i % p[j]) &#123;
+                mu[i * p[j]] = <span class="hljs-number">0</span>;
+                <span class="hljs-keyword">break</span>;
+            &#125;
+            mu[i * p[j]] = -mu[i];
+        &#125;
+    &#125;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+        sum[i] = (sum[i - <span class="hljs-number">1</span>] + <span class="hljs-number">1ll</span> * i * i % mod * (mu[i] + mod)) % mod;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">qs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> (<span class="hljs-number">1ll</span> * x * (x + <span class="hljs-number">1</span>) / <span class="hljs-number">2</span> % mod) * (<span class="hljs-number">1ll</span> * y * (y + <span class="hljs-number">1</span>) / <span class="hljs-number">2</span> % mod) % mod;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">calc</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n, <span class="hljs-keyword">int</span> m)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> l = <span class="hljs-number">1</span>, r = <span class="hljs-number">1</span>; l &lt;= n; l = r + <span class="hljs-number">1</span>) &#123;
+        r = <span class="hljs-built_in">min</span>(n / (n / l), m / (m / l));
+        res = (res + <span class="hljs-number">1ll</span> * (sum[r] - sum[l - <span class="hljs-number">1</span>] + mod) * <span class="hljs-built_in">qs</span>(n / l, m / l) % mod) % mod;
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">solve</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n, <span class="hljs-keyword">int</span> m)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> l = <span class="hljs-number">1</span>, r = <span class="hljs-number">1</span>; l &lt;= n; l = r + <span class="hljs-number">1</span>) &#123;
+        r = <span class="hljs-built_in">min</span>(n / (n / l), m / (m / l));
+        res = (res + <span class="hljs-number">1ll</span> * (r - l + <span class="hljs-number">1</span>) * (l + r) / <span class="hljs-number">2</span> % mod * <span class="hljs-built_in">calc</span>(n / l, m / l) % mod) % mod;
+    &#125;
+    <span class="hljs-keyword">return</span> res;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">init</span>(N - <span class="hljs-number">5</span>);
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);
+    <span class="hljs-keyword">if</span> (n &gt; m) <span class="hljs-built_in">swap</span>(n, m);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, <span class="hljs-built_in">solve</span>(n, m));
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="at5200-[agc038c] lcms">AT5200 [AGC038C] LCMs</h2>
+<p>题目链接: <a target="_blank" rel="noopener" href="https://atcoder.jp/contests/agc038/tasks/agc038_c?lang=en">AtCoder - agc038_c</a></p>
+<p>题意: 给定一个长度为n得序列<span class="markdown-them-math-inline">$A_{1}, A_{2}, ..., A_{n}$</span>, 求<span class="markdown-them-math-inline">$\sum_{i=1}^{n} \sum_{j=i+1}^{n} lcm(A_{i},A_{j})$</span></p>
+<p>思路: 令M=max(<span class="markdown-them-math-inline">$A_{i}$</span>), <span class="markdown-them-math-inline">$\sum_{i=1}^{n} \sum_{j=i+1}^{n} lcm(A_{i},A_{j})=\frac{\sum_{i=1}^{n} \sum_{j=1}^{n} lcm(A_{i},A_{j})-\sum_{i=1}^{n}A_{i}}{2}$</span></p>
+<p>考虑如何求<span class="markdown-them-math-inline">$res=\sum_{i=1}^{n} \sum_{j=1}^{n} lcm(A_{i},A_{j})$</span></p>
+<p><span class="markdown-them-math-inline">$\sum_{i=1}^{n} \sum_{j=1}^{n} lcm(A_{i},A_{j})=\sum_{i=1}^{n} \sum_{j=1}^{n} \frac{A_{i}A_{j}}{gcd(A_{i},A_{j})}$</span></p>
+<p>令<span class="markdown-them-math-inline">$d=gcd(A_{i},A_{j})$</span>得</p>
+<div class="markdown-them-math-block">$$\sum_{i=1}^{n} \sum_{j=1}^{n} lcm(A_{i},A_{j})=\sum_{d=1}^{M} \frac{1}{d} \sum_{i=1}^{n} \sum_{j=1}^{n} A_{i}A_{j}[gcd(A_{i},A_{j})=d]=\sum_{d=1}^{M} \frac{1}{d} \sum_{i=1}^{n} \sum_{j=1}^{n} A_{i}A_{j}[gcd(\frac{A_{i}}{d},\frac{A_{j}}{d})=1][d|A_{i}][d|A_{j}]
+$$</div><p>根据莫比乌斯反演的性质得<span class="markdown-them-math-inline">$res=\sum_{d=1}^{M} \frac{1}{d} \sum_{i=1}^{n} \sum_{j=1}^{n} A_{i}A_{j} \sum_{k|gcd(\frac{A_{i}}{d},\frac{A_{j}}{d})} \mu(k) [d|A_{i}][d|A_{j}]$</span></p>
+<p>将k提到前面得<span class="markdown-them-math-inline">$res=\sum_{d=1}^{M} \frac{1}{d} \sum_{k=1}^{\left \lfloor \frac{M}{d} \right \rfloor} \mu(k) \sum_{i=1}^{n} \sum_{j=1}^{n} A_{i}A_{j} [kd|A_{i}][kd|A_{j}]$</span></p>
+<p>所以最后<span class="markdown-them-math-inline">$res=\sum_{d=1}^{M} \frac{1}{d} \sum_{k=1}^{\left \lfloor \frac{M}{d} \right \rfloor} \mu(k) (\sum_{i=1}^{n}[kd|A_{i}]A_{i})^{2}$</span></p>
+<p>设<span class="markdown-them-math-inline">$f(t)=(\sum_{i=1}^{n}[t|A_{i}]A_{i})^{2}$</span>, 显然<span class="markdown-them-math-inline">$f(t)$</span>可以在<span class="markdown-them-math-inline">$O(nlnn)$</span>的时间内预处理出来, 再通过枚举d和k暴力求解即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">1000010</span>;
+<span class="hljs-keyword">const</span> ll mod = <span class="hljs-number">998244353</span>;
+
+<span class="hljs-keyword">int</span> isp[N], p[N], mu[N], n, tot, a[N], imax;
+ll inv[N], f[N], c[N], sum;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span>
+</span>&#123;
+    mu[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">if</span> (!isp[i]) &#123;
+            p[++tot] = i;
+            mu[i] = <span class="hljs-number">-1</span>;
+        &#125;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">1</span>; j &lt;= tot &amp;&amp; p[j] &lt;= n / i; j++) &#123;
+            isp[i * p[j]] = <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == i % p[j]) &#123;
+                mu[i * p[j]] = <span class="hljs-number">0</span>;
+                <span class="hljs-keyword">break</span>;
+            &#125;
+            <span class="hljs-keyword">else</span> mu[i * p[j]] = -mu[i];
+        &#125;
+    &#125;
+    inv[<span class="hljs-number">0</span>] = inv[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) inv[i] = (mod - mod / i) * inv[mod % i] % mod;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld&quot;</span>, &amp;a[i]);
+        imax = <span class="hljs-built_in">max</span>(imax, a[i]);
+        sum = (sum + a[i]) % mod;
+        c[a[i]] += <span class="hljs-number">1</span>;
+    &#125;
+    <span class="hljs-built_in">init</span>(imax);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= imax; i++) &#123;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = i; j &lt;= imax; j += i)
+            f[i] = (f[i] + c[j] * j) % mod;
+        f[i] = (f[i] * f[i]) % mod;
+    &#125;
+    ll res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> d = <span class="hljs-number">1</span>; d &lt;= imax; d++) &#123;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = <span class="hljs-number">1</span>, t = d; t &lt;= imax; t += d, k++) &#123;
+            res = (res + inv[d] * mu[k] % mod * f[t] % mod) % mod;
+        &#125;
+    &#125;
+    res = ((res - sum) % mod + mod) % mod * inv[<span class="hljs-number">2</span>] % mod;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../07/13/2020%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%BA%8C%E5%9C%BA%EF%BC%89B%20-%20Boundary(%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          2020牛客暑期多校训练营 (第二场) B - Boundary(计算几何)
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../05/10/%E7%BD%91%E7%BB%9C%E6%B5%81/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          网络流
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2021/01/29/Codeforces%20Round698%20(Div.%202)/">Codeforces Round698 (Div.2)</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2021/01/17/Codeforces%E8%AE%AD%E7%BB%83%E8%AE%B0%E5%BD%95/">Codeforces训练记录</a>
+          </li>
+        
+          <li>
+            <a href="../../../10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
+          </li>
+        
+          <li>
+            <a href="../../../09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
+          </li>
+        
+          <li>
+            <a href="../../../08/14/%E8%87%AA%E9%80%82%E5%BA%94Simpson%E7%A7%AF%E5%88%86/">自适应Simpson积分</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>

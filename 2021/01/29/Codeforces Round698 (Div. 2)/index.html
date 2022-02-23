@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Codeforces Round698 (Div.2) | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="链接: Codeforces Round #698 (Div.2)
+Nezzar and Colorful Balls
+思路: 答案就是出现次数最多的数出现的次数
+#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;algorithm&amp;gt;
+#include &amp;lt;cs">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-Codeforces Round698 (Div. 2)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2021-01-29T03:02:00.000Z" itemprop="datePublished">2021-01-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/Codeforces/">Codeforces</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Codeforces Round698 (Div.2)
+    </h1>
+  
+
+      </header>
+    
+    
+<div id="article-toc">
+    <h2 class="widget-title">目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#nezzar-and%20colorful%20balls"><span class="toc-number">1.</span> <span class="toc-text">Nezzar and Colorful Balls</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nezzar-and%20lucky%20number"><span class="toc-number">2.</span> <span class="toc-text">Nezzar and Lucky Number</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nezzar-and%20symmetric%20array"><span class="toc-number">3.</span> <span class="toc-text">Nezzar and Symmetric Array</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nezzar-and%20board"><span class="toc-number">4.</span> <span class="toc-text">Nezzar and Board</span></a></li></ol>
+</div>
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>链接: <a target="_blank" rel="noopener" href="https://codeforces.com/contest/1478">Codeforces Round #698 (Div.2)</a></p>
+<h2 id="nezzar-and colorful balls">Nezzar and Colorful Balls</h2>
+<p>思路: 答案就是出现次数最多的数出现的次数</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">110</span>;
+
+<span class="hljs-keyword">int</span> T, n, c[N], a[N];
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
+    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) c[i] = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">int</span> imax = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;a[i]);
+            c[a[i]] += <span class="hljs-number">1</span>;
+            imax = <span class="hljs-built_in">max</span>(imax, c[a[i]]);
+        &#125;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, imax);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="nezzar-and lucky number">Nezzar and Lucky Number</h2>
+<p>思路: 很显然<span class="markdown-them-math-inline">$x\geq 10*d$</span>时, <span class="markdown-them-math-inline">$x$</span>可以表示为<span class="markdown-them-math-inline">$x=(10*d+t)+d+d+\cdots$</span>的形式, <span class="markdown-them-math-inline">$0\leq t\leq 9$</span>, 显然<span class="markdown-them-math-inline">$10*d+t$</span>包含数字<span class="markdown-them-math-inline">$d$</span>, 所以答案肯定是YES, 当<span class="markdown-them-math-inline">$x &lt; 10*d$</span>时, 暴力即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">int</span> T, q, d;
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">check</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">10</span>; i++) &#123;
+        <span class="hljs-keyword">if</span> (i * d &lt;= x &amp;&amp; (i * d) % <span class="hljs-number">10</span> == x % <span class="hljs-number">10</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
+    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;q, &amp;d);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= q; i++) &#123;
+            <span class="hljs-keyword">int</span> x;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;x);
+            <span class="hljs-keyword">if</span> (x &gt;= <span class="hljs-number">10</span> * d || <span class="hljs-built_in">check</span>(x)) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;YES\n&quot;</span>);
+            <span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;NO\n&quot;</span>);
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="nezzar-and symmetric array">Nezzar and Symmetric Array</h2>
+<p>思路: 假设<span class="markdown-them-math-inline">$a$</span>数组中的正数为<span class="markdown-them-math-inline">$a_{1}\ a_{2}\cdots a_{n}$</span>, 假设<span class="markdown-them-math-inline">$a_{1}&lt;a_{2}&lt;\cdots &lt;a_{n}$</span>, 然后推式子可得</p>
+<p><div class="markdown-them-math-block">$$d_{1}=2\sum_{1}^{n}a_{i}$$</div></p>
+<p><div class="markdown-them-math-block">$$d_{2}=2\sum_{1}^{n}a_{i}+2a_{2}-2a_{1}$$</div></p>
+<p><div class="markdown-them-math-block">$$d_{3}=2\sum_{1}^{n}a_{i}+4a_{3}-2a_{1}-2a_{2}$$</div></p>
+<p><div class="markdown-them-math-block">$$\vdots$$</div></p>
+<p><div class="markdown-them-math-block">$$d_{n}=2\sum_{1}^{n}+2(n-1)a_{n}-2a_{1}-2a_{2}\cdots -2a_{n-1}=2na_{n}$$</div></p>
+<p>通过<span class="markdown-them-math-inline">$d_{n}$</span>求出<span class="markdown-them-math-inline">$a_{n}$</span>后, <span class="markdown-them-math-inline">$d_{i}-d_{i-1}=2(i-1)a_{i}-2(i-1)a_{i-1}$</span>, 然后从后向前反推出<span class="markdown-them-math-inline">$a$</span>数组, 最后判断<span class="markdown-them-math-inline">$a[1]$</span>是否大于0即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;vector&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200010</span>;
+
+<span class="hljs-keyword">int</span> T, n;
+ll res[N];
+vector&lt;ll&gt; alls;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
+    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        alls.<span class="hljs-built_in">clear</span>();
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">2</span> * n; i++) &#123;
+            ll x;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld&quot;</span>, &amp;x);
+            alls.<span class="hljs-built_in">push_back</span>(x);
+        &#125;
+        <span class="hljs-built_in">sort</span>(alls.<span class="hljs-built_in">begin</span>(), alls.<span class="hljs-built_in">end</span>());
+        alls.<span class="hljs-built_in">erase</span>(<span class="hljs-built_in">unique</span>(alls.<span class="hljs-built_in">begin</span>(), alls.<span class="hljs-built_in">end</span>()), alls.<span class="hljs-built_in">end</span>());
+        <span class="hljs-keyword">if</span> (n != alls.<span class="hljs-built_in">size</span>() || <span class="hljs-number">0</span> != alls[n - <span class="hljs-number">1</span>] % (<span class="hljs-number">2</span> * n)) &#123;
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;NO\n&quot;</span>);
+            <span class="hljs-keyword">continue</span>;
+        &#125;
+        res[n] = alls[n - <span class="hljs-number">1</span>] / (<span class="hljs-number">2</span> * n);
+        <span class="hljs-keyword">int</span> f = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = n - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">1</span>; i--) &#123;
+            ll d = alls[i] - alls[i - <span class="hljs-number">1</span>];
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == d || <span class="hljs-number">0</span> != d % (<span class="hljs-number">2</span> * i)) f = <span class="hljs-number">0</span>;
+            res[i] = res[i + <span class="hljs-number">1</span>] - d / (<span class="hljs-number">2</span> * i);
+        &#125;
+        <span class="hljs-keyword">if</span> (f &amp;&amp; res[<span class="hljs-number">1</span>] &gt; <span class="hljs-number">0</span>) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;YES\n&quot;</span>);
+        <span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;NO\n&quot;</span>);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="nezzar-and board">Nezzar and Board</h2>
+<p>思路: 选中的<span class="markdown-them-math-inline">$x$</span>、<span class="markdown-them-math-inline">$y$</span>的系数为1, 组成的数<span class="markdown-them-math-inline">$2x-y$</span>的系数和也为1, 所以无论怎么组合, 最后组成成的数系数和一定为1, 对于每一个组合成的数, 都可以表示成<span class="markdown-them-math-inline">$k=x_{1}(a_{2}-a_{1})+x_{2}(a_{3}-a_{1})+\cdots + x_{n-1}(a_{n}-a_{1})+a_{i}$</span>, 即</p>
+<p><div class="markdown-them-math-block">$$k-a_{i}=x_{1}(a_{2}-a_{1})+x_{2}(a_{3}-a_{1})+\cdots + x_{n-1}(a_{n}-a_{1})$$</div></p>
+<p>根据裴蜀定理<span class="markdown-them-math-inline">$O(n)$</span>遍历<span class="markdown-them-math-inline">$a_{i}$</span>验证即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;vector&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200010</span>;
+
+<span class="hljs-keyword">int</span> T, n;
+ll k, a[N];
+
+<span class="hljs-function">ll <span class="hljs-title">gcd</span><span class="hljs-params">(ll a, ll b)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> == b ? a : <span class="hljs-built_in">gcd</span>(b, a % b);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
+    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%lld&quot;</span>, &amp;n, &amp;k);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld&quot;</span>, &amp;a[i]);
+        ll d = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) d = <span class="hljs-built_in">gcd</span>(d, <span class="hljs-built_in">abs</span>(a[i] - a[<span class="hljs-number">1</span>]));
+        <span class="hljs-keyword">int</span> f = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == (k - a[i]) % d) f = <span class="hljs-number">1</span>;
+        <span class="hljs-built_in">printf</span>(f ? <span class="hljs-string">&quot;YES\n&quot;</span> : <span class="hljs-string">&quot;NO\n&quot;</span>);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="../../17/Codeforces%E8%AE%AD%E7%BB%83%E8%AE%B0%E5%BD%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Codeforces训练记录
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="">Codeforces Round698 (Div.2)</a>
+          </li>
+        
+          <li>
+            <a href="../../17/Codeforces%E8%AE%AD%E7%BB%83%E8%AE%B0%E5%BD%95/">Codeforces训练记录</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2020/10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2020/09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2020/08/14/%E8%87%AA%E9%80%82%E5%BA%94Simpson%E7%A7%AF%E5%88%86/">自适应Simpson积分</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>

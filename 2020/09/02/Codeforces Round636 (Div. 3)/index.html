@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Codeforces Round636 (Div. 3) | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="链接: Codeforces Round #636 (Div. 3)
+Candies
+题意: 求出一个x满足$x + 2*x + 4*x + \dots + 2^{k-1}*x = n$且$k&amp;gt;1$
+思路: 提出x得$x*(1+2+4+\dots + 2^{k-1})=n$, 从小到大枚举k,">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-Codeforces Round636 (Div. 3)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2020-09-02T04:44:00.000Z" itemprop="datePublished">2020-09-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/Codeforces/">Codeforces</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Codeforces Round636 (Div. 3)
+    </h1>
+  
+
+      </header>
+    
+    
+<div id="article-toc">
+    <h2 class="widget-title">目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#candies"><span class="toc-number">1.</span> <span class="toc-text">Candies</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#balanced-array"><span class="toc-number">2.</span> <span class="toc-text">Balanced Array</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#alternating-subsequence"><span class="toc-number">3.</span> <span class="toc-text">Alternating Subsequence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#constant-palindrome%20sum"><span class="toc-number">4.</span> <span class="toc-text">Constant Palindrome Sum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#weights-distributing"><span class="toc-number">5.</span> <span class="toc-text">Weights Distributing</span></a></li></ol>
+</div>
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>链接: <a target="_blank" rel="noopener" href="http://codeforces.com/contest/1343">Codeforces Round #636 (Div. 3)</a></p>
+<h2 id="candies">Candies</h2>
+<p>题意: 求出一个x满足<span class="markdown-them-math-inline">$x + 2*x + 4*x + \dots + 2^{k-1}*x = n$</span>且<span class="markdown-them-math-inline">$k&gt;1$</span></p>
+<p>思路: 提出x得<span class="markdown-them-math-inline">$x*(1+2+4+\dots + 2^{k-1})=n$</span>, 从小到大枚举k, 直到满足<span class="markdown-them-math-inline">$n \mid (1+2+4+\dots + 2^{k-1})$</span></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">int</span> T, n;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
+    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+        <span class="hljs-keyword">int</span> now = <span class="hljs-number">3</span>, t = <span class="hljs-number">4</span>;
+        <span class="hljs-keyword">while</span> (<span class="hljs-number">0</span> != n % now) &#123;
+            now += t;
+            t *= <span class="hljs-number">2</span>;
+        &#125;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, n / now);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="balanced-array">Balanced Array</h2>
+<p>题意: 给你一个偶数n, 要求你构造出一个数列, 满足前<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数为偶数, 后<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数为奇数, 每个数都为互不相同的正整数, 且前<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数的和等于后<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数的和</p>
+<p>思路: 奇数和偶数的差为奇数, 如果<span class="markdown-them-math-inline">$\frac{n}{2}-1$</span>为奇数, 那么对于前<span class="markdown-them-math-inline">$\frac{n}{2}-1$</span>对奇数和偶数, 合起来的差为偶数, 那么第<span class="markdown-them-math-inline">$\frac{n}{2}$</span>对奇数和偶数就无法构造出来, 所以<span class="markdown-them-math-inline">$\frac{n}{2}$</span>必须为偶数, 即<span class="markdown-them-math-inline">$n\mid 4$</span>, 显然可以构造出这样的数列<span class="markdown-them-math-inline">$2\ \ 4\ \ 6\cdots n\ \ 1\ \ 3\ \ 5\cdots (n-3)\ \ (n+\frac{n}{2}-1)$</span></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">int</span> T, n;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
+    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+        <span class="hljs-keyword">if</span> (n % <span class="hljs-number">4</span>) &#123;
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;NO\n&quot;</span>);
+            <span class="hljs-keyword">continue</span>;
+        &#125;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;YES\n&quot;</span>);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n / <span class="hljs-number">2</span>; i++) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>, <span class="hljs-number">2</span> * i);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n / <span class="hljs-number">2</span> - <span class="hljs-number">1</span>; i++) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>, <span class="hljs-number">2</span> * i - <span class="hljs-number">1</span>);
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, n + n / <span class="hljs-number">2</span> - <span class="hljs-number">1</span>);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="alternating-subsequence">Alternating Subsequence</h2>
+<p>题意: 就是给你n个数, 你需要找出其中的最长子序列, 并且这个子序列是正负交替的, 并且尽量让这个子序列的和最大</p>
+<p>思路: 由于要子序列最长, 所以把n个数按照正负分成几块(块内元素正负性相同), 然后再在每个块内贪心取一个数即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200010</span>;
+<span class="hljs-keyword">const</span> ll INF = <span class="hljs-number">1000000000000000000</span>;
+
+<span class="hljs-keyword">int</span> T, n;
+ll a[N];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">solve</span><span class="hljs-params">(ll &amp;imax, ll &amp;imin, <span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r)</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = l; i &lt;= r; i++) &#123;
+        imax = <span class="hljs-built_in">max</span>(imax, a[i]);
+        imin = <span class="hljs-built_in">max</span>(imin, a[i]);
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
+    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;n);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld&quot;</span>, &amp;a[i]);
+        <span class="hljs-keyword">int</span> lst = <span class="hljs-number">1</span>, now = <span class="hljs-number">2</span>;
+        ll res = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">while</span> (now &lt;= n) &#123;
+            <span class="hljs-keyword">if</span> ((a[now] &gt; <span class="hljs-number">0</span>) != (a[now - <span class="hljs-number">1</span>] &gt; <span class="hljs-number">0</span>)) &#123;
+                ll imax = -INF, imin = -INF;
+                <span class="hljs-built_in">solve</span>(imax, imin, lst, now - <span class="hljs-number">1</span>);
+                <span class="hljs-keyword">if</span> (a[lst] &gt; <span class="hljs-number">0</span>) res += imax;
+                <span class="hljs-keyword">else</span> res += imin;
+                lst = now;
+            &#125;
+            now += <span class="hljs-number">1</span>;
+        &#125;
+        ll imax = -INF, imin = -INF;
+        <span class="hljs-built_in">solve</span>(imax, imin, lst, n);
+        <span class="hljs-keyword">if</span> (a[lst] &gt; <span class="hljs-number">0</span>) res += imax;
+        <span class="hljs-keyword">else</span> res += imin;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="constant-palindrome sum">Constant Palindrome Sum</h2>
+<p>题意: 给定一个长度为n的数列, n为偶数, 保证每个元素在[1,k]之间, 每次操作可以把某个位置的数字变成[1,k]内的任意数字, 要求让这个数列满足: 对于所有的i<span class="markdown-them-math-inline">$\in$</span>[1,<span class="markdown-them-math-inline">$\frac{n}{2}$</span>], a[i]+a[n-i+1]是一个定值, 问最少的操作次数</p>
+<p>思路: 设imin=min(a[i],a[n-i+1]), imax=max(a[i],a[n-i+1]), 分三种情况, 不进行操作a[i]+a[n-i+1]不变, 操作一次能够使a[i]+a[n-i+1]<span class="markdown-them-math-inline">$\in$</span>[imin+1,imax+k], 操作两次能使a[i]+a[n-i+1]<span class="markdown-them-math-inline">$\in$</span>[2,2<em>k], 根据贪心的思想, 对于每一对(a[i],a[n-i+1]), [imin+1,imax+k]操作次数加1, [2,imin]和[imax+k+1,2</em>k]操作次数加2, a[i]+a[n-i+1]操作次数不变, 用差分数组维护一下, 最后找到[2,2*k]内的最小操作次数即可</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">400010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> INF = <span class="hljs-number">0x3f3f3f3f</span>;
+
+<span class="hljs-keyword">int</span> T, n, k, a[N], b[N];
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *d, <span class="hljs-keyword">int</span> l, <span class="hljs-keyword">int</span> r, <span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    d[l] += x;
+    d[r + <span class="hljs-number">1</span>] -= x;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
+    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;k);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">2</span> * k; i++) b[i] = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;a[i]);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n / <span class="hljs-number">2</span>; i++) &#123;
+            <span class="hljs-keyword">int</span> imin = <span class="hljs-built_in">min</span>(a[i], a[n - i + <span class="hljs-number">1</span>]);
+            <span class="hljs-keyword">int</span> imax = <span class="hljs-built_in">max</span>(a[i], a[n - i + <span class="hljs-number">1</span>]);
+            <span class="hljs-keyword">if</span> (<span class="hljs-number">2</span> &lt;= imin) <span class="hljs-built_in">add</span>(b, <span class="hljs-number">2</span>, imin, <span class="hljs-number">2</span>);
+            <span class="hljs-built_in">add</span>(b, imin + <span class="hljs-number">1</span>, imax + k, <span class="hljs-number">1</span>);
+            <span class="hljs-keyword">if</span> (imax + <span class="hljs-number">1</span> &lt;= k) <span class="hljs-built_in">add</span>(b, imax + k + <span class="hljs-number">1</span>, <span class="hljs-number">2</span> * k, <span class="hljs-number">2</span>);
+        &#125;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">2</span> * k; i++) b[i] += b[i - <span class="hljs-number">1</span>];
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n / <span class="hljs-number">2</span>; i++) b[a[i] + a[n - i + <span class="hljs-number">1</span>]] -= <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">int</span> res = INF;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= <span class="hljs-number">2</span> * k; i++) res = <span class="hljs-built_in">min</span>(res, b[i]);
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, res);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+<h2 id="weights-distributing">Weights Distributing</h2>
+<p>题意: 给定一张n个顶点的有权无向图, m条边和m个权值和三个点a, b, c.  问如何分配边权能使a到b, b再到c的权值和最小, 求最小值</p>
+<p>思路: 很直观的感受就是, 求出a到b, b再到c的最短路径, 然后将m个权值从小到大分配即可, 如果同时有多条最短路径, 我们应该选择重合最多的两条最短路径(因为这样用的边会更少), 并且此时重合的部分应该分配权值最小的边, 所以我们可以用bfs或者dfs求出a, b, c到其他所有点的最短距离da[],db[],dc[], 然后枚举每个点x, 假设a到b, b再到c的路径拆为a到x, x到b, b到x, x再到c, 枚举所有的点x, 一定会包含上述的两种(两条路径重叠与不重叠)的情况, 并且此时b到x应该分配最小的边权, 将m个边权排序, 求前缀和sum[], 那么对于点x, 答案就是sum[db[x]]+sum[da[x]+db[x]+dc[x]]</p>
+<p>参考: <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34261446/article/details/105753266">https://blog.csdn.net/qq_34261446/article/details/105753266</a></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;queue&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200010</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> INF = <span class="hljs-number">0x3f3f3f3f</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> to, nex;
+&#125;;
+
+<span class="hljs-keyword">int</span> T, n, m, a, b, c;
+ll p[N], sum[N];
+<span class="hljs-keyword">int</span> head[N], cnt, da[N], db[N], dc[N];
+node edge[<span class="hljs-number">2</span> * N];
+queue&lt;<span class="hljs-keyword">int</span>&gt; q;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span>
+</span>&#123;
+    cnt = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) head[i] = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) da[i] = db[i] = dc[i] = INF;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add_edge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> v)</span>
+</span>&#123;
+    edge[++cnt].to = v;
+    edge[cnt].nex = head[u];
+    head[u] = cnt;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">bfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> s, <span class="hljs-keyword">int</span> *d)</span>
+</span>&#123;
+    <span class="hljs-keyword">while</span> (!q.<span class="hljs-built_in">empty</span>()) q.<span class="hljs-built_in">pop</span>();
+    d[s] = <span class="hljs-number">0</span>;
+    q.<span class="hljs-built_in">push</span>(s);
+    <span class="hljs-keyword">while</span> (!q.<span class="hljs-built_in">empty</span>()) &#123;
+        <span class="hljs-keyword">int</span> u = q.<span class="hljs-built_in">front</span>();
+        q.<span class="hljs-built_in">pop</span>();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = head[u]; <span class="hljs-number">0</span> != i; i = edge[i].nex) &#123;
+            <span class="hljs-keyword">int</span> v = edge[i].to;
+            <span class="hljs-keyword">if</span> (d[v] != INF) <span class="hljs-keyword">continue</span>;
+            d[v] = d[u] + <span class="hljs-number">1</span>;
+            q.<span class="hljs-built_in">push</span>(v);
+        &#125;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
+    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
+    <span class="hljs-keyword">while</span> (T--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d%d%d&quot;</span>, &amp;n, &amp;m, &amp;a, &amp;b, &amp;c);
+        <span class="hljs-built_in">init</span>();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld&quot;</span>, &amp;p[i]);
+        <span class="hljs-built_in">sort</span>(p + <span class="hljs-number">1</span>, p + m + <span class="hljs-number">1</span>);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) sum[i] = sum[i - <span class="hljs-number">1</span>] + p[i];
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) &#123;
+            <span class="hljs-keyword">int</span> u, v;
+            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;u, &amp;v);
+            <span class="hljs-built_in">add_edge</span>(u, v);
+            <span class="hljs-built_in">add_edge</span>(v, u);
+        &#125;
+        <span class="hljs-built_in">bfs</span>(a, da);
+        <span class="hljs-built_in">bfs</span>(b, db);
+        <span class="hljs-built_in">bfs</span>(c, dc);
+        ll res = <span class="hljs-number">1000000000000000000</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+            <span class="hljs-keyword">if</span> (da[i] + db[i] + dc[i] &gt; m) <span class="hljs-keyword">continue</span>;
+            res = <span class="hljs-built_in">min</span>(res, sum[db[i]] + sum[da[i] + db[i] + dc[i]]);
+        &#125;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../08/14/%E8%87%AA%E9%80%82%E5%BA%94Simpson%E7%A7%AF%E5%88%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          自适应Simpson积分
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2021/01/29/Codeforces%20Round698%20(Div.%202)/">Codeforces Round698 (Div.2)</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2021/01/17/Codeforces%E8%AE%AD%E7%BB%83%E8%AE%B0%E5%BD%95/">Codeforces训练记录</a>
+          </li>
+        
+          <li>
+            <a href="../../../10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
+          </li>
+        
+          <li>
+            <a href="">Codeforces Round636 (Div. 3)</a>
+          </li>
+        
+          <li>
+            <a href="../../../08/14/%E8%87%AA%E9%80%82%E5%BA%94Simpson%E7%A7%AF%E5%88%86/">自适应Simpson积分</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>
