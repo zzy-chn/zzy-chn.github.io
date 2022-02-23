@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Codeforces Round603 (Div. 2) - E. Editor(线段树) | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="题意: 给你一串指令集, 当某个指令为$``L&amp;quot;$时, 表示鼠标的光标向左移动一个单位$($如果已经位于最左边, 则不移动$)$, 当指令为$``R&amp;quot;$时, 表示将光标像右移动一个单位, 其他的字符$($只有小写字母和左括号、右括号$)$都表示将当前光标指向的字符更改为输入的字符">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+      <a class="main-nav-link" href="../../../../about">About</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-Codeforces Round603 (Div. 2) - E. Editor(线段树)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2019-12-29T07:53:00.000Z" itemprop="datePublished">2019-12-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Codeforces Round603 (Div. 2) - E. Editor(线段树)
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>题意: 给你一串指令集, 当某个指令为<span class="markdown-them-math-inline">$``L&quot;$</span>时, 表示鼠标的光标向左移动一个单位<span class="markdown-them-math-inline">$($</span>如果已经位于最左边, 则不移动<span class="markdown-them-math-inline">$)$</span>, 当指令为<span class="markdown-them-math-inline">$``R&quot;$</span>时, 表示将光标像右移动一个单位, 其他的字符<span class="markdown-them-math-inline">$($</span>只有小写字母和左括号、右括号<span class="markdown-them-math-inline">$)$</span>都表示将当前光标指向的字符更改为输入的字符, 对于每个指令, 输出一个数, 如果所得到的文本中括号序列合法, 则是输出当前文本最大的括号嵌套层数, 括号序列不合法则输出<span class="markdown-them-math-inline">$-1$</span></p>
+<p>思路: 用<span class="markdown-them-math-inline">$1$</span>表示左括号, <span class="markdown-them-math-inline">$-1$</span>表示右括号, <span class="markdown-them-math-inline">$0$</span>表示其他字符, 用一个线段树维护三个值: 区间和<span class="markdown-them-math-inline">$w$</span>, 区间最大前缀和<span class="markdown-them-math-inline">$imax$</span>, 区间最小前缀和<span class="markdown-them-math-inline">$imin$</span>.  对于任意一个合法的括号序列, 需要满足以下两个条件:</p>
+<ul>
+<li>
+<p>左括号和右括号的数量相等, 即<span class="markdown-them-math-inline">$w=0$</span></p>
+</li>
+<li>
+<p>括号序列的任意前缀和都大于等于<span class="markdown-them-math-inline">$0$</span>, 即<span class="markdown-them-math-inline">$imin \ge 0$</span><br>
+而对于一个合法的括号序列, 括号的最大嵌套层数就是区间最大前缀和<span class="markdown-them-math-inline">$imax$</span>, 需要维护一个单点修改和区间查询的线段树, 但由于每次查询的区间都是<span class="markdown-them-math-inline">$[1,n]$</span>, 线段树根节点表示的区间正好是<span class="markdown-them-math-inline">$[1,n]$</span>, 所以只用维护一个单点修改的线段树, 输入小写字母和左括号、右括号时, 将光标位置上的值改为对应的值, 同时更新区间和, 区间最大前缀和, 区间最小前缀和, 具体更新如下:</p>
+</li>
+<li>
+<p>区间和<span class="markdown-them-math-inline">$=$</span>左区间和<span class="markdown-them-math-inline">$+$</span>右区间和</p>
+</li>
+<li>
+<p>最小前缀和<span class="markdown-them-math-inline">$=min($</span>左区间最小前缀和<span class="markdown-them-math-inline">$,$</span>左区间区间和<span class="markdown-them-math-inline">$+$</span>右区间最小前缀和<span class="markdown-them-math-inline">$)$</span></p>
+</li>
+<li>
+<p>最大前缀和<span class="markdown-them-math-inline">$=max($</span>左区间最大前缀和<span class="markdown-them-math-inline">$,$</span>左区间区间和<span class="markdown-them-math-inline">$+$</span>右区间最大前缀和<span class="markdown-them-math-inline">$)$</span><br>
+更新后判断<span class="markdown-them-math-inline">$[1,n]$</span>的括号序列是否合法, 不合法输出<span class="markdown-them-math-inline">$-1$</span>, 合法则直接输出区间<span class="markdown-them-math-inline">$[1,n]$</span>中<span class="markdown-them-math-inline">$imax$</span>的值</p>
+</li>
+</ul>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+ 
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+ 
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">1000010</span>;
+ 
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r, w;
+    <span class="hljs-keyword">int</span> imin, imax;
+&#125;;
+ 
+node tree[<span class="hljs-number">4</span> * N];
+<span class="hljs-keyword">int</span> n, res[N];
+<span class="hljs-keyword">char</span> s[N];
+ 
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">build</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k, <span class="hljs-keyword">int</span> lef, <span class="hljs-keyword">int</span> rig)</span>
+</span>&#123;
+    tree[k].l = lef, tree[k].r = rig;
+    <span class="hljs-keyword">if</span> (tree[k].l == tree[k].r) &#123;
+        tree[k].w = tree[k].imin = tree[k].imax = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-keyword">int</span> mid = (lef + rig) / <span class="hljs-number">2</span>;
+    <span class="hljs-built_in">build</span>(k * <span class="hljs-number">2</span>, lef, mid);
+    <span class="hljs-built_in">build</span>(k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, rig);
+    tree[k].w = tree[k * <span class="hljs-number">2</span>].w + tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].w;
+    tree[k].imax = <span class="hljs-built_in">max</span>(tree[k * <span class="hljs-number">2</span>].imax, tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].imax);
+    tree[k].imin = <span class="hljs-built_in">max</span>(tree[k * <span class="hljs-number">2</span>].imin, tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].imin);
+&#125;
+ 
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">change_point</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k, <span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (tree[k].l == tree[k].r) &#123;
+        tree[k].w = y;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-keyword">int</span> mid = (tree[k].l + tree[k].r) / <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">if</span> (x &lt;= mid) <span class="hljs-built_in">change_point</span>(<span class="hljs-number">2</span> * k, x, y);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">change_point</span>(<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>, x, y);
+    tree[k].w = tree[k * <span class="hljs-number">2</span>].w + tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].w;
+    tree[k].imax = <span class="hljs-built_in">max</span>(tree[k * <span class="hljs-number">2</span>].imax, tree[k * <span class="hljs-number">2</span>].w + tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].imax);
+    tree[k].imin = <span class="hljs-built_in">min</span>(tree[k * <span class="hljs-number">2</span>].imin, tree[k * <span class="hljs-number">2</span>].w + tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].imin);
+&#125;
+ 
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%s&quot;</span>, &amp;n, s + <span class="hljs-number">1</span>);
+    <span class="hljs-built_in">build</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, n);
+    <span class="hljs-keyword">int</span> cur = <span class="hljs-number">1</span>, len = <span class="hljs-built_in">strlen</span>(s + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++) &#123;
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;(&#x27;</span> == s[i]) <span class="hljs-built_in">change_point</span>(<span class="hljs-number">1</span>, cur, <span class="hljs-number">1</span>);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;)&#x27;</span> == s[i]) <span class="hljs-built_in">change_point</span>(<span class="hljs-number">1</span>, cur, <span class="hljs-number">-1</span>);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;L&#x27;</span> == s[i]) &#123;
+            <span class="hljs-keyword">if</span> (cur &gt;= <span class="hljs-number">2</span>) cur--;
+        &#125;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;R&#x27;</span> == s[i]) cur++;
+        <span class="hljs-keyword">else</span> <span class="hljs-built_in">change_point</span>(<span class="hljs-number">1</span>, cur, <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> != tree[<span class="hljs-number">1</span>].w || <span class="hljs-number">0</span> != tree[<span class="hljs-number">1</span>].imin) res[i] = <span class="hljs-number">-1</span>;
+        <span class="hljs-keyword">else</span> res[i] = tree[<span class="hljs-number">1</span>].imax;
+    &#125;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++) &#123;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d&quot;</span>, res[i]);
+        <span class="hljs-built_in">printf</span>(i == len ? <span class="hljs-string">&quot;\n&quot;</span> : <span class="hljs-string">&quot; &quot;</span>);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../../2020/01/10/Codeforces%20Round606%20(Div.%202)%20-%20E.%20Two%20Fairs(%E5%89%B2%E7%82%B9+dfs)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Codeforces Round606 (Div. 2) - E. Two Fairs(割点+dfs)
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../25/Educational%20Codeforces%20Round%2077%20(Rated%20for%20Div.%202)%20-%20D.%20A%20Game%20with%20Traps(%E4%BA%8C%E5%88%86)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Educational Codeforces Round 77 (Rated for Div. 2) - D. A Game with Traps(二分)
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2020/01/15/Codeforces%20Round608%20(Div.%202)%20-%20D.%20Portals(%E8%B4%AA%E5%BF%83)/">Codeforces Round608 (Div. 2) - D. Portals(贪心)</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2020/01/10/Codeforces%20Round606%20(Div.%202)%20-%20E.%20Two%20Fairs(%E5%89%B2%E7%82%B9+dfs)/">Codeforces Round606 (Div. 2) - E. Two Fairs(割点+dfs)</a>
+          </li>
+        
+          <li>
+            <a href="">Codeforces Round603 (Div. 2) - E. Editor(线段树)</a>
+          </li>
+        
+          <li>
+            <a href="../../25/Educational%20Codeforces%20Round%2077%20(Rated%20for%20Div.%202)%20-%20D.%20A%20Game%20with%20Traps(%E4%BA%8C%E5%88%86)/">Educational Codeforces Round 77 (Rated for Div. 2) - D. A Game with Traps(二分)</a>
+          </li>
+        
+          <li>
+            <a href="../../13/Codeforces%20Round600%20(Div.%202)%20-%20D.%20Harmonious%20Graph(%E5%B9%B6%E6%9F%A5%E9%9B%86)/">Codeforces Round600 (Div. 2) - D. Harmonious Graph(并查集)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>

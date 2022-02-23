@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Educational Codeforces Round 77 (Rated for Div. 2) - D. A Game with Traps(二分) | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="题意: $m$个士兵, 每个士兵都有一个灵敏度$a[i]$, 起点为$0$, 终点为$n + 1$, 在路上有$k$个陷阱, 每个陷阱有三个属性$l[i],r[i],d[i]$, $l[i]$表示陷阱的位置, 如果你走到$r[i]$这个位置, 则可以拆掉这个陷阱, $d[i]$与士兵的灵敏度对应, ">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+      <a class="main-nav-link" href="../../../../about">About</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-Educational Codeforces Round 77 (Rated for Div. 2) - D. A Game with Traps(二分)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2019-12-25T09:20:00.000Z" itemprop="datePublished">2019-12-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Educational Codeforces Round 77 (Rated for Div. 2) - D. A Game with Traps(二分)
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>题意: <span class="markdown-them-math-inline">$m$</span>个士兵, 每个士兵都有一个灵敏度<span class="markdown-them-math-inline">$a[i]$</span>, 起点为<span class="markdown-them-math-inline">$0$</span>, 终点为<span class="markdown-them-math-inline">$n + 1$</span>, 在路上有<span class="markdown-them-math-inline">$k$</span>个陷阱, 每个陷阱有三个属性<span class="markdown-them-math-inline">$l[i],r[i],d[i]$</span>, <span class="markdown-them-math-inline">$l[i]$</span>表示陷阱的位置, 如果你走到<span class="markdown-them-math-inline">$r[i]$</span>这个位置, 则可以拆掉这个陷阱, <span class="markdown-them-math-inline">$d[i]$</span>与士兵的灵敏度对应, 如果<span class="markdown-them-math-inline">$d[i]&gt;a[j]$</span>, 则这个士兵就会被困住, 现在你可以挑选任意数量的士兵, 你有两种方式移动方式:</p>
+<ul>
+<li>带着士兵移动, 但士兵不能被陷阱困住, 每秒只能移动一格, 从<span class="markdown-them-math-inline">$x$</span>到<span class="markdown-them-math-inline">$x+1$</span>或者<span class="markdown-them-math-inline">$x-1$</span></li>
+<li>一个人去拆除陷阱<span class="markdown-them-math-inline">$($</span>你不会被陷阱困住<span class="markdown-them-math-inline">$)$</span>, 每秒移动一格, 从<span class="markdown-them-math-inline">$x$</span>到<span class="markdown-them-math-inline">$x+1$</span>或者<span class="markdown-them-math-inline">$x-1$</span><br>
+问你最多可以带多少士兵, 在时间<span class="markdown-them-math-inline">$t$</span>内移动到终点</li>
+</ul>
+<p>思路: 二分答案或者二分可以挑选士兵的最小灵敏度都可以, 每次贪心带灵敏度最高的士兵, 关键是二分后如何计算移动的最小时间, 显然当多个陷阱的<span class="markdown-them-math-inline">$l[i],r[i]$</span>有交叉时, 应该一个人继续前进拆除陷阱, 直到<span class="markdown-them-math-inline">$l[i],r[i]$</span>没有交叉时回到士兵的位置带着士兵前进, 否则直接回到士兵的位置, 直到再次遇到能困住士兵的陷阱, 一直这样到终点, <span class="markdown-them-math-inline">$l[i],r[i]$</span>相互交叉的部分则可以用差分、前缀和来处理, 记录每个点的覆盖情况, 计算被覆盖区间的总长度.</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200010</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r, d;
+&#125;;
+
+<span class="hljs-keyword">int</span> a[N], cnt[N];
+<span class="hljs-keyword">int</span> n, m, k, t;
+node p[N];
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> a &gt; b;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">check</span><span class="hljs-params">(<span class="hljs-keyword">int</span> mid)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> imin = a[mid], tt = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n + <span class="hljs-number">1</span>; i++) cnt[i] = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= k; i++)
+        <span class="hljs-keyword">if</span> (p[i].d &gt; imin)
+            cnt[p[i].l]++, cnt[p[i].r + <span class="hljs-number">1</span>]--;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n + <span class="hljs-number">1</span>; i++) cnt[i] += cnt[i - <span class="hljs-number">1</span>];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n + <span class="hljs-number">1</span>; i++)
+        <span class="hljs-keyword">if</span> (cnt[i] &gt;= <span class="hljs-number">1</span>) tt++;
+    tt = <span class="hljs-number">2</span> * tt + n + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> tt &gt; t;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d%d&quot;</span>, &amp;m, &amp;n, &amp;k, &amp;t);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;a[i]);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= k; i++)
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d&quot;</span>, &amp;p[i].l, &amp;p[i].r, &amp;p[i].d);
+    <span class="hljs-built_in">sort</span>(a + <span class="hljs-number">1</span>, a + m + <span class="hljs-number">1</span>, cmp);
+    <span class="hljs-keyword">int</span> l = <span class="hljs-number">0</span>, r = m;
+    <span class="hljs-keyword">while</span> (l &lt; r) &#123;
+        <span class="hljs-keyword">int</span> mid = (l + r + <span class="hljs-number">1</span>) &gt;&gt; <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">check</span>(mid)) r = mid - <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">else</span> l = mid;
+    &#125;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, l);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../29/Codeforces%20Round603%20(Div.%202)%20-%20E.%20Editor(%E7%BA%BF%E6%AE%B5%E6%A0%91)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Codeforces Round603 (Div. 2) - E. Editor(线段树)
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../13/Codeforces%20Round600%20(Div.%202)%20-%20D.%20Harmonious%20Graph(%E5%B9%B6%E6%9F%A5%E9%9B%86)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Codeforces Round600 (Div. 2) - D. Harmonious Graph(并查集)
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2020/01/15/Codeforces%20Round608%20(Div.%202)%20-%20D.%20Portals(%E8%B4%AA%E5%BF%83)/">Codeforces Round608 (Div. 2) - D. Portals(贪心)</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2020/01/10/Codeforces%20Round606%20(Div.%202)%20-%20E.%20Two%20Fairs(%E5%89%B2%E7%82%B9+dfs)/">Codeforces Round606 (Div. 2) - E. Two Fairs(割点+dfs)</a>
+          </li>
+        
+          <li>
+            <a href="../../29/Codeforces%20Round603%20(Div.%202)%20-%20E.%20Editor(%E7%BA%BF%E6%AE%B5%E6%A0%91)/">Codeforces Round603 (Div. 2) - E. Editor(线段树)</a>
+          </li>
+        
+          <li>
+            <a href="">Educational Codeforces Round 77 (Rated for Div. 2) - D. A Game with Traps(二分)</a>
+          </li>
+        
+          <li>
+            <a href="../../13/Codeforces%20Round600%20(Div.%202)%20-%20D.%20Harmonious%20Graph(%E5%B9%B6%E6%9F%A5%E9%9B%86)/">Codeforces Round600 (Div. 2) - D. Harmonious Graph(并查集)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>

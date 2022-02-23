@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Codeforces Round600 (Div. 2) - D. Harmonious Graph(并查集) | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="题意: 对于一张图, 如果$a$与$b$连通, 则对于任意的$c(a&amp;lt;c&amp;lt;b)$都有$a$与$c$连通, 则称该图为和谐图, 现在给你一张图, 问你最少添加多少条边使图变为和谐图.
+思路: 将一个连通块内最大的点做为根, 用并查集维护, 遍历一遍, 对于某个点$i$及该点连通块内的根$f">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
+    
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+      <a class="main-nav-link" href="../../../../about">About</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
+</div>
+
+      <div id="content" class="outer">
+        <section id="main"><article id="post-Codeforces Round600 (Div. 2) - D. Harmonious Graph(并查集)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2019-12-13T05:52:00.000Z" itemprop="datePublished">2019-12-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Codeforces Round600 (Div. 2) - D. Harmonious Graph(并查集)
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>题意: 对于一张图, 如果<span class="markdown-them-math-inline">$a$</span>与<span class="markdown-them-math-inline">$b$</span>连通, 则对于任意的<span class="markdown-them-math-inline">$c(a&lt;c&lt;b)$</span>都有<span class="markdown-them-math-inline">$a$</span>与<span class="markdown-them-math-inline">$c$</span>连通, 则称该图为和谐图, 现在给你一张图, 问你最少添加多少条边使图变为和谐图.</p>
+<p>思路: 将一个连通块内最大的点做为根, 用并查集维护, 遍历一遍, 对于某个点<span class="markdown-them-math-inline">$i$</span>及该点连通块内的根<span class="markdown-them-math-inline">$fx$</span>, <span class="markdown-them-math-inline">$i$</span>到<span class="markdown-them-math-inline">$fx$</span>内的每一个点, 当与<span class="markdown-them-math-inline">$i$</span>不属于一个集合时, 进行合并, 答案加一, 同时更新该连通块的根.</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200010</span>;
+
+<span class="hljs-keyword">int</span> fa[N], n, m;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) fa[i] = i;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> x == fa[x] ? x : fa[x] = <span class="hljs-built_in">find</span>(fa[x]);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">nuio</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y)</span>
+</span>&#123;
+    <span class="hljs-keyword">int</span> fx = <span class="hljs-built_in">find</span>(x), fy = <span class="hljs-built_in">find</span>(y);
+    <span class="hljs-keyword">if</span> (fx != fy) &#123;
+        <span class="hljs-keyword">if</span> (fx &gt; fy) fa[fy] = fx;
+        <span class="hljs-keyword">else</span> fa[fx] = fy;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);
+    <span class="hljs-built_in">init</span>();
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) &#123;
+        <span class="hljs-keyword">int</span> x, y;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;x, &amp;y);
+        <span class="hljs-built_in">nuio</span>(x, y);
+    &#125;
+    <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
+        <span class="hljs-keyword">int</span> fx = <span class="hljs-built_in">find</span>(i);
+        <span class="hljs-keyword">while</span> (i &lt; fx) &#123;
+            <span class="hljs-keyword">int</span> fy = <span class="hljs-built_in">find</span>(i);
+            <span class="hljs-keyword">if</span> (fx != fy) &#123;
+                res++;
+                <span class="hljs-keyword">if</span> (fx &gt; fy) fa[fy] = fx;
+                <span class="hljs-keyword">else</span> fa[fx] = fy;
+                fx = <span class="hljs-built_in">max</span>(fx, fy);
+            &#125;
+            i++;
+        &#125;
+    &#125;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, res);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../25/Educational%20Codeforces%20Round%2077%20(Rated%20for%20Div.%202)%20-%20D.%20A%20Game%20with%20Traps(%E4%BA%8C%E5%88%86)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Educational Codeforces Round 77 (Rated for Div. 2) - D. A Game with Traps(二分)
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../11/23/Codeforces%20Round600%20(Div.%202)%20-%20B.%20Silly%20Mistake(%E6%A8%A1%E6%8B%9F)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Codeforces Round600 (Div. 2) - B. Silly Mistake(模拟)
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2020/01/15/Codeforces%20Round608%20(Div.%202)%20-%20D.%20Portals(%E8%B4%AA%E5%BF%83)/">Codeforces Round608 (Div. 2) - D. Portals(贪心)</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2020/01/10/Codeforces%20Round606%20(Div.%202)%20-%20E.%20Two%20Fairs(%E5%89%B2%E7%82%B9+dfs)/">Codeforces Round606 (Div. 2) - E. Two Fairs(割点+dfs)</a>
+          </li>
+        
+          <li>
+            <a href="../../29/Codeforces%20Round603%20(Div.%202)%20-%20E.%20Editor(%E7%BA%BF%E6%AE%B5%E6%A0%91)/">Codeforces Round603 (Div. 2) - E. Editor(线段树)</a>
+          </li>
+        
+          <li>
+            <a href="../../25/Educational%20Codeforces%20Round%2077%20(Rated%20for%20Div.%202)%20-%20D.%20A%20Game%20with%20Traps(%E4%BA%8C%E5%88%86)/">Educational Codeforces Round 77 (Rated for Div. 2) - D. A Game with Traps(二分)</a>
+          </li>
+        
+          <li>
+            <a href="">Codeforces Round600 (Div. 2) - D. Harmonious Graph(并查集)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+
+
+
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
+
+
+  </div>
+</body>
+</html>
