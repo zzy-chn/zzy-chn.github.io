@@ -42,6 +42,98 @@
       <div id="content" class="outer">
         <section id="main">
   
+    <article id="post-Educational Codeforces Round 81 (Rated for Div. 2) - D. Same GCDs(数学)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="../../2020/02/03/Educational%20Codeforces%20Round%2081%20(Rated%20for%20Div.%202)%20-%20D.%20Same%20GCDs(%E6%95%B0%E5%AD%A6)/" class="article-date">
+  <time class="dt-published" datetime="2020-02-03T15:03:00.000Z" itemprop="datePublished">2020-02-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/%E6%95%B0%E5%AD%A6/">数学</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="../../2020/02/03/Educational%20Codeforces%20Round%2081%20(Rated%20for%20Div.%202)%20-%20D.%20Same%20GCDs(%E6%95%B0%E5%AD%A6)/">Educational Codeforces Round 81 (Rated for Div. 2) - D. Same GCDs(数学)</a>
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>题目链接:<a target="_blank" rel="noopener" href="https://codeforces.com/problemset/problem/1295/D">Same GCDs</a></p>
+<p>题意:给你两个数<span class="markdown-them-math-inline">$a$</span>，<span class="markdown-them-math-inline">$m(1 \leq a &lt; m \leq 10^{10})$</span>，求有多少个<span class="markdown-them-math-inline">$x$</span>满足：<span class="markdown-them-math-inline">$0 \leq x &lt; m$</span>且<span class="markdown-them-math-inline">$gcd(a,m)=gcd(a+x,m)$</span></p>
+<p>思路：设<span class="markdown-them-math-inline">$gcd(a,m)=d$</span>，那么问题转换为求多少个<span class="markdown-them-math-inline">$k \in [a,a+m)$</span>满足<span class="markdown-them-math-inline">$gcd(k,m)=d$</span></p>
+<p>两边同时除<span class="markdown-them-math-inline">$d$</span>，转换为求有多少<span class="markdown-them-math-inline">$k \in [\frac{a}{d},\frac{a+m}{d})$</span>满足<span class="markdown-them-math-inline">$gcd(k,\frac{m}{d})=1$</span></p>
+<p>设<span class="markdown-them-math-inline">$x=\frac{a}{d}$</span>，<span class="markdown-them-math-inline">$y=\frac{m}{d}$</span>，因为<span class="markdown-them-math-inline">$a&lt;m$</span>，所以显然有<span class="markdown-them-math-inline">$x&lt;y$</span></p>
+<p>问题转换为求有多少<span class="markdown-them-math-inline">$k \in [x,x+y)$</span>满足<span class="markdown-them-math-inline">$gcd(k,y)=1$</span></p>
+<p>将区间<span class="markdown-them-math-inline">$[x,x+y)$</span>拆成<span class="markdown-them-math-inline">$[x,y]$</span>和<span class="markdown-them-math-inline">$(y,x+y)$</span>两个区间</p>
+<p>考虑区间<span class="markdown-them-math-inline">$(y,x+y)$</span>，<span class="markdown-them-math-inline">$gcd(k,y)=gcd(y,k\%y)=gcd(k\%y,y)=1$</span>，因为<span class="markdown-them-math-inline">$k \in (y,x+y)$</span>，所以答案为<span class="markdown-them-math-inline">$(0,x)$</span>内与<span class="markdown-them-math-inline">$y$</span>互质的数的个数<br>
+考虑区间<span class="markdown-them-math-inline">$[x,y]$</span>，因为<span class="markdown-them-math-inline">$gcd(k,y)=1$</span>，所以答案为<span class="markdown-them-math-inline">$[x,y]$</span>内与<span class="markdown-them-math-inline">$y$</span>互质的数的个数<br>
+两个区间一合并，答案就是<span class="markdown-them-math-inline">$\varphi(y)$</span>，即<span class="markdown-them-math-inline">$\varphi(\frac{d}{m})$</span></p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cmath&gt;</span></span>
+ 
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+ 
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+ 
+<span class="hljs-keyword">int</span> t;
+ll a, m;
+ 
+<span class="hljs-function">ll <span class="hljs-title">gcd</span><span class="hljs-params">(ll a, ll b)</span>
+</span>&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> == b ? a : <span class="hljs-built_in">gcd</span>(b, a % b);
+&#125;
+ 
+<span class="hljs-function">ll <span class="hljs-title">euler</span><span class="hljs-params">(ll n)</span>
+</span>&#123;
+    ll ans = n;
+    <span class="hljs-keyword">for</span> (ll i = <span class="hljs-number">2</span>; i &lt;= <span class="hljs-built_in">sqrt</span>(n); i++) &#123;
+        <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == n % i) &#123;
+            ans = ans / i * (i - <span class="hljs-number">1</span>);
+            <span class="hljs-keyword">while</span> (<span class="hljs-number">0</span> == n % i) n /= i;
+        &#125;
+    &#125;
+    <span class="hljs-keyword">if</span> (n &gt; <span class="hljs-number">1</span>) ans = ans / n * (n - <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">return</span> ans;
+&#125;
+ 
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;t);
+    <span class="hljs-keyword">while</span> (t--) &#123;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld%lld&quot;</span>, &amp;a, &amp;m);
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, <span class="hljs-built_in">euler</span>(m / <span class="hljs-built_in">gcd</span>(a, m)));
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-AcWing - 156 矩阵(二维哈希)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="../../2020/02/01/AcWing%20-%20156%20%E7%9F%A9%E9%98%B5(%E4%BA%8C%E7%BB%B4%E5%93%88%E5%B8%8C)/" class="article-date">
@@ -69,12 +161,12 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题目链接: <a target="_blank" rel="noopener" href="https://www.acwing.com/problem/content/description/158/">矩阵</a></p>
-<p>题意: 给定一个<span class="markdown-them-math-inline">$m$</span>行<span class="markdown-them-math-inline">$n$</span>列的<span class="markdown-them-math-inline">$01$</span>矩阵<span class="markdown-them-math-inline">$($</span>只包含数字<span class="markdown-them-math-inline">$0$</span>或<span class="markdown-them-math-inline">$1$</span>的矩阵<span class="markdown-them-math-inline">$)$</span>, 再执行<span class="markdown-them-math-inline">$q$</span>次询问, 每次询问给出一个<span class="markdown-them-math-inline">$a$</span>行<span class="markdown-them-math-inline">$b$</span>列的<span class="markdown-them-math-inline">$01$</span>矩阵, 求该矩阵是否在原矩阵中出现过</p>
-<p>思路: 二维哈希, 从矩阵的右下角为低位到矩阵的左上角为高位, 先求出每一行的一维哈希值<span class="markdown-them-math-inline">$h[i][j]$</span>, 在<span class="markdown-them-math-inline">$a$</span>行<span class="markdown-them-math-inline">$b$</span>列的<span class="markdown-them-math-inline">$01$</span>矩阵向下移动的过程中, 先向下扩展成<span class="markdown-them-math-inline">$a+1$</span>行<span class="markdown-them-math-inline">$b$</span>列的<span class="markdown-them-math-inline">$01$</span>矩阵, 再将最上面的一行减去, 这样矩阵就会向下移动一格, 设原来<span class="markdown-them-math-inline">$a$</span>行<span class="markdown-them-math-inline">$b$</span>列矩阵的哈希值为<span class="markdown-them-math-inline">$t$</span>, 所以新矩阵的哈希值</p>
+        <p>题目链接：<a target="_blank" rel="noopener" href="https://www.acwing.com/problem/content/description/158/">矩阵</a></p>
+<p>题意：给定一个<span class="markdown-them-math-inline">$m$</span>行<span class="markdown-them-math-inline">$n$</span>列的<span class="markdown-them-math-inline">$01$</span>矩阵<span class="markdown-them-math-inline">$($</span>只包含数字<span class="markdown-them-math-inline">$0$</span>或<span class="markdown-them-math-inline">$1$</span>的矩阵<span class="markdown-them-math-inline">$)$</span>，再执行<span class="markdown-them-math-inline">$q$</span>次询问，每次询问给出一个<span class="markdown-them-math-inline">$a$</span>行<span class="markdown-them-math-inline">$b$</span>列的<span class="markdown-them-math-inline">$01$</span>矩阵，求该矩阵是否在原矩阵中出现过</p>
+<p>思路：二维哈希，从矩阵的右下角为低位到矩阵的左上角为高位，先求出每一行的一维哈希值<span class="markdown-them-math-inline">$h[i][j]$</span>，在<span class="markdown-them-math-inline">$a$</span>行<span class="markdown-them-math-inline">$b$</span>列的<span class="markdown-them-math-inline">$01$</span>矩阵向下移动的过程中，先向下扩展成<span class="markdown-them-math-inline">$a+1$</span>行<span class="markdown-them-math-inline">$b$</span>列的<span class="markdown-them-math-inline">$01$</span>矩阵，再将最上面的一行减去，这样矩阵就会向下移动一格，设原来<span class="markdown-them-math-inline">$a$</span>行<span class="markdown-them-math-inline">$b$</span>列矩阵的哈希值为<span class="markdown-them-math-inline">$t$</span>，所以新矩阵的哈希值</p>
 <p><div class="markdown-them-math-block">$$res=t*p[b]+(h[i+1][j]-h[i+1][j-b]*p[b])-((h[i-a][j]-h[i-a][j-b]*p[b])*p[a*b])$$</div></p>
-<p>用<span class="markdown-them-math-inline">$set$</span>存储每个子矩阵的哈希值, 求出询问矩阵的哈希值, 判断是否出现过</p>
-<p>其他二维哈希的题目, 令矩阵的右下角为低位、矩阵的左上角为高位, 然后推一下公式即可.</p>
+<p>用<span class="markdown-them-math-inline">$set$</span>存储每个子矩阵的哈希值，求出询问矩阵的哈希值，判断是否出现过</p>
+<p>其他二维哈希的题目，令矩阵的右下角为低位、矩阵的左上角为高位，然后推一下公式即可。</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -175,11 +267,11 @@ ull h[N][N], p[M];
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题目链接: <a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/3979/I">K小数查询</a></p>
-<p>题意: 给你一个长度为<span class="markdown-them-math-inline">$n$</span>序列<span class="markdown-them-math-inline">$A$</span>, 有<span class="markdown-them-math-inline">$m$</span>个操作, 操作分为两种:</p>
-<p>输入<span class="markdown-them-math-inline">$x, y, c$</span>, 表示对<span class="markdown-them-math-inline">$i\in[x,y] $</span>, 令<span class="markdown-them-math-inline">$A_{i}=min(A_{i},c)$</span><br>
-输入<span class="markdown-them-math-inline">$x, y, k$</span>, 表示询问区间<span class="markdown-them-math-inline">$[x,y]$</span>中的第<span class="markdown-them-math-inline">$k$</span>小数<br>
-思路: 数据范围不是很大, 可以分块来做, 记录每个块已经更新过的最小值<span class="markdown-them-math-inline">$imin[]$</span>, 询问时二分答案, 然后求出<span class="markdown-them-math-inline">$[x,y]$</span>区间中小于等于<span class="markdown-them-math-inline">$mid$</span>的数的个数<span class="markdown-them-math-inline">$cnt$</span>, 通过判断<span class="markdown-them-math-inline">$cnt$</span>与<span class="markdown-them-math-inline">$k$</span>的大小来改变<span class="markdown-them-math-inline">$l, r$</span>即可</p>
+        <p>题目链接：<a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/3979/I">K小数查询</a></p>
+<p>题意：给你一个长度为<span class="markdown-them-math-inline">$n$</span>序列<span class="markdown-them-math-inline">$A$</span>，有<span class="markdown-them-math-inline">$m$</span>个操作，操作分为两种：</p>
+<p>输入<span class="markdown-them-math-inline">$x，y，c$</span>，表示对<span class="markdown-them-math-inline">$i\in[x,y] $</span>，令<span class="markdown-them-math-inline">$A_{i}=min(A_{i},c)$</span><br>
+输入<span class="markdown-them-math-inline">$x，y，k$</span>，表示询问区间<span class="markdown-them-math-inline">$[x,y]$</span>中的第<span class="markdown-them-math-inline">$k$</span>小数<br>
+思路：数据范围不是很大，可以分块来做，记录每个块已经更新过的最小值<span class="markdown-them-math-inline">$imin[]$</span>，询问时二分答案，然后求出<span class="markdown-them-math-inline">$[x,y]$</span>区间中小于等于<span class="markdown-them-math-inline">$mid$</span>的数的个数<span class="markdown-them-math-inline">$cnt$</span>，通过判断<span class="markdown-them-math-inline">$cnt$</span>与<span class="markdown-them-math-inline">$k$</span>的大小来改变<span class="markdown-them-math-inline">$l，r$</span>即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -328,10 +420,10 @@ vector&lt;<span class="hljs-keyword">int</span>&gt; v[N];
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题意: 灯离地面的高度为<span class="markdown-them-math-inline">$H$</span>, 人的身高为<span class="markdown-them-math-inline">$h$</span>, 灯离墙的距离为<span class="markdown-them-math-inline">$D$</span>, 人站在不同位置, 影子的长度不一样, 求出影子的最长长度.</p>
-<p>思路: 设人离灯的距离为<span class="markdown-them-math-inline">$x$</span>, 当人走到距离灯长度为<span class="markdown-them-math-inline">$L$</span>时, 人在墙上的影子消失, 此时人再往前走, 影子的长度必然会减小, 此时的<span class="markdown-them-math-inline">$L$</span>就为三分的左边界, 右边界为<span class="markdown-them-math-inline">$R=D$</span>, 由形似三角形可以推导出<span class="markdown-them-math-inline">$L=D-\frac{h*D}{H}$</span>, 影子的长度</p>
+        <p>题意：灯离地面的高度为<span class="markdown-them-math-inline">$H$</span>，人的身高为<span class="markdown-them-math-inline">$h$</span>，灯离墙的距离为<span class="markdown-them-math-inline">$D$</span>，人站在不同位置，影子的长度不一样，求出影子的最长长度。</p>
+<p>思路：设人离灯的距离为<span class="markdown-them-math-inline">$x$</span>，当人走到距离灯长度为<span class="markdown-them-math-inline">$L$</span>时，人在墙上的影子消失，此时人再往前走，影子的长度必然会减小，此时的<span class="markdown-them-math-inline">$L$</span>就为三分的左边界，右边界为<span class="markdown-them-math-inline">$R=D$</span>，由形似三角形可以推导出<span class="markdown-them-math-inline">$L=D-\frac{h*D}{H}$</span>，影子的长度</p>
 <p><div class="markdown-them-math-block">$$f(x)=D-x+H-\frac{(H-h)*D}{x},x\in [D-\frac{h*D}{H},D]$$</div></p>
-<p>在区间<span class="markdown-them-math-inline">$[D-\frac{h*D}{H},D]$</span>三分求极值即可.</p>
+<p>在区间<span class="markdown-them-math-inline">$[D-\frac{h*D}{H},D]$</span>三分求极值即可。</p>
 <p><img src="/images/1588753-20200121204142027-435717852.gif" alt=""></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -413,17 +505,17 @@ vector&lt;<span class="hljs-keyword">int</span>&gt; v[N];
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题意: 求<span class="markdown-them-math-inline">$A^{B}$</span>的所有约数之和<span class="markdown-them-math-inline">$mod\ 9901$</span></p>
-<p>思路: 由结论有, 一个数<span class="markdown-them-math-inline">$n$</span>进行质因数分解得到<span class="markdown-them-math-inline">$n={p_{1}}^{c_{1}} * {p_{2}}^{c_{2}} *...* {p_{k}}^{c_{k}}$</span>, 那么<span class="markdown-them-math-inline">$n$</span>的约数之和为</p>
+        <p>题意：求<span class="markdown-them-math-inline">$A^{B}$</span>的所有约数之和<span class="markdown-them-math-inline">$mod\ 9901$</span></p>
+<p>思路：由结论有，一个数<span class="markdown-them-math-inline">$n$</span>进行质因数分解得到<span class="markdown-them-math-inline">$n={p_{1}}^{c_{1}} * {p_{2}}^{c_{2}} *...* {p_{k}}^{c_{k}}$</span>，那么<span class="markdown-them-math-inline">$n$</span>的约数之和为</p>
 <p><div class="markdown-them-math-block">$$sum=(1+{p_{1}}^{1}+\cdots+{p_{1}}^{c_{1}})*(1+{p_{2}}^{1}+\cdots +{p_{2}}^{c_{2}})*\cdots*(1+{p_{k}}^{1}+\cdots+{p_{k}}^{c_{k}})$$</div></p>
-<p>所以对<span class="markdown-them-math-inline">$A$</span>质因数分解后, 那么<span class="markdown-them-math-inline">$A^{B}$</span>的约数之和</p>
+<p>所以对<span class="markdown-them-math-inline">$A$</span>质因数分解后，那么<span class="markdown-them-math-inline">$A^{B}$</span>的约数之和</p>
 <p><div class="markdown-them-math-block">$$sum=(1+{p_{1}}^{1}+\cdots+{p_{1}}^{B*c_{1}})*(1+{p_{2}}^{1}+\cdots +{p_{2}}^{B*c_{2}})*\cdots*(1+{p_{k}}^{1}+\cdots+{p_{k}}^{B*c_{k}})$$</div></p>
-<p>上式中每个括号内都是等比数列, 利用分治法对等比数列求和, 设<span class="markdown-them-math-inline">$sum(p, c)=1+p+p^2+\cdots+p^{c}$</span></p>
+<p>上式中每个括号内都是等比数列，利用分治法对等比数列求和，设<span class="markdown-them-math-inline">$sum(p，c)=1+p+p^2+\cdots+p^{c}$</span></p>
 <p>当<span class="markdown-them-math-inline">$c$</span>为奇数时</p>
 <p><div class="markdown-them-math-block">$$sum(p,c)=(1+p+\cdots+p^{\frac{c-1}{2}})+(p^{\frac{c+1}{2}}+\cdots+p^c)=(1+p^{\frac{c+1}{2}})*sum(p,\frac{c-1}{2})$$</div></p>
 <p>当<span class="markdown-them-math-inline">$c$</span>为偶数时</p>
 <p><div class="markdown-them-math-block">$$sum(p,c)=(1+p+\cdots+p^{\frac{c}{2}-1})+(p^{\frac{c}{2}}+p^{\frac{c}{2}+1}\cdots+p^{c-1})+p^c=(1+p^{\frac{c}{2}})*sum(p,\frac{c}{2}-1)+p^c$$</div></p>
-<p>当<span class="markdown-them-math-inline">$c$</span>等于<span class="markdown-them-math-inline">$0$</span>, 结束递归,  返回<span class="markdown-them-math-inline">$1$</span>即可</p>
+<p>当<span class="markdown-them-math-inline">$c$</span>等于<span class="markdown-them-math-inline">$0$</span>，结束递归， 返回<span class="markdown-them-math-inline">$1$</span>即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -533,8 +625,8 @@ ll p[N], c[N], m;
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题意: 一共有<span class="markdown-them-math-inline">$n$</span>个数, <span class="markdown-them-math-inline">$m$</span>次询问, 每次询问包括<span class="markdown-them-math-inline">$k、pos$</span>两个数, 需要你从这<span class="markdown-them-math-inline">$n$</span>个数里面找出<span class="markdown-them-math-inline">$k$</span>个数, 使得他们的总和最大, 如果有多种情况, 找出序号字典序最小的一组, 然后输出这个序列中第<span class="markdown-them-math-inline">$pos$</span>个数的值.</p>
-<p>思路: 根据贪心的思想, 把这<span class="markdown-them-math-inline">$n$</span>个数按大到小排个序<span class="markdown-them-math-inline">$($</span>相同大小按下标从小到大<span class="markdown-them-math-inline">$)$</span>, 再按照每个元素的下标依次放入主席树中, 对于每次询问, 查找前<span class="markdown-them-math-inline">$k$</span>个数中第<span class="markdown-them-math-inline">$pos$</span>大的数, 但这个查找到的值是下标, 再把这个下标对应到数值即可, 体现在代码中的<span class="markdown-them-math-inline">$b[]$</span>数组中.</p>
+        <p>题意：一共有<span class="markdown-them-math-inline">$n$</span>个数，<span class="markdown-them-math-inline">$m$</span>次询问，每次询问包括<span class="markdown-them-math-inline">$k、pos$</span>两个数，需要你从这<span class="markdown-them-math-inline">$n$</span>个数里面找出<span class="markdown-them-math-inline">$k$</span>个数，使得他们的总和最大，如果有多种情况，找出序号字典序最小的一组，然后输出这个序列中第<span class="markdown-them-math-inline">$pos$</span>个数的值。</p>
+<p>思路：根据贪心的思想，把这<span class="markdown-them-math-inline">$n$</span>个数按大到小排个序<span class="markdown-them-math-inline">$($</span>相同大小按下标从小到大<span class="markdown-them-math-inline">$)$</span>，再按照每个元素的下标依次放入主席树中，对于每次询问，查找前<span class="markdown-them-math-inline">$k$</span>个数中第<span class="markdown-them-math-inline">$pos$</span>大的数，但这个查找到的值是下标，再把这个下标对应到数值即可，体现在代码中的<span class="markdown-them-math-inline">$b[]$</span>数组中。</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -644,8 +736,8 @@ node tree[<span class="hljs-number">40</span> * N];
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题意: 有<span class="markdown-them-math-inline">$n$</span>个孩子, 第<span class="markdown-them-math-inline">$i$</span>个孩子有<span class="markdown-them-math-inline">$k[i]$</span>件想要的礼物, 第<span class="markdown-them-math-inline">$j$</span>个礼物为<span class="markdown-them-math-inline">$a[i][j]$</span>, 现在随机挑一个孩子, 从他想要的礼物里面随机挑一个, 然后送给另一个孩子<span class="markdown-them-math-inline">$($</span>这个孩子可以和第一个孩子是同一个人<span class="markdown-them-math-inline">$)$</span>, 问你送的这个礼物在后一个孩子愿望单里的概率.</p>
-<p>思路: 求出每件礼物出现的次数<span class="markdown-them-math-inline">$cnt[]$</span>, 挑出第一个孩子的概率为<span class="markdown-them-math-inline">$\frac{1}{n}$</span>, 在他的愿望单里挑出一件礼物的概率为<span class="markdown-them-math-inline">$\frac{1}{k[i]}$</span>, 挑出另一个孩子的概率也是<span class="markdown-them-math-inline">$\frac{1}{n}$</span>, 挑出的第一个孩子的每件礼物<span class="markdown-them-math-inline">$a[i][j]$</span>出现了<span class="markdown-them-math-inline">$cnt[a[i][j]]$</span>次, 那么对于第<span class="markdown-them-math-inline">$i$</span>个孩子的第<span class="markdown-them-math-inline">$j$</span>件礼物<span class="markdown-them-math-inline">$a[i][j]$</span>礼物而言, 对答案的贡献就是<span class="markdown-them-math-inline">$\frac{cnt[a[i][j]]}{n^{2}*k[i]}$</span>, 所以总概率<div class="markdown-them-math-block">$$p=\sum_{i=1}^{n}\sum_{j=1}^{k[i]}\frac{cnt[a[i][j]]}{n^{2}*k[i]}$$</div>用快速幂取逆元.</p>
+        <p>题意：有<span class="markdown-them-math-inline">$n$</span>个孩子，第<span class="markdown-them-math-inline">$i$</span>个孩子有<span class="markdown-them-math-inline">$k[i]$</span>件想要的礼物，第<span class="markdown-them-math-inline">$j$</span>个礼物为<span class="markdown-them-math-inline">$a[i][j]$</span>，现在随机挑一个孩子，从他想要的礼物里面随机挑一个，然后送给另一个孩子<span class="markdown-them-math-inline">$($</span>这个孩子可以和第一个孩子是同一个人<span class="markdown-them-math-inline">$)$</span>，问你送的这个礼物在后一个孩子愿望单里的概率。</p>
+<p>思路：求出每件礼物出现的次数<span class="markdown-them-math-inline">$cnt[]$</span>，挑出第一个孩子的概率为<span class="markdown-them-math-inline">$\frac{1}{n}$</span>，在他的愿望单里挑出一件礼物的概率为<span class="markdown-them-math-inline">$\frac{1}{k[i]}$</span>，挑出另一个孩子的概率也是<span class="markdown-them-math-inline">$\frac{1}{n}$</span>，挑出的第一个孩子的每件礼物<span class="markdown-them-math-inline">$a[i][j]$</span>出现了<span class="markdown-them-math-inline">$cnt[a[i][j]]$</span>次，那么对于第<span class="markdown-them-math-inline">$i$</span>个孩子的第<span class="markdown-them-math-inline">$j$</span>件礼物<span class="markdown-them-math-inline">$a[i][j]$</span>礼物而言，对答案的贡献就是<span class="markdown-them-math-inline">$\frac{cnt[a[i][j]]}{n^{2}*k[i]}$</span>，所以总概率<div class="markdown-them-math-block">$$p=\sum_{i=1}^{n}\sum_{j=1}^{k[i]}\frac{cnt[a[i][j]]}{n^{2}*k[i]}$$</div>用快速幂取逆元。</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -737,8 +829,8 @@ vector&lt;ll&gt; v[N];
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题意: 有<span class="markdown-them-math-inline">$n$</span>个人, <span class="markdown-them-math-inline">$m$</span>个债务关系, <span class="markdown-them-math-inline">$u_{i}$</span>, <span class="markdown-them-math-inline">$v_{i}$</span>, <span class="markdown-them-math-inline">$d_{i}$</span>表示第<span class="markdown-them-math-inline">$u_{i}个人$</span>欠第<span class="markdown-them-math-inline">$v_{i}$</span>个人<span class="markdown-them-math-inline">$d_{i}$</span>块钱, 现在你需要简化债务关系, 使得债务总额最小.  比如, <span class="markdown-them-math-inline">$A$</span>欠<span class="markdown-them-math-inline">$B$</span>十元, <span class="markdown-them-math-inline">$B$</span>欠<span class="markdown-them-math-inline">$C$</span>十五元, <span class="markdown-them-math-inline">$C$</span>欠<span class="markdown-them-math-inline">$A$</span>十元, 此时总的债务为<span class="markdown-them-math-inline">$10+15+10=35$</span>, 我们可以把债务关系简化为<span class="markdown-them-math-inline">$B$</span>欠<span class="markdown-them-math-inline">$C$</span>五元, 那这样总的债务为<span class="markdown-them-math-inline">$5$</span>.</p>
-<p>思路: 其实每个人只关心自己借出或者借进了多少钱, 所以求出每个人借出或者借进了多少钱, 再将借进和借出的人分开, 两两进行配对, 确保每次配对总能消除一个人, 比如求出<span class="markdown-them-math-inline">$A$</span>借出<span class="markdown-them-math-inline">$6$</span>元, <span class="markdown-them-math-inline">$B$</span>借进<span class="markdown-them-math-inline">$2$</span>元, <span class="markdown-them-math-inline">$C$</span>借进<span class="markdown-them-math-inline">$4$</span>元, 第一次将<span class="markdown-them-math-inline">$A$</span>和<span class="markdown-them-math-inline">$B$</span>配对, 消除<span class="markdown-them-math-inline">$B$</span>, 此时相当于<span class="markdown-them-math-inline">$A$</span>只借出了<span class="markdown-them-math-inline">$4$</span>元, 再将<span class="markdown-them-math-inline">$A$</span>与<span class="markdown-them-math-inline">$C$</span>配对消除<span class="markdown-them-math-inline">$C$</span>即可, 因为每次配对都能消除一个人, 所以求出来的债务总额也肯定最小.</p>
+        <p>题意：有<span class="markdown-them-math-inline">$n$</span>个人，<span class="markdown-them-math-inline">$m$</span>个债务关系，<span class="markdown-them-math-inline">$u_{i}$</span>，<span class="markdown-them-math-inline">$v_{i}$</span>，<span class="markdown-them-math-inline">$d_{i}$</span>表示第<span class="markdown-them-math-inline">$u_{i}个人$</span>欠第<span class="markdown-them-math-inline">$v_{i}$</span>个人<span class="markdown-them-math-inline">$d_{i}$</span>块钱，现在你需要简化债务关系，使得债务总额最小。比如，<span class="markdown-them-math-inline">$A$</span>欠<span class="markdown-them-math-inline">$B$</span>十元，<span class="markdown-them-math-inline">$B$</span>欠<span class="markdown-them-math-inline">$C$</span>十五元，<span class="markdown-them-math-inline">$C$</span>欠<span class="markdown-them-math-inline">$A$</span>十元，此时总的债务为<span class="markdown-them-math-inline">$10+15+10=35$</span>，我们可以把债务关系简化为<span class="markdown-them-math-inline">$B$</span>欠<span class="markdown-them-math-inline">$C$</span>五元，那这样总的债务为<span class="markdown-them-math-inline">$5$</span>。</p>
+<p>思路：其实每个人只关心自己借出或者借进了多少钱，所以求出每个人借出或者借进了多少钱，再将借进和借出的人分开，两两进行配对，确保每次配对总能消除一个人，比如求出<span class="markdown-them-math-inline">$A$</span>借出<span class="markdown-them-math-inline">$6$</span>元，<span class="markdown-them-math-inline">$B$</span>借进<span class="markdown-them-math-inline">$2$</span>元，<span class="markdown-them-math-inline">$C$</span>借进<span class="markdown-them-math-inline">$4$</span>元，第一次将<span class="markdown-them-math-inline">$A$</span>和<span class="markdown-them-math-inline">$B$</span>配对，消除<span class="markdown-them-math-inline">$B$</span>，此时相当于<span class="markdown-them-math-inline">$A$</span>只借出了<span class="markdown-them-math-inline">$4$</span>元，再将<span class="markdown-them-math-inline">$A$</span>与<span class="markdown-them-math-inline">$C$</span>配对消除<span class="markdown-them-math-inline">$C$</span>即可，因为每次配对都能消除一个人，所以求出来的债务总额也肯定最小。</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -833,13 +925,13 @@ ll d[N], rw[N];
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题意: 你起初有一支军队, 有<span class="markdown-them-math-inline">$k$</span>个士兵, 现在有<span class="markdown-them-math-inline">$n$</span>座城堡, 你若想占领第<span class="markdown-them-math-inline">$i$</span>座城堡, 至少得有<span class="markdown-them-math-inline">$a[i]$</span>个士兵才能占领<span class="markdown-them-math-inline">$($</span>占领后士兵不会减少<span class="markdown-them-math-inline">$)$</span>, 占领了第<span class="markdown-them-math-inline">$i$</span>座城堡后, 你将得到<span class="markdown-them-math-inline">$b[i]$</span>个士兵, 然后你有两种方式防御你占领的城堡:</p>
+        <p>题意：你起初有一支军队，有<span class="markdown-them-math-inline">$k$</span>个士兵，现在有<span class="markdown-them-math-inline">$n$</span>座城堡，你若想占领第<span class="markdown-them-math-inline">$i$</span>座城堡，至少得有<span class="markdown-them-math-inline">$a[i]$</span>个士兵才能占领<span class="markdown-them-math-inline">$($</span>占领后士兵不会减少<span class="markdown-them-math-inline">$)$</span>，占领了第<span class="markdown-them-math-inline">$i$</span>座城堡后，你将得到<span class="markdown-them-math-inline">$b[i]$</span>个士兵，然后你有两种方式防御你占领的城堡：</p>
 <ul>
 <li>在你占领第<span class="markdown-them-math-inline">$i$</span>个城堡后留下一个士兵防御第<span class="markdown-them-math-inline">$i$</span>个城堡</li>
-<li>有<span class="markdown-them-math-inline">$m$</span>个传送门, 能从<span class="markdown-them-math-inline">$u_{i}$</span>传送到<span class="markdown-them-math-inline">$v_{i}(u_{i}&gt;v_{i})$</span>, 你可以在占领完第<span class="markdown-them-math-inline">$u_{i}$</span>座城堡后再派一个士兵去防御第<span class="markdown-them-math-inline">$v_{i}$</span>个城堡<br>
-如果你防御了第<span class="markdown-them-math-inline">$i$</span>座城堡, 你能得到<span class="markdown-them-math-inline">$c[i]$</span>的成就值, 现在问你, 如果你能占领全部的城堡, 你能获得的最大的成就值是多少, 若不能占领全部的城堡,  输出<span class="markdown-them-math-inline">$-1$</span>.</li>
+<li>有<span class="markdown-them-math-inline">$m$</span>个传送门，能从<span class="markdown-them-math-inline">$u_{i}$</span>传送到<span class="markdown-them-math-inline">$v_{i}(u_{i}&gt;v_{i})$</span>，你可以在占领完第<span class="markdown-them-math-inline">$u_{i}$</span>座城堡后再派一个士兵去防御第<span class="markdown-them-math-inline">$v_{i}$</span>个城堡<br>
+如果你防御了第<span class="markdown-them-math-inline">$i$</span>座城堡，你能得到<span class="markdown-them-math-inline">$c[i]$</span>的成就值，现在问你，如果你能占领全部的城堡，你能获得的最大的成就值是多少，若不能占领全部的城堡， 输出<span class="markdown-them-math-inline">$-1$</span>。</li>
 </ul>
-<p>思路: 对于每一座城堡, 如果它能在多个地方被防御, 那么肯定选择最远能够被防御的地方, 所以预处理出<span class="markdown-them-math-inline">$to[i][j]$</span>表示第<span class="markdown-them-math-inline">$to[i][j]$</span>个城堡最远能被防御的地方是第<span class="markdown-them-math-inline">$i$</span>个城堡, 根据贪心的思想, 我们对于城堡<span class="markdown-them-math-inline">$i$</span>, 应该将城堡<span class="markdown-them-math-inline">$i$</span>能够到达的城堡<span class="markdown-them-math-inline">$to[i][j]$</span>全部进行防御, 防御时按照成就值从高到低依次防御, 当没有士兵进行防御时, 如果当前需要防御的城堡的成就值大于你已经防御的城堡里面成就值的最小值, 则应该放弃那个成就值最小的城堡, 来防御当前的城堡, 当发现自己的士兵不够占领某个城堡时, 贪心放弃那些成就低的城堡, 利用优先队列, 每次放弃城堡时取出队头即可.</p>
+<p>思路：对于每一座城堡，如果它能在多个地方被防御，那么肯定选择最远能够被防御的地方，所以预处理出<span class="markdown-them-math-inline">$to[i][j]$</span>表示第<span class="markdown-them-math-inline">$to[i][j]$</span>个城堡最远能被防御的地方是第<span class="markdown-them-math-inline">$i$</span>个城堡，根据贪心的思想，我们对于城堡<span class="markdown-them-math-inline">$i$</span>，应该将城堡<span class="markdown-them-math-inline">$i$</span>能够到达的城堡<span class="markdown-them-math-inline">$to[i][j]$</span>全部进行防御，防御时按照成就值从高到低依次防御，当没有士兵进行防御时，如果当前需要防御的城堡的成就值大于你已经防御的城堡里面成就值的最小值，则应该放弃那个成就值最小的城堡，来防御当前的城堡，当发现自己的士兵不够占领某个城堡时，贪心放弃那些成就低的城堡，利用优先队列，每次放弃城堡时取出队头即可。</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -952,10 +1044,10 @@ priority_queue&lt; <span class="hljs-keyword">int</span>, vector&lt;<span class=
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题意: 给你一张无向连通图, 对于求有多少对<span class="markdown-them-math-inline">$(x,y)$</span>满足互相到达必须经过<span class="markdown-them-math-inline">$(a,b)$</span>, 其中<span class="markdown-them-math-inline">$x\neq a,x\neq b,y\neq a,y\neq b$</span></p>
-<p>思路: 显然<span class="markdown-them-math-inline">$a,b$</span>都必须为割点, 所以先用<span class="markdown-them-math-inline">$tarjan$</span>判断<span class="markdown-them-math-inline">$a,b$</span>是否都为割点, 如果<span class="markdown-them-math-inline">$a$</span>或<span class="markdown-them-math-inline">$b$</span>有一个不为割点, 那么答案就是<span class="markdown-them-math-inline">$0$</span></p>
+        <p>题意：给你一张无向连通图，对于求有多少对<span class="markdown-them-math-inline">$(x,y)$</span>满足互相到达必须经过<span class="markdown-them-math-inline">$(a,b)$</span>，其中<span class="markdown-them-math-inline">$x\neq a,x\neq b,y\neq a,y\neq b$</span></p>
+<p>思路：显然<span class="markdown-them-math-inline">$a,b$</span>都必须为割点，所以先用<span class="markdown-them-math-inline">$tarjan$</span>判断<span class="markdown-them-math-inline">$a,b$</span>是否都为割点，如果<span class="markdown-them-math-inline">$a$</span>或<span class="markdown-them-math-inline">$b$</span>有一个不为割点，那么答案就是<span class="markdown-them-math-inline">$0$</span></p>
 <p><img src="/images/1588753-20200110161203006-1063370167.png" alt=""></p>
-<p>当<span class="markdown-them-math-inline">$a,b$</span>都为割点时, 答案为连通块<span class="markdown-them-math-inline">$1$</span>内点的个数<span class="markdown-them-math-inline">$*$</span>连通块<span class="markdown-them-math-inline">$2$</span>内点的个数, 以求连通块<span class="markdown-them-math-inline">$1$</span>内点的个数为例, 从<span class="markdown-them-math-inline">$b$</span>点开始<span class="markdown-them-math-inline">$dfs$</span>, 当遇到<span class="markdown-them-math-inline">$a$</span>点时停止, 统计出<span class="markdown-them-math-inline">$($</span>连通块<span class="markdown-them-math-inline">$2+$</span>复杂网络<span class="markdown-them-math-inline">$+b+a)$</span>这些点的个数, 连通块<span class="markdown-them-math-inline">$1$</span>内点的个数就是用<span class="markdown-them-math-inline">$n$</span>减去<span class="markdown-them-math-inline">$dfs$</span>求出的点的个数, 求连通块<span class="markdown-them-math-inline">$2$</span>内点的个数从<span class="markdown-them-math-inline">$a$</span>点开始<span class="markdown-them-math-inline">$dfs$</span>即可.</p>
+<p>当<span class="markdown-them-math-inline">$a,b$</span>都为割点时，答案为连通块<span class="markdown-them-math-inline">$1$</span>内点的个数<span class="markdown-them-math-inline">$*$</span>连通块<span class="markdown-them-math-inline">$2$</span>内点的个数，以求连通块<span class="markdown-them-math-inline">$1$</span>内点的个数为例，从<span class="markdown-them-math-inline">$b$</span>点开始<span class="markdown-them-math-inline">$dfs$</span>，当遇到<span class="markdown-them-math-inline">$a$</span>点时停止，统计出<span class="markdown-them-math-inline">$($</span>连通块<span class="markdown-them-math-inline">$2+$</span>复杂网络<span class="markdown-them-math-inline">$+b+a)$</span>这些点的个数，连通块<span class="markdown-them-math-inline">$1$</span>内点的个数就是用<span class="markdown-them-math-inline">$n$</span>减去<span class="markdown-them-math-inline">$dfs$</span>求出的点的个数，求连通块<span class="markdown-them-math-inline">$2$</span>内点的个数从<span class="markdown-them-math-inline">$a$</span>点开始<span class="markdown-them-math-inline">$dfs$</span>即可。</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -1066,144 +1158,11 @@ node edge[<span class="hljs-number">2</span> * N];
 
 
   
-    <article id="post-Codeforces Round603 (Div. 2) - E. Editor(线段树)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="../../2019/12/29/Codeforces%20Round603%20(Div.%202)%20-%20E.%20Editor(%E7%BA%BF%E6%AE%B5%E6%A0%91)/" class="article-date">
-  <time class="dt-published" datetime="2019-12-29T07:53:00.000Z" itemprop="datePublished">2019-12-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="../../2019/12/29/Codeforces%20Round603%20(Div.%202)%20-%20E.%20Editor(%E7%BA%BF%E6%AE%B5%E6%A0%91)/">Codeforces Round603 (Div. 2) - E. Editor(线段树)</a>
-    </h1>
-  
-
-      </header>
-    
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>题意: 给你一串指令集, 当某个指令为<span class="markdown-them-math-inline">$``L&quot;$</span>时, 表示鼠标的光标向左移动一个单位<span class="markdown-them-math-inline">$($</span>如果已经位于最左边, 则不移动<span class="markdown-them-math-inline">$)$</span>, 当指令为<span class="markdown-them-math-inline">$``R&quot;$</span>时, 表示将光标像右移动一个单位, 其他的字符<span class="markdown-them-math-inline">$($</span>只有小写字母和左括号、右括号<span class="markdown-them-math-inline">$)$</span>都表示将当前光标指向的字符更改为输入的字符, 对于每个指令, 输出一个数, 如果所得到的文本中括号序列合法, 则是输出当前文本最大的括号嵌套层数, 括号序列不合法则输出<span class="markdown-them-math-inline">$-1$</span></p>
-<p>思路: 用<span class="markdown-them-math-inline">$1$</span>表示左括号, <span class="markdown-them-math-inline">$-1$</span>表示右括号, <span class="markdown-them-math-inline">$0$</span>表示其他字符, 用一个线段树维护三个值: 区间和<span class="markdown-them-math-inline">$w$</span>, 区间最大前缀和<span class="markdown-them-math-inline">$imax$</span>, 区间最小前缀和<span class="markdown-them-math-inline">$imin$</span>.  对于任意一个合法的括号序列, 需要满足以下两个条件:</p>
-<ul>
-<li>
-<p>左括号和右括号的数量相等, 即<span class="markdown-them-math-inline">$w=0$</span></p>
-</li>
-<li>
-<p>括号序列的任意前缀和都大于等于<span class="markdown-them-math-inline">$0$</span>, 即<span class="markdown-them-math-inline">$imin \ge 0$</span><br>
-而对于一个合法的括号序列, 括号的最大嵌套层数就是区间最大前缀和<span class="markdown-them-math-inline">$imax$</span>, 需要维护一个单点修改和区间查询的线段树, 但由于每次查询的区间都是<span class="markdown-them-math-inline">$[1,n]$</span>, 线段树根节点表示的区间正好是<span class="markdown-them-math-inline">$[1,n]$</span>, 所以只用维护一个单点修改的线段树, 输入小写字母和左括号、右括号时, 将光标位置上的值改为对应的值, 同时更新区间和, 区间最大前缀和, 区间最小前缀和, 具体更新如下:</p>
-</li>
-<li>
-<p>区间和<span class="markdown-them-math-inline">$=$</span>左区间和<span class="markdown-them-math-inline">$+$</span>右区间和</p>
-</li>
-<li>
-<p>最小前缀和<span class="markdown-them-math-inline">$=min($</span>左区间最小前缀和<span class="markdown-them-math-inline">$,$</span>左区间区间和<span class="markdown-them-math-inline">$+$</span>右区间最小前缀和<span class="markdown-them-math-inline">$)$</span></p>
-</li>
-<li>
-<p>最大前缀和<span class="markdown-them-math-inline">$=max($</span>左区间最大前缀和<span class="markdown-them-math-inline">$,$</span>左区间区间和<span class="markdown-them-math-inline">$+$</span>右区间最大前缀和<span class="markdown-them-math-inline">$)$</span><br>
-更新后判断<span class="markdown-them-math-inline">$[1,n]$</span>的括号序列是否合法, 不合法输出<span class="markdown-them-math-inline">$-1$</span>, 合法则直接输出区间<span class="markdown-them-math-inline">$[1,n]$</span>中<span class="markdown-them-math-inline">$imax$</span>的值</p>
-</li>
-</ul>
-<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
- 
-<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
- 
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">1000010</span>;
- 
-<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
-    <span class="hljs-keyword">int</span> l, r, w;
-    <span class="hljs-keyword">int</span> imin, imax;
-&#125;;
- 
-node tree[<span class="hljs-number">4</span> * N];
-<span class="hljs-keyword">int</span> n, res[N];
-<span class="hljs-keyword">char</span> s[N];
- 
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">build</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k, <span class="hljs-keyword">int</span> lef, <span class="hljs-keyword">int</span> rig)</span>
-</span>&#123;
-    tree[k].l = lef, tree[k].r = rig;
-    <span class="hljs-keyword">if</span> (tree[k].l == tree[k].r) &#123;
-        tree[k].w = tree[k].imin = tree[k].imax = <span class="hljs-number">0</span>;
-        <span class="hljs-keyword">return</span>;
-    &#125;
-    <span class="hljs-keyword">int</span> mid = (lef + rig) / <span class="hljs-number">2</span>;
-    <span class="hljs-built_in">build</span>(k * <span class="hljs-number">2</span>, lef, mid);
-    <span class="hljs-built_in">build</span>(k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, rig);
-    tree[k].w = tree[k * <span class="hljs-number">2</span>].w + tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].w;
-    tree[k].imax = <span class="hljs-built_in">max</span>(tree[k * <span class="hljs-number">2</span>].imax, tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].imax);
-    tree[k].imin = <span class="hljs-built_in">max</span>(tree[k * <span class="hljs-number">2</span>].imin, tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].imin);
-&#125;
- 
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">change_point</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k, <span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y)</span>
-</span>&#123;
-    <span class="hljs-keyword">if</span> (tree[k].l == tree[k].r) &#123;
-        tree[k].w = y;
-        <span class="hljs-keyword">return</span>;
-    &#125;
-    <span class="hljs-keyword">int</span> mid = (tree[k].l + tree[k].r) / <span class="hljs-number">2</span>;
-    <span class="hljs-keyword">if</span> (x &lt;= mid) <span class="hljs-built_in">change_point</span>(<span class="hljs-number">2</span> * k, x, y);
-    <span class="hljs-keyword">else</span> <span class="hljs-built_in">change_point</span>(<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>, x, y);
-    tree[k].w = tree[k * <span class="hljs-number">2</span>].w + tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].w;
-    tree[k].imax = <span class="hljs-built_in">max</span>(tree[k * <span class="hljs-number">2</span>].imax, tree[k * <span class="hljs-number">2</span>].w + tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].imax);
-    tree[k].imin = <span class="hljs-built_in">min</span>(tree[k * <span class="hljs-number">2</span>].imin, tree[k * <span class="hljs-number">2</span>].w + tree[k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>].imin);
-&#125;
- 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%s&quot;</span>, &amp;n, s + <span class="hljs-number">1</span>);
-    <span class="hljs-built_in">build</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, n);
-    <span class="hljs-keyword">int</span> cur = <span class="hljs-number">1</span>, len = <span class="hljs-built_in">strlen</span>(s + <span class="hljs-number">1</span>);
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++) &#123;
-        <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;(&#x27;</span> == s[i]) <span class="hljs-built_in">change_point</span>(<span class="hljs-number">1</span>, cur, <span class="hljs-number">1</span>);
-        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;)&#x27;</span> == s[i]) <span class="hljs-built_in">change_point</span>(<span class="hljs-number">1</span>, cur, <span class="hljs-number">-1</span>);
-        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;L&#x27;</span> == s[i]) &#123;
-            <span class="hljs-keyword">if</span> (cur &gt;= <span class="hljs-number">2</span>) cur--;
-        &#125;
-        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;R&#x27;</span> == s[i]) cur++;
-        <span class="hljs-keyword">else</span> <span class="hljs-built_in">change_point</span>(<span class="hljs-number">1</span>, cur, <span class="hljs-number">0</span>);
-        <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> != tree[<span class="hljs-number">1</span>].w || <span class="hljs-number">0</span> != tree[<span class="hljs-number">1</span>].imin) res[i] = <span class="hljs-number">-1</span>;
-        <span class="hljs-keyword">else</span> res[i] = tree[<span class="hljs-number">1</span>].imax;
-    &#125;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++) &#123;
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d&quot;</span>, res[i]);
-        <span class="hljs-built_in">printf</span>(i == len ? <span class="hljs-string">&quot;\n&quot;</span> : <span class="hljs-string">&quot; &quot;</span>);
-    &#125;
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;
-</code></pre></div>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="../3/">&laquo; 上一页</a><a class="page-number" href="../../">1</a><a class="page-number" href="../2/">2</a><a class="page-number" href="../3/">3</a><span class="page-number current">4</span><a class="page-number" href="../5/">5</a><a class="extend next" rel="next" href="../5/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="../3/">&laquo; 上一页</a><a class="page-number" href="../../">1</a><a class="page-number" href="../2/">2</a><a class="page-number" href="../3/">3</a><span class="page-number current">4</span><a class="page-number" href="../5/">5</a><a class="page-number" href="../6/">6</a><a class="extend next" rel="next" href="../5/">下一页 &raquo;</a>
   </nav>
 
 </section>
@@ -1215,6 +1174,10 @@ node tree[<span class="hljs-number">4</span> * N];
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
         
           <li>
             <a href="../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
@@ -1232,10 +1195,6 @@ node tree[<span class="hljs-number">4</span> * N];
             <a href="../../2020/10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
           </li>
         
-          <li>
-            <a href="../../2020/09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1245,7 +1204,7 @@ node tree[<span class="hljs-number">4</span> * N];
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 

@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   
   
-  <title>2020牛客暑期多校训练营 (第三场) E - Two Matchings(dp) | zzy&#39;s blog</title>
+  <title>2020牛客暑期多校训练营（第三场）E - Two Matchings(dp) | zzy&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <meta name="description" content="题目链接: Two Matchings
-题意: 给你一个序列a, 你要找到两种完全不同的整个序列的两两匹配, 使得所有两两匹配差的绝对值的和最小, 输出这个和
-思路: 对序列a排序后, 显然最小的匹配相邻两两匹配, 即$(a_2-a_1)+(a_4-a_3)+\dots+(a_n - a_{n-1}">
+  <meta name="description" content="题目链接：Two Matchings
+题意：给你一个序列a，你要找到两种完全不同的整个序列的两两匹配，使得所有两两匹配差的绝对值的和最小，输出这个和
+思路：对序列a排序后，显然最小的匹配相邻两两匹配，即$(a_2-a_1)+(a_4-a_3)+\dots+(a_n - a_{n-1})$，关键在如何">
   
   
   
@@ -62,7 +62,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      2020牛客暑期多校训练营 (第三场) E - Two Matchings(dp)
+      2020牛客暑期多校训练营（第三场）E - Two Matchings(dp)
     </h1>
   
 
@@ -71,13 +71,13 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题目链接: <a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/5668/E">Two Matchings</a></p>
-<p>题意: 给你一个序列a, 你要找到两种完全不同的整个序列的两两匹配, 使得所有两两匹配差的绝对值的和最小, 输出这个和</p>
-<p>思路: 对序列a排序后, 显然最小的匹配相邻两两匹配, 即<span class="markdown-them-math-inline">$(a_2-a_1)+(a_4-a_3)+\dots+(a_n - a_{n-1})$</span>, 关键在如何求第二小的匹配</p>
-<p>对于第二小的匹配, 我们可以讲整个序列分为多个4个数的子序列和多个6个数的子序列</p>
-<p>对于4个数的子序列, 除了相邻两两匹配外, 第二小的匹配为<span class="markdown-them-math-inline">$a_3+a_4-a_2-a_1$</span></p>
-<p>对于6个数的子序列, 除了相邻两两匹配外, 第二小的匹配为<span class="markdown-them-math-inline">$a_6+a_5+a_3-a_4-a_1-a_2$</span></p>
-<p>对于偶数位进行dp即可, 即dp[i]=min(dp[i - 4] + a[i] + a[i - 1] - a[i - 2] - a[i - 3],dp[i - 6] + a[i] + a[i - 1] + a[i - 3] - a[i - 5] - a[i - 4] - a[i - 2])</p>
+        <p>题目链接：<a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/5668/E">Two Matchings</a></p>
+<p>题意：给你一个序列a，你要找到两种完全不同的整个序列的两两匹配，使得所有两两匹配差的绝对值的和最小，输出这个和</p>
+<p>思路：对序列a排序后，显然最小的匹配相邻两两匹配，即<span class="markdown-them-math-inline">$(a_2-a_1)+(a_4-a_3)+\dots+(a_n - a_{n-1})$</span>，关键在如何求第二小的匹配</p>
+<p>对于第二小的匹配，我们可以讲整个序列分为多个4个数的子序列和多个6个数的子序列</p>
+<p>对于4个数的子序列，除了相邻两两匹配外，第二小的匹配为<span class="markdown-them-math-inline">$a_3+a_4-a_2-a_1$</span></p>
+<p>对于6个数的子序列，除了相邻两两匹配外，第二小的匹配为<span class="markdown-them-math-inline">$a_6+a_5+a_3-a_4-a_1-a_2$</span></p>
+<p>对于偶数位进行dp即可，即dp[i]=min(dp[i - 4] + a[i] + a[i - 1] - a[i - 2] - a[i - 3],dp[i - 6] + a[i] + a[i - 1] + a[i - 3] - a[i - 5] - a[i - 4] - a[i - 2])</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -148,7 +148,7 @@ ll a[N], dp[N];
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">
         
-          2020牛客暑期多校训练营 (第二场) B - Boundary(计算几何)
+          2020牛客暑期多校训练营（第二场）B - Boundary(计算几何)
         
       </div>
     </a>
@@ -170,6 +170,10 @@ ll a[N], dp[N];
       <ul>
         
           <li>
+            <a href="../../../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
+        
+          <li>
             <a href="../../../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
           </li>
         
@@ -185,10 +189,6 @@ ll a[N], dp[N];
             <a href="../../../10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
           </li>
         
-          <li>
-            <a href="../../../09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -198,7 +198,7 @@ ll a[N], dp[N];
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 

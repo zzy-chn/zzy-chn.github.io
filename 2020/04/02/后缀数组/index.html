@@ -8,9 +8,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <meta name="description" content="New Distinct Substrings
-题目链接: spoj - SUBST1
-题意: 给你一个串, 求他的子串个数
-思路: 每个子串都是某个后缀的前缀, 所以计算每个后缀的贡献即可, 按照后缀suffix(sa[1]), suffix(sa[2])…的顺序计算, 当加入suffix(sa[">
+题目链接：spoj - SUBST1
+题意：给你一个串，求他的子串个数
+思路：每个子串都是某个后缀的前缀，所以计算每个后缀的贡献即可，按照后缀suffix(sa[1])，suffix(sa[2])…的顺序计算，当加入suffix(sa[k])时，本应产">
   
   
   
@@ -78,9 +78,9 @@
     <div class="e-content article-entry" itemprop="articleBody">
       
         <h2 id="new-distinct substrings">New Distinct Substrings</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="https://www.spoj.com/problems/SUBST1/en/">spoj - SUBST1</a></p>
-<p>题意: 给你一个串, 求他的子串个数</p>
-<p>思路: 每个子串都是某个后缀的前缀, 所以计算每个后缀的贡献即可, 按照后缀suffix(sa[1]), suffix(sa[2])…的顺序计算, 当加入suffix(sa[k])时, 本应产生n-sa[k]+1个前缀, 但是有height[k]个前缀在前面已经计算过了, 所以suffix(sa[k])对答案的贡献就是n-sa[k]+1-height[k]</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="https://www.spoj.com/problems/SUBST1/en/">spoj - SUBST1</a></p>
+<p>题意：给你一个串，求他的子串个数</p>
+<p>思路：每个子串都是某个后缀的前缀，所以计算每个后缀的贡献即可，按照后缀suffix(sa[1])，suffix(sa[2])…的顺序计算，当加入suffix(sa[k])时，本应产生n-sa[k]+1个前缀，但是有height[k]个前缀在前面已经计算过了，所以suffix(sa[k])对答案的贡献就是n-sa[k]+1-height[k]</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -153,9 +153,9 @@
 &#125;
 </code></pre></div>
 <h2 id="substring">Substring</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=5769">hdu - 5769</a></p>
-<p>题意: 给你一个串和一个字符x, 求包含字符x的子串个数</p>
-<p>思路: 和上题思路一样, 计算每个后缀的贡献, 不同的是子串中需要包含字符x, 所以我们可以先预处理出每个位置后面离它最近的一个字符x的位置pos[], 当加入suffix(sa[k])时, 我们只能从pos[sa[k]]开始取前缀, 所以suffix(sa[k])对答案的贡献就是n-sa[k]+1-max(height[k], pos[sa[k]]-sa[k])</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=5769">hdu - 5769</a></p>
+<p>题意：给你一个串和一个字符x，求包含字符x的子串个数</p>
+<p>思路：和上题思路一样，计算每个后缀的贡献，不同的是子串中需要包含字符x，所以我们可以先预处理出每个位置后面离它最近的一个字符x的位置pos[]，当加入suffix(sa[k])时，我们只能从pos[sa[k]]开始取前缀，所以suffix(sa[k])对答案的贡献就是n-sa[k]+1-max(height[k]，pos[sa[k]]-sa[k])</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -238,9 +238,9 @@
 &#125;
 </code></pre></div>
 <h2 id="musical-theme">Musical Theme</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="http://poj.org/problem?id=1743">poj - 1743</a></p>
-<p>题意: 给你一个串, 找出最长、不可重叠、重复的子串</p>
-<p>思路: 二分答案, 将问题转换为判定型问题, 判断是否存在两个子串长度为k且不重叠, 将排序后的后缀分为若干组, 每组内所有元素的height大于等于k, 那么每组内任意两个后缀的最长公共前缀长度都大于等于k, 此时如果有一组内sa的最大值与最小值之差大于等于k, 那么就一定存在两个子串长度为k且不重叠</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="http://poj.org/problem?id=1743">poj - 1743</a></p>
+<p>题意：给你一个串，找出最长、不可重叠、重复的子串</p>
+<p>思路：二分答案，将问题转换为判定型问题，判断是否存在两个子串长度为k且不重叠，将排序后的后缀分为若干组，每组内所有元素的height大于等于k，那么每组内任意两个后缀的最长公共前缀长度都大于等于k，此时如果有一组内sa的最大值与最小值之差大于等于k，那么就一定存在两个子串长度为k且不重叠</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -333,9 +333,9 @@
 &#125;
 </code></pre></div>
 <h2 id="milk-patterns">Milk Patterns</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="http://poj.org/problem?id=3261">poj - 3261</a></p>
-<p>题意: 给你一个数组和一个数k, 求出最长、可以重叠、重复k次的子串</p>
-<p>思路: 二分答案, 将问题转换为判定型问题, 判断是否存在k个子串长度为L、可以重叠的子串, 将排序后的后缀分为若干组, 每组内所有元素的height大于等于L, 此时如果存在一组组内后缀的数目大于等于k, 那么就一定存在k个子串长度为L、可以重叠的子串</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="http://poj.org/problem?id=3261">poj - 3261</a></p>
+<p>题意：给你一个数组和一个数k，求出最长、可以重叠、重复k次的子串</p>
+<p>思路：二分答案，将问题转换为判定型问题，判断是否存在k个子串长度为L、可以重叠的子串，将排序后的后缀分为若干组，每组内所有元素的height大于等于L，此时如果存在一组组内后缀的数目大于等于k，那么就一定存在k个子串长度为L、可以重叠的子串</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -420,9 +420,9 @@
 &#125;
 </code></pre></div>
 <h2 id="life-forms">Life Forms</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="http://poj.org/problem?id=3294">poj - 3294</a></p>
-<p>题意: 给你n个字符串, 求在大于n/2个字符串中含有的最长公共子串</p>
-<p>思路: 将n个字符串拼接起来, 中间用一个从没出现过且不相同的字符隔开, 求出后缀数组后二分答案, 将排序后的后缀分为若干组, 判断每一组内的后缀是否出现在大于n/2个不同的字符串中(标记某个字符串是否出现过, 统计不同字符串的数量)</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="http://poj.org/problem?id=3294">poj - 3294</a></p>
+<p>题意：给你n个字符串，求在大于n/2个字符串中含有的最长公共子串</p>
+<p>思路：将n个字符串拼接起来，中间用一个从没出现过且不相同的字符隔开，求出后缀数组后二分答案，将排序后的后缀分为若干组，判断每一组内的后缀是否出现在大于n/2个不同的字符串中(标记某个字符串是否出现过，统计不同字符串的数量)</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -563,9 +563,9 @@
 &#125;
 </code></pre></div>
 <h2 id="relevant-phrases of annihilation">Relevant Phrases of Annihilation</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="https://www.spoj.com/problems/PHRASES/en/">spoj - PHRASES</a></p>
-<p>题意: 给你n个字符串, 求在每个字符串中不重叠的至少出现2次的最长子串</p>
-<p>思路: 将n个字符串拼接起来, 中间用一个从没出现过且不相同的字符隔开, 求后缀数组后二分答案, 将排序后的后缀分为若干组, 判断是否有一组后缀在每个原来的字符串中至少出现两次, 并且在每个原来的字符串中, 后缀的起始位置的最大值与最小值之差是否不小于当前二分的长度</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="https://www.spoj.com/problems/PHRASES/en/">spoj - PHRASES</a></p>
+<p>题意：给你n个字符串，求在每个字符串中不重叠的至少出现2次的最长子串</p>
+<p>思路：将n个字符串拼接起来，中间用一个从没出现过且不相同的字符隔开，求后缀数组后二分答案，将排序后的后缀分为若干组，判断是否有一组后缀在每个原来的字符串中至少出现两次，并且在每个原来的字符串中，后缀的起始位置的最大值与最小值之差是否不小于当前二分的长度</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -690,9 +690,9 @@
 &#125;
 </code></pre></div>
 <h2 id="long-long message">Long Long Message</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="http://poj.org/problem?id=2774">poj - 2774</a></p>
-<p>题意: 给你两个串, 求两个串的最长公共子串</p>
-<p>思路: 将第二个串写在第一个串的后面, 中间用一个没有出现过的字符隔开, 求这个新字符串的后缀数组, 当sa[i-1]和sa[i]不属于同一个字符串时, height[i]的最大值就是答案</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="http://poj.org/problem?id=2774">poj - 2774</a></p>
+<p>题意：给你两个串，求两个串的最长公共子串</p>
+<p>思路：将第二个串写在第一个串的后面，中间用一个没有出现过的字符隔开，求这个新字符串的后缀数组，当sa[i-1]和sa[i]不属于同一个字符串时，height[i]的最大值就是答案</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -767,10 +767,10 @@
 &#125;
 </code></pre></div>
 <h2 id="substrings">Substrings</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="http://poj.org/problem?id=1226">poj - 1226</a></p>
-<p>题意: 给你n个串, 求顺序出现或者逆序出现在每个字符串的最长子串</p>
-<p>思路: 将每个字符串反过来写一遍, 再将这2*n个字符串拼接起来, 中间用一个从没出现过且不相同的字符隔开, 求出后缀数组后二分答案, 判断是否有一组后缀在每个原来的字符串或反转后</p>
-<p>的字符串中出现, 注意特判n=1的情况</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="http://poj.org/problem?id=1226">poj - 1226</a></p>
+<p>题意：给你n个串，求顺序出现或者逆序出现在每个字符串的最长子串</p>
+<p>思路：将每个字符串反过来写一遍，再将这2*n个字符串拼接起来，中间用一个从没出现过且不相同的字符隔开，求出后缀数组后二分答案，判断是否有一组后缀在每个原来的字符串或反转后</p>
+<p>的字符串中出现，注意特判n=1的情况</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -893,9 +893,9 @@
 &#125;
 </code></pre></div>
 <h2 id="mr-panda and fantastic beasts">Mr. Panda and Fantastic Beasts</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="https://codeforces.com/gym/101194">Gym - 101194F</a></p>
-<p>题意: 给你n个字符串, 找到第一个字符串字典序最小的最短子串, 使得这个子串不是其他字符串的子串</p>
-<p>思路: 将n个字符串拼接起来, 中间用一个从没出现过且不相同的字符隔开, 求出后缀数组后, 对所有来自第一个字符串的后缀进行判断, 找到它左边第一个不是来自第一个串的后缀, 求lcp为x, 找到它右边第一个不是来自第一个串的后缀, 求lcp为y, 那么显然该后缀至少取前max(x,y)+1个字符做为子串, 对每个后缀都进行一次判断, 取最小值即可, 注意需要判断max(x,y)+1是否超过了第一个字符串后缀的长度</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="https://codeforces.com/gym/101194">Gym - 101194F</a></p>
+<p>题意：给你n个字符串，找到第一个字符串字典序最小的最短子串，使得这个子串不是其他字符串的子串</p>
+<p>思路：将n个字符串拼接起来，中间用一个从没出现过且不相同的字符隔开，求出后缀数组后，对所有来自第一个字符串的后缀进行判断，找到它左边第一个不是来自第一个串的后缀，求lcp为x，找到它右边第一个不是来自第一个串的后缀，求lcp为y，那么显然该后缀至少取前max(x,y)+1个字符做为子串，对每个后缀都进行一次判断，取最小值即可，注意需要判断max(x,y)+1是否超过了第一个字符串后缀的长度</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -1039,9 +1039,9 @@
 &#125;
 </code></pre></div>
 <h2 id="good-article good sentence">Good Article Good sentence</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=4416">hdu - 4416</a></p>
-<p>题意: 给出一个串A和若干串B, 问A中有多少子串未在任一B串中出现过</p>
-<p>思路: 将所有的串拼接起来, 中间用一个从没出现过且不相同的字符隔开, 求出后缀数组, 设A串的长度为lenA, 对于A串中每个后缀, lenA-sa[i]+1-height[i]就是没有限制条件下第i个后缀的贡献, 设j为i后面第一个来自B串的后缀, 那么加上限制条件后, 每个后缀的贡献就是lenA-sa[i]+1-max(height[i],lcp(i,j)), lcp(i,j)可以通过从后向前扫一遍求出来</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=4416">hdu - 4416</a></p>
+<p>题意：给出一个串A和若干串B，问A中有多少子串未在任一B串中出现过</p>
+<p>思路：将所有的串拼接起来，中间用一个从没出现过且不相同的字符隔开，求出后缀数组，设A串的长度为lenA，对于A串中每个后缀，lenA-sa[i]+1-height[i]就是没有限制条件下第i个后缀的贡献，设j为i后面第一个来自B串的后缀，那么加上限制条件后，每个后缀的贡献就是lenA-sa[i]+1-max(height[i],lcp(i,j))，lcp(i,j)可以通过从后向前扫一遍求出来</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -1139,9 +1139,9 @@
 &#125;
 </code></pre></div>
 <h2 id="string-string string">string string string</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=6194">hdu - 6194</a></p>
-<p>题意: 给出一个字符串, 求恰好出现k次的子串个数</p>
-<p>思路: 求出后缀数组后, 枚举长度为k的段, 一段一段的枚举, 用rmq求出每一段的最长公共前缀长度lcp, 即这段有lcp个子串是满足出现k次的, 但又有可能子串过短而不止出现k次, 所以要减去出现次数大于k次的子串个数, 所以每段对答案的贡献就是lcp-max(height[i],height[i+k]), 特判k=1的情况</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=6194">hdu - 6194</a></p>
+<p>题意：给出一个字符串，求恰好出现k次的子串个数</p>
+<p>思路：求出后缀数组后，枚举长度为k的段，一段一段的枚举，用rmq求出每一段的最长公共前缀长度lcp，即这段有lcp个子串是满足出现k次的，但又有可能子串过短而不止出现k次，所以要减去出现次数大于k次的子串个数，所以每段对答案的贡献就是lcp-max(height[i],height[i+k])，特判k=1的情况</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -1257,9 +1257,9 @@ ll k;
 &#125;
 </code></pre></div>
 <h2 id="boring-string problem">Boring String Problem</h2>
-<p>题目链接: <a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=5008">hdu - 5008</a></p>
-<p>题意: 给出一个字符串, 求出第k小的子串, 并求出字符串的起止位置, 如果有多个重复子串, 求出位置最靠左的子串</p>
-<p>思路: 求出后缀数组, 后缀数组本来就是按照字典序排序的, 由于height数组的去重性质, 我们就可以通过二分查找来定位第k小的子串来自哪个后缀, 但由于可能有多个重复的子串, 所以需要暴力向后面的后缀进行查找, 找到位置最靠左的子串</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=5008">hdu - 5008</a></p>
+<p>题意：给出一个字符串，求出第k小的子串，并求出字符串的起止位置，如果有多个重复子串，求出位置最靠左的子串</p>
+<p>思路：求出后缀数组，后缀数组本来就是按照字典序排序的，由于height数组的去重性质，我们就可以通过二分查找来定位第k小的子串来自哪个后缀，但由于可能有多个重复的子串，所以需要暴力向后面的后缀进行查找，找到位置最靠左的子串</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -1406,6 +1406,10 @@ ll b[N];
       <ul>
         
           <li>
+            <a href="../../../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
+        
+          <li>
             <a href="../../../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
           </li>
         
@@ -1421,10 +1425,6 @@ ll b[N];
             <a href="../../../10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
           </li>
         
-          <li>
-            <a href="../../../09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1434,7 +1434,7 @@ ll b[N];
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 

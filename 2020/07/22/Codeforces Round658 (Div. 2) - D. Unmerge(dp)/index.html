@@ -7,9 +7,9 @@
   <title>Codeforces Round658 (Div. 2) - D. Unmerge(dp) | zzy&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <meta name="description" content="题目链接: Unmerge
-题意: 定义两个数组的合并merge(a, b), 每次将数组a第一个元素和数组b第一个元素中最小的那个放到数组c中, 同时删除那个最小的元素, 现在给你一个长度为2*n的排列, 问是否能由两个长度为n的数组合并而成
-思路: 对于长度为2*n的排列, 显然是通过一段一段合">
+  <meta name="description" content="题目链接：Unmerge
+题意：定义两个数组的合并merge(a，b)，每次将数组a第一个元素和数组b第一个元素中最小的那个放到数组c中，同时删除那个最小的元素，现在给你一个长度为2*n的排列，问是否能由两个长度为n的数组合并而成
+思路：对于长度为2*n的排列，显然是通过一段一段合并得到的，例如(3">
   
   
   
@@ -71,9 +71,9 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题目链接: <a target="_blank" rel="noopener" href="http://codeforces.com/contest/1382/problem/D">Unmerge</a></p>
-<p>题意: 定义两个数组的合并merge(a, b), 每次将数组a第一个元素和数组b第一个元素中最小的那个放到数组c中, 同时删除那个最小的元素, 现在给你一个长度为2*n的排列, 问是否能由两个长度为n的数组合并而成</p>
-<p>思路: 对于长度为2*n的排列, 显然是通过一段一段合并得到的, 例如(3, 2, 6, 1, 5, 7, 8, 4), 找到3后面比他大的第一个数6, 6后面比他大的第一个数7, 7后面比他大的第一个数8, 应该分为(3, 2), (6, 1, 5), (7), (8, 4)这四段, 然后将这四段进行分配, 判断能够组成两个长度为n的数组, 用01背包判断(背包容量为n, 物品的容量和价值都为每一段的长度), 判断最后的最大价值是否为n即可</p>
+        <p>题目链接：<a target="_blank" rel="noopener" href="http://codeforces.com/contest/1382/problem/D">Unmerge</a></p>
+<p>题意：定义两个数组的合并merge(a，b)，每次将数组a第一个元素和数组b第一个元素中最小的那个放到数组c中，同时删除那个最小的元素，现在给你一个长度为2*n的排列，问是否能由两个长度为n的数组合并而成</p>
+<p>思路：对于长度为2*n的排列，显然是通过一段一段合并得到的，例如(3，2，6，1，5，7，8，4)，找到3后面比他大的第一个数6，6后面比他大的第一个数7，7后面比他大的第一个数8，应该分为(3，2)，(6，1，5)，(7)，(8，4)这四段，然后将这四段进行分配，判断能够组成两个长度为n的数组，用01背包判断(背包容量为n，物品的容量和价值都为每一段的长度)，判断最后的最大价值是否为n即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -145,7 +145,7 @@ vector&lt;<span class="hljs-keyword">int</span>&gt; p;
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">
         
-          2020牛客暑期多校训练营 (第三场) E - Two Matchings(dp)
+          2020牛客暑期多校训练营（第三场）E - Two Matchings(dp)
         
       </div>
     </a>
@@ -167,6 +167,10 @@ vector&lt;<span class="hljs-keyword">int</span>&gt; p;
       <ul>
         
           <li>
+            <a href="../../../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
+        
+          <li>
             <a href="../../../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
           </li>
         
@@ -182,10 +186,6 @@ vector&lt;<span class="hljs-keyword">int</span>&gt; p;
             <a href="../../../10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
           </li>
         
-          <li>
-            <a href="../../../09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -195,7 +195,7 @@ vector&lt;<span class="hljs-keyword">int</span>&gt; p;
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 

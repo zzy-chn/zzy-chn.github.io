@@ -7,8 +7,8 @@
   <title>二次剩余学习笔记 | zzy&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <meta name="description" content="定义: 对一个数n, 如果不是p的倍数且模p同余于某个数的平方, 则称n为模p的二次剩余, 即对一个数n, 求解方程$x^2\equiv n(mod\ p)$
-二次剩余的作用: 对于一个数n, 如果要求$\sqrt{n} mod\ p$, 可以看为n是否是模p的二次剩余, 如果方程$x^2\equi">
+  <meta name="description" content="定义：对一个数n，如果不是p的倍数且模p同余于某个数的平方，则称n为模p的二次剩余，即对一个数n，求解方程$x^2\equiv n(mod\ p)$
+二次剩余的作用：对于一个数n，如果要求$\sqrt{n} mod\ p$，可以看为n是否是模p的二次剩余，如果方程$x^2\equiv n(mod\ ">
   
   
   
@@ -70,37 +70,37 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>定义: 对一个数n, 如果不是p的倍数且模p同余于某个数的平方, 则称n为模p的二次剩余, 即对一个数n, 求解方程<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span></p>
-<p>二次剩余的作用: 对于一个数n, 如果要求<span class="markdown-them-math-inline">$\sqrt{n} mod\ p$</span>, 可以看为n是否是模p的二次剩余, 如果方程<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>有解, 就会有<span class="markdown-them-math-inline">$x\equiv \sqrt{n} (mod\ p)$</span>, 就可以用x代替<span class="markdown-them-math-inline">$\sqrt{n}$</span></p>
+        <p>定义：对一个数n，如果不是p的倍数且模p同余于某个数的平方，则称n为模p的二次剩余，即对一个数n，求解方程<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span></p>
+<p>二次剩余的作用：对于一个数n，如果要求<span class="markdown-them-math-inline">$\sqrt{n} mod\ p$</span>，可以看为n是否是模p的二次剩余，如果方程<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>有解，就会有<span class="markdown-them-math-inline">$x\equiv \sqrt{n} (mod\ p)$</span>，就可以用x代替<span class="markdown-them-math-inline">$\sqrt{n}$</span></p>
 <p>下面仅考虑p为奇素数的情况</p>
-<p>定理1: 对于<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>, 能满足 “n是模p的二次剩余” 的n一共有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个(不包括0), 非二次剩余有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个</p>
-<p>证明: 设<span class="markdown-them-math-inline">$u^2=a*p+n$</span>, 即<span class="markdown-them-math-inline">$u^2\equiv n(mod\ p)$</span></p>
-<p><span class="markdown-them-math-inline">$\because \forall t\in \mathbb{Z}, (u+t*p)^2=u^2+2*u*t*p+(t*p)^2=(a+t^2 * p + 2*u*t)*p+n$</span></p>
+<p>定理1：对于<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>，能满足“n是模p的二次剩余”的n一共有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个(不包括0)，非二次剩余有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个</p>
+<p>证明：设<span class="markdown-them-math-inline">$u^2=a*p+n$</span>，即<span class="markdown-them-math-inline">$u^2\equiv n(mod\ p)$</span></p>
+<p><span class="markdown-them-math-inline">$\because \forall t\in \mathbb{Z}，(u+t*p)^2=u^2+2*u*t*p+(t*p)^2=(a+t^2 * p + 2*u*t)*p+n$</span></p>
 <p><span class="markdown-them-math-inline">$\therefore u^2\equiv (u+t*p)^2 (mod\ p)$</span></p>
-<p>所以我们只用考虑当<span class="markdown-them-math-inline">$x\in [0,p-1]$</span>, 满足 “n是模p的二次剩余” 的n一共有多少个</p>
-<p>假设存在两个不同的数u,v带入方程, 使得<span class="markdown-them-math-inline">$u^2\equiv n(mod\ p)$</span>, <span class="markdown-them-math-inline">$v^2\equiv n(mod\ p)$</span></p>
-<p>那么就有<span class="markdown-them-math-inline">$u^2\equiv v^2(mod\ p)$</span>, 显然<span class="markdown-them-math-inline">$(u^2 - v^2)\mid p$</span>, 即<span class="markdown-them-math-inline">$(u-v)*(u+v)\mid p$</span></p>
-<p>因为<span class="markdown-them-math-inline">$u,v\in [0,p-1]$</span>, 所以<span class="markdown-them-math-inline">$(u-v)\nmid p$</span>, 只可能u+v=p, 那么这样的u, v有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>对, 即满足 “n是模p的二次剩余” 的n有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个</p>
+<p>所以我们只用考虑当<span class="markdown-them-math-inline">$x\in [0,p-1]$</span>，满足“n是模p的二次剩余”的n一共有多少个</p>
+<p>假设存在两个不同的数u,v带入方程，使得<span class="markdown-them-math-inline">$u^2\equiv n(mod\ p)$</span>，<span class="markdown-them-math-inline">$v^2\equiv n(mod\ p)$</span></p>
+<p>那么就有<span class="markdown-them-math-inline">$u^2\equiv v^2(mod\ p)$</span>，显然<span class="markdown-them-math-inline">$(u^2 - v^2)\mid p$</span>，即<span class="markdown-them-math-inline">$(u-v)*(u+v)\mid p$</span></p>
+<p>因为<span class="markdown-them-math-inline">$u,v\in [0,p-1]$</span>，所以<span class="markdown-them-math-inline">$(u-v)\nmid p$</span>，只可能u+v=p，那么这样的u，v有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>对，即满足“n是模p的二次剩余”的n有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个</p>
 <hr>
 <p>我们引入勒让德符号<span class="markdown-them-math-inline">$(\frac{n}{p})$</span></p>
-<p>当<span class="markdown-them-math-inline">$p\nmid n$</span>且n是p的二次剩余时, <span class="markdown-them-math-inline">$(\frac{n}{p})=1$</span></p>
-<p>当<span class="markdown-them-math-inline">$p\nmid n$</span>且n不是p的二次剩余时, <span class="markdown-them-math-inline">$(\frac{n}{p})=-1$</span></p>
-<p>当<span class="markdown-them-math-inline">$p\mid n$</span>时, <span class="markdown-them-math-inline">$(\frac{n}{p})=0$</span></p>
-<p>欧拉判别准则: <span class="markdown-them-math-inline">$(\frac{n}{p})\equiv n^{\frac{p-1}{2}}(mod\ p)$</span>, n是p的二次剩余, 当且仅当<span class="markdown-them-math-inline">$n^{\frac{p-1}{2}}\equiv 1(mod\ p)$</span>, n不是p的二次剩余, 当且仅当<span class="markdown-them-math-inline">$n^{\frac{p-1}{2}}\equiv -1(mod p)$</span></p>
-<p>证明: 由费马小定理得<span class="markdown-them-math-inline">$x^{p-1}\equiv 1(mod\ p)$</span>一定存在解</p>
+<p>当<span class="markdown-them-math-inline">$p\nmid n$</span>且n是p的二次剩余时，<span class="markdown-them-math-inline">$(\frac{n}{p})=1$</span></p>
+<p>当<span class="markdown-them-math-inline">$p\nmid n$</span>且n不是p的二次剩余时，<span class="markdown-them-math-inline">$(\frac{n}{p})=-1$</span></p>
+<p>当<span class="markdown-them-math-inline">$p\mid n$</span>时，<span class="markdown-them-math-inline">$(\frac{n}{p})=0$</span></p>
+<p>欧拉判别准则：<span class="markdown-them-math-inline">$(\frac{n}{p})\equiv n^{\frac{p-1}{2}}(mod\ p)$</span>，n是p的二次剩余，当且仅当<span class="markdown-them-math-inline">$n^{\frac{p-1}{2}}\equiv 1(mod\ p)$</span>，n不是p的二次剩余，当且仅当<span class="markdown-them-math-inline">$n^{\frac{p-1}{2}}\equiv -1(mod p)$</span></p>
+<p>证明：由费马小定理得<span class="markdown-them-math-inline">$x^{p-1}\equiv 1(mod\ p)$</span>一定存在解</p>
 <p>由于<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span></p>
 <p>所以<span class="markdown-them-math-inline">$x^{p-1}\equiv (x^2)^{\frac{p-1}{2}}\equiv n^{\frac{p-1}{2}}(mod\ p)$</span></p>
 <p>所以n为p的二次剩余的条件为<span class="markdown-them-math-inline">$n^{\frac{p-1}{2}}\equiv 1(mod\ p)$</span></p>
 <hr>
-<p>二次剩余解(x)的个数: 假设存在多组解<span class="markdown-them-math-inline">$x_0,x_1$</span>使得<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>成立, 于是有<span class="markdown-them-math-inline">$x_{0}^2\equiv x_{1}^2$</span>, 移项后得<span class="markdown-them-math-inline">$(x_0-x_1)*(x_0+x_1)\equiv 0(mod\ p)$</span></p>
+<p>二次剩余解(x)的个数：假设存在多组解<span class="markdown-them-math-inline">$x_0,x_1$</span>使得<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>成立，于是有<span class="markdown-them-math-inline">$x_{0}^2\equiv x_{1}^2$</span>，移项后得<span class="markdown-them-math-inline">$(x_0-x_1)*(x_0+x_1)\equiv 0(mod\ p)$</span></p>
 <p>因为<span class="markdown-them-math-inline">$x_0,x_1\in [0,p-1]$</span></p>
-<p>当<span class="markdown-them-math-inline">$x_0=x_1$</span>时, <span class="markdown-them-math-inline">$(x_0-x_1)*(x_0+x_1)\equiv 0(mod\ p)$</span>成立</p>
-<p>当<span class="markdown-them-math-inline">$x_0\neq x_1$</span>时, <span class="markdown-them-math-inline">$(x_0+x_1)\equiv 0(mod\ p)$</span>成立, 此时只存在两个不相等的解</p>
-<p>Cipolla定理: 设a满足<span class="markdown-them-math-inline">$\omega =a^2-n$</span>且<span class="markdown-them-math-inline">$\omega $</span>是模p得非二次剩余, 即<span class="markdown-them-math-inline">$x^2\equiv \omega (mod\ p)$</span>无解, 那么<span class="markdown-them-math-inline">$x\equiv (a+\sqrt{\omega })^{\frac{p+1}{2}}$</span>是<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>的解</p>
-<p>所以我们可以随机一个a, 然后来找到一个满足条件的解</p>
-<p>建立一个类似于 “复数域” 的域, 定义 “虚数单位” 为<span class="markdown-them-math-inline">$\omega$</span>, 然后进行求解, 由于满足 “n是模p的二次剩余” 的n一共有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个, 所以随机次数的期望为2</p>
+<p>当<span class="markdown-them-math-inline">$x_0=x_1$</span>时，<span class="markdown-them-math-inline">$(x_0-x_1)*(x_0+x_1)\equiv 0(mod\ p)$</span>成立</p>
+<p>当<span class="markdown-them-math-inline">$x_0\neq x_1$</span>时，<span class="markdown-them-math-inline">$(x_0+x_1)\equiv 0(mod\ p)$</span>成立，此时只存在两个不相等的解</p>
+<p>Cipolla定理：设a满足<span class="markdown-them-math-inline">$\omega =a^2-n$</span>且<span class="markdown-them-math-inline">$\omega $</span>是模p得非二次剩余，即<span class="markdown-them-math-inline">$x^2\equiv \omega (mod\ p)$</span>无解，那么<span class="markdown-them-math-inline">$x\equiv (a+\sqrt{\omega })^{\frac{p+1}{2}}$</span>是<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>的解</p>
+<p>所以我们可以随机一个a，然后来找到一个满足条件的解</p>
+<p>建立一个类似于“复数域”的域，定义“虚数单位”为<span class="markdown-them-math-inline">$\omega$</span>，然后进行求解，由于满足“n是模p的二次剩余”的n一共有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个，所以随机次数的期望为2</p>
 <hr>
-<p>例题:</p>
+<p>例题：</p>
 <p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P5491">luogu 5491 [模板]二次剩余</a></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -193,15 +193,15 @@ ll n, mod, I;
 &#125;
 </code></pre></div>
 <p><a target="_blank" rel="noopener" href="https://zoj.pintia.cn/problem-sets/91827364500/problems/91827369735">zoj 3774 Power of Fibonacci</a></p>
-<p>题意: 求<span class="markdown-them-math-inline">$\sum_{i=1}^{n}F_{i}^k$</span>, <span class="markdown-them-math-inline">$F_{i}$</span>为斐波那契数列的第i项, 模1000000009</p>
-<p>思路: 斐波那契数列的通项公式为<span class="markdown-them-math-inline">$F_n=\frac{1}{\sqrt{5}}[(\frac{1+\sqrt{5}}{2})^n-(\frac{1-\sqrt{5}}{2})^n]$</span></p>
-<p>令<span class="markdown-them-math-inline">$a=\frac{1+\sqrt{5}}{2}$</span>, <span class="markdown-them-math-inline">$b=\frac{1-\sqrt{5}}{2}$</span>, 则<span class="markdown-them-math-inline">$F_n=\frac{1}{\sqrt{5}}(a^n-b^n)$</span></p>
+<p>题意：求<span class="markdown-them-math-inline">$\sum_{i=1}^{n}F_{i}^k$</span>，<span class="markdown-them-math-inline">$F_{i}$</span>为斐波那契数列的第i项，模1000000009</p>
+<p>思路：斐波那契数列的通项公式为<span class="markdown-them-math-inline">$F_n=\frac{1}{\sqrt{5}}[(\frac{1+\sqrt{5}}{2})^n-(\frac{1-\sqrt{5}}{2})^n]$</span></p>
+<p>令<span class="markdown-them-math-inline">$a=\frac{1+\sqrt{5}}{2}$</span>，<span class="markdown-them-math-inline">$b=\frac{1-\sqrt{5}}{2}$</span>，则<span class="markdown-them-math-inline">$F_n=\frac{1}{\sqrt{5}}(a^n-b^n)$</span></p>
 <p><span class="markdown-them-math-inline">$F_n^k=(\frac{1}{\sqrt{5}})^k (a^n-b^n)^k$</span></p>
 <p><span class="markdown-them-math-inline">$(a^n-b^n)^k$</span>二项式展开得<span class="markdown-them-math-inline">$(a^n-b^n)^k=C_k^0(a^n)^k+C_k^1(a^n)^{k-1}(-b^n)^1+\dots +C_k^k(-b^n)^k=\sum_{r=0}^{k}(-1)^rC_k^r(a^{k-r}*b^r)^n$</span></p>
 <p>将前n项相加得<span class="markdown-them-math-inline">$res=(\frac{1}{\sqrt{5}})^k \sum_{r=0}^k\sum_{i=1}^{n}(-1)^rC_k^r(a^{k-r}*b^r)^i=(\frac{1}{\sqrt{5}})^k \sum_{r=0}^k(-1)^rC_k^r\sum_{i=1}^{n}(a^{k-r}*b^r)^i$</span></p>
-<p>令<span class="markdown-them-math-inline">$t=a^{k-r}*b^r$</span>, <span class="markdown-them-math-inline">$\sum_{i=1}^{n}(a^{k-r}*b^r)^i=\sum_{i=1}^{n}t^i$</span>, 为等比数列, 求和后为<span class="markdown-them-math-inline">$\frac{t*(t^n-1)}{t}$</span>, 预处理出<span class="markdown-them-math-inline">$a^i$</span>和<span class="markdown-them-math-inline">$b^i$</span>即可O(1)求出t</p>
+<p>令<span class="markdown-them-math-inline">$t=a^{k-r}*b^r$</span>，<span class="markdown-them-math-inline">$\sum_{i=1}^{n}(a^{k-r}*b^r)^i=\sum_{i=1}^{n}t^i$</span>，为等比数列，求和后为<span class="markdown-them-math-inline">$\frac{t*(t^n-1)}{t}$</span>，预处理出<span class="markdown-them-math-inline">$a^i$</span>和<span class="markdown-them-math-inline">$b^i$</span>即可O(1)求出t</p>
 <p>所以<span class="markdown-them-math-inline">$res=(\frac{1}{\sqrt{5}})^k\sum_{i=0}^{k}(-1)^rC_k^r\frac{t*(t^n-1)}{t-1}$</span></p>
-<p>根据二次剩余, <span class="markdown-them-math-inline">$\sqrt{5}\equiv 383008016 mod\ 1000000009$</span>, <span class="markdown-them-math-inline">$\frac{1+\sqrt{5}}{2}\equiv 691504013 mod\ 1000000009$</span>, <span class="markdown-them-math-inline">$\frac{1-\sqrt{5}}{2}\equiv 308495997 mod\ 1000000009$</span></p>
+<p>根据二次剩余，<span class="markdown-them-math-inline">$\sqrt{5}\equiv 383008016 mod\ 1000000009$</span>，<span class="markdown-them-math-inline">$\frac{1+\sqrt{5}}{2}\equiv 691504013 mod\ 1000000009$</span>，<span class="markdown-them-math-inline">$\frac{1-\sqrt{5}}{2}\equiv 308495997 mod\ 1000000009$</span></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -275,8 +275,8 @@ ll n, A[N], B[N], fac[N], inv[N];
 &#125;
 </code></pre></div>
 <p><a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=6755">2020 Multi-University Training Contest 1 - 1005. Fibonacci Sum</a></p>
-<p>题意: 求<span class="markdown-them-math-inline">$(F_{0})^k+(F_{c})^k+(F_{2*c})^k+\dots +(F_{n*c})^k$</span>, 模1000000009</p>
-<p>思路: 和上一题差不多, 时间卡的很紧, 需要用到欧拉降幂</p>
+<p>题意：求<span class="markdown-them-math-inline">$(F_{0})^k+(F_{c})^k+(F_{2*c})^k+\dots +(F_{n*c})^k$</span>，模1000000009</p>
+<p>思路：和上一题差不多，时间卡的很紧，需要用到欧拉降幂</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -404,6 +404,10 @@ ll fac[N], inv[N], pa[N], pb[N], n, c, k;
       <ul>
         
           <li>
+            <a href="../../../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
+        
+          <li>
             <a href="../../../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
           </li>
         
@@ -419,10 +423,6 @@ ll fac[N], inv[N], pa[N], pb[N], n, c, k;
             <a href="../../../10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
           </li>
         
-          <li>
-            <a href="../../../09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -432,7 +432,7 @@ ll fac[N], inv[N], pa[N], pb[N], n, c, k;
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 

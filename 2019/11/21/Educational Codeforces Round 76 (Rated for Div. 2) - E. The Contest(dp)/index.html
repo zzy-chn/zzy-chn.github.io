@@ -7,7 +7,7 @@
   <title>Educational Codeforces Round 76 (Rated for Div. 2) - E. The Contest(dp) | zzy&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <meta name="description" content="题意: 有三个人去写编号从$1$到$n$的$n$个题目, 现在这三个人分别有$k_1$, $k_2$, $k_3$个题目 ($k_1+k_2+k_3=n$) , 每次操作你可以将一个人的某一个题目给另一个人, 问你最少经过多少次操作使得第一个人写这$n$个题目的前缀, 第三个人写这$n$个题目的后缀">
+  <meta name="description" content="题意：有三个人去写编号从$1$到$n$的$n$个题目，现在这三个人分别有$k_1$，$k_2$，$k_3$个题目（$k_1+k_2+k_3=n$），每次操作你可以将一个人的某一个题目给另一个人，问你最少经过多少次操作使得第一个人写这$n$个题目的前缀，第三个人写这$n$个题目的后缀，第二个人写其他部">
   
   
   
@@ -69,16 +69,16 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题意: 有三个人去写编号从<span class="markdown-them-math-inline">$1$</span>到<span class="markdown-them-math-inline">$n$</span>的<span class="markdown-them-math-inline">$n$</span>个题目, 现在这三个人分别有<span class="markdown-them-math-inline">$k_1$</span>, <span class="markdown-them-math-inline">$k_2$</span>, <span class="markdown-them-math-inline">$k_3$</span>个题目 (<span class="markdown-them-math-inline">$k_1+k_2+k_3=n$</span>) , 每次操作你可以将一个人的某一个题目给另一个人, 问你最少经过多少次操作使得第一个人写这<span class="markdown-them-math-inline">$n$</span>个题目的前缀, 第三个人写这<span class="markdown-them-math-inline">$n$</span>个题目的后缀, 第二个人写其他部分, 可以有人不写题目.</p>
-<p>思路: 设<span class="markdown-them-math-inline">$dp[i][j]$</span>表示把第<span class="markdown-them-math-inline">$i$</span>个题目给第<span class="markdown-them-math-inline">$j$</span>个人最少的次数</p>
-<p>当第<span class="markdown-them-math-inline">$i$</span>个题目本来就属于第一个人时, 分析如下:</p>
+        <p>题意：有三个人去写编号从<span class="markdown-them-math-inline">$1$</span>到<span class="markdown-them-math-inline">$n$</span>的<span class="markdown-them-math-inline">$n$</span>个题目，现在这三个人分别有<span class="markdown-them-math-inline">$k_1$</span>，<span class="markdown-them-math-inline">$k_2$</span>，<span class="markdown-them-math-inline">$k_3$</span>个题目（<span class="markdown-them-math-inline">$k_1+k_2+k_3=n$</span>），每次操作你可以将一个人的某一个题目给另一个人，问你最少经过多少次操作使得第一个人写这<span class="markdown-them-math-inline">$n$</span>个题目的前缀，第三个人写这<span class="markdown-them-math-inline">$n$</span>个题目的后缀，第二个人写其他部分，可以有人不写题目。</p>
+<p>思路：设<span class="markdown-them-math-inline">$dp[i][j]$</span>表示把第<span class="markdown-them-math-inline">$i$</span>个题目给第<span class="markdown-them-math-inline">$j$</span>个人最少的次数</p>
+<p>当第<span class="markdown-them-math-inline">$i$</span>个题目本来就属于第一个人时，分析如下：</p>
 <ul>
-<li>当把第<span class="markdown-them-math-inline">$i$</span>个题目给第一个人时, 显然<span class="markdown-them-math-inline">$dp[i][1]=dp[i-1][1]$</span>, 不用进行操作</li>
-<li>当把第<span class="markdown-them-math-inline">$i$</span>个题目给第二个人时, 因为每个人最后的序列都是连续单调递增的, 所以<span class="markdown-them-math-inline">$dp[i][2]$</span>只能从<span class="markdown-them-math-inline">$dp[i-1][1]$</span>和<span class="markdown-them-math-inline">$dp[i-1][2]$</span>转移过来, 这两种情况都需要进行一次操作, 即<span class="markdown-them-math-inline">$dp[i][2] = min(dp[i - 1][1] + 1, dp[i - 1][2] + 1)$</span></li>
-<li>当把第<span class="markdown-them-math-inline">$i$</span>个题目给第三个人时, 同理得<span class="markdown-them-math-inline">$dp[i][3] = min(dp[i - 1][1] + 1, min(dp[i - 1][2] + 1, dp[i - 1][3] + 1))$</span><br>
-当第<span class="markdown-them-math-inline">$i$</span>个题目本来就属于第二个人或者第三个人时, 分析是一样的.</li>
+<li>当把第<span class="markdown-them-math-inline">$i$</span>个题目给第一个人时，显然<span class="markdown-them-math-inline">$dp[i][1]=dp[i-1][1]$</span>，不用进行操作</li>
+<li>当把第<span class="markdown-them-math-inline">$i$</span>个题目给第二个人时，因为每个人最后的序列都是连续单调递增的，所以<span class="markdown-them-math-inline">$dp[i][2]$</span>只能从<span class="markdown-them-math-inline">$dp[i-1][1]$</span>和<span class="markdown-them-math-inline">$dp[i-1][2]$</span>转移过来，这两种情况都需要进行一次操作，即<span class="markdown-them-math-inline">$dp[i][2] = min(dp[i - 1][1] + 1, dp[i - 1][2] + 1)$</span></li>
+<li>当把第<span class="markdown-them-math-inline">$i$</span>个题目给第三个人时，同理得<span class="markdown-them-math-inline">$dp[i][3] = min(dp[i - 1][1] + 1, min(dp[i - 1][2] + 1, dp[i - 1][3] + 1))$</span><br>
+当第<span class="markdown-them-math-inline">$i$</span>个题目本来就属于第二个人或者第三个人时，分析是一样的。</li>
 </ul>
-<p>设<span class="markdown-them-math-inline">$a[x]=i$</span>表示第<span class="markdown-them-math-inline">$x$</span>个题目本来就属于第<span class="markdown-them-math-inline">$i$</span>个人, 所以状态转移方程如下:</p>
+<p>设<span class="markdown-them-math-inline">$a[x]=i$</span>表示第<span class="markdown-them-math-inline">$x$</span>个题目本来就属于第<span class="markdown-them-math-inline">$i$</span>个人，所以状态转移方程如下：</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
     <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> == a[i]) &#123;
         dp[i][<span class="hljs-number">1</span>] = dp[i - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>];
@@ -97,7 +97,7 @@
     &#125;
 &#125;
 </code></pre></div>
-<p>写成两个<span class="markdown-them-math-inline">$for$</span>循环感觉更简洁, 但上面的状态转移方程更容易理解.</p>
+<p>写成两个<span class="markdown-them-math-inline">$for$</span>循环感觉更简洁，但上面的状态转移方程更容易理解。</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -184,6 +184,10 @@
       <ul>
         
           <li>
+            <a href="../../../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
+        
+          <li>
             <a href="../../../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
           </li>
         
@@ -199,10 +203,6 @@
             <a href="../../../../2020/10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
           </li>
         
-          <li>
-            <a href="../../../../2020/09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -212,7 +212,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 

@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   
   
-  <title>2020牛客暑期多校训练营 (第九场) - E. Groundhog Chasing Death | zzy&#39;s blog</title>
+  <title>2020牛客暑期多校训练营（第九场）- E. Groundhog Chasing Death | zzy&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <meta name="description" content="题目链接: Groundhog Chasing Death
-题意: 给你一个a, b, c, d, x, y, 求$\prod_{i=a}^{b} \prod_{j=c}^{d} gcd(x^i,y^j)$的值
-思路: 对x, y质因数分解, 对于x和y的某一个公共质因子p, 假设x分解后p的幂次为">
+  <meta name="description" content="题目链接：Groundhog Chasing Death
+题意：给你一个a，b，c，d，x，y，求$\prod_{i=a}^{b} \prod_{j=c}^{d} gcd(x^i,y^j)$的值
+思路：对x，y质因数分解，对于x和y的某一个公共质因子p，假设x分解后p的幂次为a，y分解后p的幂次位为">
   
   
   
@@ -62,7 +62,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      2020牛客暑期多校训练营 (第九场) - E. Groundhog Chasing Death
+      2020牛客暑期多校训练营（第九场）- E. Groundhog Chasing Death
     </h1>
   
 
@@ -71,15 +71,15 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题目链接: <a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/5674/E">Groundhog Chasing Death</a></p>
-<p>题意: 给你一个a, b, c, d, x, y, 求<span class="markdown-them-math-inline">$\prod_{i=a}^{b} \prod_{j=c}^{d} gcd(x^i,y^j)$</span>的值</p>
-<p>思路: 对x, y质因数分解, 对于x和y的某一个公共质因子p, 假设x分解后p的幂次为a, y分解后p的幂次位为b, 当i,j确定时, p对答案贡献为<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}$</span>, 接下来考虑一下a<em>i和b</em>j的大小</p>
-<p>当<span class="markdown-them-math-inline">$j\geq \lceil \frac{a*i}{b} \rceil$</span>时有<span class="markdown-them-math-inline">$a*i\leq b*j$</span>, 此时<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}=p^{a*i}$</span></p>
-<p>当<span class="markdown-them-math-inline">$j&lt; \lceil \frac{a*i}{b} \rceil$</span>时有<span class="markdown-them-math-inline">$a*i&gt;b*j$</span>, 此时<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}=p^{b*j}$</span></p>
-<p>对于每个p, 我们可以枚举i, 显然<span class="markdown-them-math-inline">$\lceil \frac{a*i}{b} \rceil$</span>时确定的</p>
-<p>对于<span class="markdown-them-math-inline">$\geq \lceil \frac{a*i}{b} \rceil$</span>的j来说, p的幂次为<span class="markdown-them-math-inline">$a*i*(d- \lceil \frac{a*i}{b} \rceil +1)$</span></p>
-<p>对于<span class="markdown-them-math-inline">$&lt; \lceil \frac{a*i}{b} \rceil$</span>的j来说, p的幂次为<span class="markdown-them-math-inline">$b*[c+(c+1)+\dots +(\lceil \frac{a*i}{b} \rceil -1)]$</span></p>
-<p>算出每个p的总的幂次(幂次加的过程中需要欧拉降幂), 然后快速幂求解即可</p>
+        <p>题目链接：<a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/5674/E">Groundhog Chasing Death</a></p>
+<p>题意：给你一个a，b，c，d，x，y，求<span class="markdown-them-math-inline">$\prod_{i=a}^{b} \prod_{j=c}^{d} gcd(x^i,y^j)$</span>的值</p>
+<p>思路：对x，y质因数分解，对于x和y的某一个公共质因子p，假设x分解后p的幂次为a，y分解后p的幂次位为b，当i,j确定时，p对答案贡献为<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}$</span>，接下来考虑一下a<em>i和b</em>j的大小</p>
+<p>当<span class="markdown-them-math-inline">$j\geq \lceil \frac{a*i}{b} \rceil$</span>时有<span class="markdown-them-math-inline">$a*i\leq b*j$</span>，此时<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}=p^{a*i}$</span></p>
+<p>当<span class="markdown-them-math-inline">$j&lt; \lceil \frac{a*i}{b} \rceil$</span>时有<span class="markdown-them-math-inline">$a*i&gt;b*j$</span>，此时<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}=p^{b*j}$</span></p>
+<p>对于每个p，我们可以枚举i，显然<span class="markdown-them-math-inline">$\lceil \frac{a*i}{b} \rceil$</span>时确定的</p>
+<p>对于<span class="markdown-them-math-inline">$\geq \lceil \frac{a*i}{b} \rceil$</span>的j来说，p的幂次为<span class="markdown-them-math-inline">$a*i*(d- \lceil \frac{a*i}{b} \rceil +1)$</span></p>
+<p>对于<span class="markdown-them-math-inline">$&lt; \lceil \frac{a*i}{b} \rceil$</span>的j来说，p的幂次为<span class="markdown-them-math-inline">$b*[c+(c+1)+\dots +(\lceil \frac{a*i}{b} \rceil -1)]$</span></p>
+<p>算出每个p的总的幂次(幂次加的过程中需要欧拉降幂)，然后快速幂求解即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -237,6 +237,10 @@ ll mi[N];
       <ul>
         
           <li>
+            <a href="../../../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
+        
+          <li>
             <a href="../../../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
           </li>
         
@@ -252,10 +256,6 @@ ll mi[N];
             <a href="../../../10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
           </li>
         
-          <li>
-            <a href="../../../09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -265,7 +265,7 @@ ll mi[N];
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 

@@ -4,13 +4,14 @@
   <meta charset="utf-8">
   
   
-  <title>动态规划 (线性, 区间, 树形, 数据结构优化, 四边形不等式)  | zzy&#39;s blog</title>
+  <title>动态规划（线性，区间，树形，数据结构优化，四边形不等式） | zzy&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <meta name="description" content="To The Max, hdu1081
-求最大子矩阵和, 把二维转换到一维, 把每一行的某些列的和看作一个元素, 这样就成了一维下的最大子段和, 预处理每行的前缀和, 暴力枚举每行的的列数情况即可
+  <meta name="description" content="To The Max，hdu1081
+求最大子矩阵和，把二维转换到一维，把每一行的某些列的和看作一个元素，这样就成了一维下的最大子段和，预处理每行的前缀和，暴力枚举每行的的列数情况即可
 #include &amp;lt;iostream&amp;gt;
-#include &amp;lt;algorithm&amp;gt">
+#include &amp;lt;algorithm&amp;gt;
+#inc">
   
   
   
@@ -63,7 +64,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      动态规划 (线性, 区间, 树形, 数据结构优化, 四边形不等式) 
+      动态规划（线性，区间，树形，数据结构优化，四边形不等式）
     </h1>
   
 
@@ -72,13 +73,13 @@
     
 <div id="article-toc">
     <h2 class="widget-title">目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#to-the%20max,%20hdu1081"><span class="toc-number">1.</span> <span class="toc-text">To The Max, hdu1081</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#buy-low,%20buy%20lower,%20poj1952"><span class="toc-number">2.</span> <span class="toc-text">BUY LOW, BUY LOWER, poj1952</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#monkey-and%20banana,%20hdu1069"><span class="toc-number">3.</span> <span class="toc-text">Monkey and Banana, hdu1069</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trip,-poj1934"><span class="toc-number">4.</span> <span class="toc-text">Trip, poj1934</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#polygon,-poj1179"><span class="toc-number">5.</span> <span class="toc-text">Polygon, poj1179</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#palindrome-subsequence,%20hdu4632"><span class="toc-number">6.</span> <span class="toc-text">Palindrome subsequence, hdu4632</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#you-are%20the%20one,%20hdu4283"><span class="toc-number">7.</span> <span class="toc-text">You Are the One, hdu4283</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#anniversary-party,%20poj2342"><span class="toc-number">8.</span> <span class="toc-text">Anniversary party, poj2342</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#accumulation-degree,%20poj3585"><span class="toc-number">9.</span> <span class="toc-text">Accumulation Degree, poj3585</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#computer,-hdu2196"><span class="toc-number">10.</span> <span class="toc-text">Computer, hdu2196</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tree-painting,%20codeforces1187e"><span class="toc-number">11.</span> <span class="toc-text">Tree Painting, CodeForces1187E</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#to-the%20max%EF%BC%8Chdu1081"><span class="toc-number">1.</span> <span class="toc-text">To The Max，hdu1081</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#buy-low,%20buy%20lower%EF%BC%8Cpoj1952"><span class="toc-number">2.</span> <span class="toc-text">BUY LOW, BUY LOWER，poj1952</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#monkey-and%20banana%EF%BC%8Chdu1069"><span class="toc-number">3.</span> <span class="toc-text">Monkey and Banana，hdu1069</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trip%EF%BC%8Cpoj1934"><span class="toc-number">4.</span> <span class="toc-text">Trip，poj1934</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#polygon%EF%BC%8Cpoj1179"><span class="toc-number">5.</span> <span class="toc-text">Polygon，poj1179</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#palindrome-subsequence%EF%BC%8Chdu4632"><span class="toc-number">6.</span> <span class="toc-text">Palindrome subsequence，hdu4632</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#you-are%20the%20one%EF%BC%8Chdu4283"><span class="toc-number">7.</span> <span class="toc-text">You Are the One，hdu4283</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#anniversary-party%EF%BC%8Cpoj2342"><span class="toc-number">8.</span> <span class="toc-text">Anniversary party，poj2342</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#accumulation-degree%EF%BC%8Cpoj3585"><span class="toc-number">9.</span> <span class="toc-text">Accumulation Degree，poj3585</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#computer%EF%BC%8Chdu2196"><span class="toc-number">10.</span> <span class="toc-text">Computer，hdu2196</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tree-painting%EF%BC%8Ccodeforces1187e"><span class="toc-number">11.</span> <span class="toc-text">Tree Painting，CodeForces1187E</span></a></li></ol>
 </div>
 
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h2 id="to-the max, hdu1081">To The Max, hdu1081</h2>
-<p>求最大子矩阵和, 把二维转换到一维, 把每一行的某些列的和看作一个元素, 这样就成了一维下的最大子段和, 预处理每行的前缀和, 暴力枚举每行的的列数情况即可</p>
+        <h2 id="to-the max，hdu1081">To The Max，hdu1081</h2>
+<p>求最大子矩阵和，把二维转换到一维，把每一行的某些列的和看作一个元素，这样就成了一维下的最大子段和，预处理每行的前缀和，暴力枚举每行的的列数情况即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -114,11 +115,11 @@
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="buy-low, buy lower, poj1952">BUY LOW, BUY LOWER, poj1952</h2>
-<p>最长下降子序列很简单就能求出, 但是还要额外求一个方案数</p>
-<p>设<span class="markdown-them-math-inline">$dp[i]$</span>为以<span class="markdown-them-math-inline">$i$</span>结尾的最长下降子序列的长度, <span class="markdown-them-math-inline">$num[i]$</span>为以<span class="markdown-them-math-inline">$i$</span>结尾的最长下降子序列的个数</p>
-<p>所以状态转移方程为<span class="markdown-them-math-inline">$dp[i] = max(dp[i], dp[j] + 1)(c[j]&gt;c[i])$</span>, <span class="markdown-them-math-inline">$num[i] += num[j](c[j]&gt;c[i]\ \&amp;\&amp;\ dp[j]+1==dp[i])$</span></p>
-<p>但这样求出来的<span class="markdown-them-math-inline">$num$</span>是没有去重的, 考虑到<span class="markdown-them-math-inline">$c[j]==c[i]\ \&amp;\&amp;\ dp[j]==dp[i]$</span>时, <span class="markdown-them-math-inline">$c[i]$</span>可以完全被<span class="markdown-them-math-inline">$c[j]$</span>替代, 此时<span class="markdown-them-math-inline">$num[i]$</span>应该等于<span class="markdown-them-math-inline">$0$</span></p>
+<h2 id="buy-low, buy lower，poj1952">BUY LOW, BUY LOWER，poj1952</h2>
+<p>最长下降子序列很简单就能求出，但是还要额外求一个方案数</p>
+<p>设<span class="markdown-them-math-inline">$dp[i]$</span>为以<span class="markdown-them-math-inline">$i$</span>结尾的最长下降子序列的长度，<span class="markdown-them-math-inline">$num[i]$</span>为以<span class="markdown-them-math-inline">$i$</span>结尾的最长下降子序列的个数</p>
+<p>所以状态转移方程为<span class="markdown-them-math-inline">$dp[i] = max(dp[i], dp[j] + 1)(c[j]&gt;c[i])$</span>，<span class="markdown-them-math-inline">$num[i] += num[j](c[j]&gt;c[i]\ \&amp;\&amp;\ dp[j]+1==dp[i])$</span></p>
+<p>但这样求出来的<span class="markdown-them-math-inline">$num$</span>是没有去重的，考虑到<span class="markdown-them-math-inline">$c[j]==c[i]\ \&amp;\&amp;\ dp[j]==dp[i]$</span>时，<span class="markdown-them-math-inline">$c[i]$</span>可以完全被<span class="markdown-them-math-inline">$c[j]$</span>替代，此时<span class="markdown-them-math-inline">$num[i]$</span>应该等于<span class="markdown-them-math-inline">$0$</span></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 
@@ -142,7 +143,7 @@
         <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> == dp[i]) num[i] = <span class="hljs-number">1</span>;
         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">1</span>; j &lt; i; j++) &#123;
             <span class="hljs-keyword">if</span> (c[j] &gt; c[i] &amp;&amp; dp[j] + <span class="hljs-number">1</span> == dp[i]) num[i] += num[j];
-            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (c[j] == c[i] &amp;&amp; dp[j] == dp[i]) num[i] = <span class="hljs-number">0</span>; <span class="hljs-comment">// 能够被c[j]代替, 所以num[i]=0</span>
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (c[j] == c[i] &amp;&amp; dp[j] == dp[i]) num[i] = <span class="hljs-number">0</span>; <span class="hljs-comment">// 能够被c[j]代替，所以num[i]=0</span>
         &#125;
     &#125;
     <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) imax = <span class="hljs-built_in">max</span>(imax, dp[i]);
@@ -151,8 +152,8 @@
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="monkey-and banana, hdu1069">Monkey and Banana, hdu1069</h2>
-<p>矩阵嵌套的变形, 每个立方体有六个面, 每个面都能作为底面, 预处理一下, 就跟矩阵嵌套一样了, 排个序后动态规划</p>
+<h2 id="monkey-and banana，hdu1069">Monkey and Banana，hdu1069</h2>
+<p>矩阵嵌套的变形，每个立方体有六个面，每个面都能作为底面，预处理一下，就跟矩阵嵌套一样了，排个序后动态规划</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 
@@ -202,13 +203,13 @@ node c[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="trip,-poj1934">Trip, poj1934</h2>
-<p>最长公共子序列问题 (LCS) , 当<span class="markdown-them-math-inline">$a[i]==b[j]$</span>时, <span class="markdown-them-math-inline">$dp[i][j]=d[i-1][j-1]+1$</span>, 当<span class="markdown-them-math-inline">$a[i]!=b[j]$</span>时, <span class="markdown-them-math-inline">$dp[i][j]=max(dp[i-1][j],dp[i][j-1])$</span></p>
-<p>但是最坑的是需要输出方案数, 一开始想的是暴搜, 但肯定会超时</p>
-<p>但仔细想一想, 其实有很多的搜索是不必要的, 比如两个串的某两个位置的字符不相等, 这样就没必要继续向前一位搜索了, 我们就可以直接跳到当前位置前有公共字符的位置继续搜索</p>
-<p>所以预处理<span class="markdown-them-math-inline">$l\_a[N][26]$</span>和<span class="markdown-them-math-inline">$l\_b[N][26]$</span>数组, 分别表示<span class="markdown-them-math-inline">$a$</span>字符串和<span class="markdown-them-math-inline">$b$</span>字符串在第<span class="markdown-them-math-inline">$i$</span>位前面第<span class="markdown-them-math-inline">$j$</span>个字母第一次出现的位置</p>
-<p>如果<span class="markdown-them-math-inline">$a$</span>字符串和<span class="markdown-them-math-inline">$b$</span>字符串当前位置的字符相等, 则可以向前递归, 即跳到<span class="markdown-them-math-inline">$pos\_a-1$</span>和<span class="markdown-them-math-inline">$pos\_b-1$</span>进行递归</p>
-<p>如果<span class="markdown-them-math-inline">$a$</span>字符串和<span class="markdown-them-math-inline">$b$</span>字符串当前位置的字符不相等, 则没有必要向前递归, 直接跳到当前位置前面第<span class="markdown-them-math-inline">$i$</span>个字符相等的位置, 即跳到<span class="markdown-them-math-inline">$l\_a[pos\_a][i]-1$</span>和<span class="markdown-them-math-inline">$l\_b[pos\_b][i]-1$</span>进行递归</p>
+<h2 id="trip，poj1934">Trip，poj1934</h2>
+<p>最长公共子序列问题（LCS），当<span class="markdown-them-math-inline">$a[i]==b[j]$</span>时，<span class="markdown-them-math-inline">$dp[i][j]=d[i-1][j-1]+1$</span>，当<span class="markdown-them-math-inline">$a[i]!=b[j]$</span>时，<span class="markdown-them-math-inline">$dp[i][j]=max(dp[i-1][j],dp[i][j-1])$</span></p>
+<p>但是最坑的是需要输出方案数，一开始想的是暴搜，但肯定会超时</p>
+<p>但仔细想一想，其实有很多的搜索是不必要的，比如两个串的某两个位置的字符不相等，这样就没必要继续向前一位搜索了，我们就可以直接跳到当前位置前有公共字符的位置继续搜索</p>
+<p>所以预处理<span class="markdown-them-math-inline">$l\_a[N][26]$</span>和<span class="markdown-them-math-inline">$l\_b[N][26]$</span>数组，分别表示<span class="markdown-them-math-inline">$a$</span>字符串和<span class="markdown-them-math-inline">$b$</span>字符串在第<span class="markdown-them-math-inline">$i$</span>位前面第<span class="markdown-them-math-inline">$j$</span>个字母第一次出现的位置</p>
+<p>如果<span class="markdown-them-math-inline">$a$</span>字符串和<span class="markdown-them-math-inline">$b$</span>字符串当前位置的字符相等，则可以向前递归，即跳到<span class="markdown-them-math-inline">$pos\_a-1$</span>和<span class="markdown-them-math-inline">$pos\_b-1$</span>进行递归</p>
+<p>如果<span class="markdown-them-math-inline">$a$</span>字符串和<span class="markdown-them-math-inline">$b$</span>字符串当前位置的字符不相等，则没有必要向前递归，直接跳到当前位置前面第<span class="markdown-them-math-inline">$i$</span>个字符相等的位置，即跳到<span class="markdown-them-math-inline">$l\_a[pos\_a][i]-1$</span>和<span class="markdown-them-math-inline">$l\_b[pos\_b][i]-1$</span>进行递归</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;string&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -276,22 +277,22 @@ vector&lt;string&gt; res;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="polygon,-poj1179">Polygon, poj1179</h2>
-<p>感觉像一个加强版的成环石子合并, 先来回顾一下成环的石子合并</p>
-<p>将原序列复制一份放在后面, 枚举起点<span class="markdown-them-math-inline">$i$</span>, 用区间合并去计算区间<span class="markdown-them-math-inline">$[i,i+n]$</span>这个区间的最大值</p>
-<p>这题就是把区间合并中对两个区间的操作换了下, 石子合并是两个区间值相加, 这题两个区间值能够相加, 相乘, 而且区间值可能为负, 这就导致我们要记录一个最大值一个最小值</p>
-<p>当两个区间值相乘时:</p>
+<h2 id="polygon，poj1179">Polygon，poj1179</h2>
+<p>感觉像一个加强版的成环石子合并，先来回顾一下成环的石子合并</p>
+<p>将原序列复制一份放在后面，枚举起点<span class="markdown-them-math-inline">$i$</span>，用区间合并去计算区间<span class="markdown-them-math-inline">$[i,i+n]$</span>这个区间的最大值</p>
+<p>这题就是把区间合并中对两个区间的操作换了下，石子合并是两个区间值相加，这题两个区间值能够相加，相乘，而且区间值可能为负，这就导致我们要记录一个最大值一个最小值</p>
+<p>当两个区间值相乘时：</p>
 <ul>
-<li>两个大的正区间值相乘得到一个更大的正区间值, 即<span class="markdown-them-math-inline">$imax[l][r] = max(imax[l][r], imax[l][k - 1] * imax[k][r])$</span></li>
-<li>两个小的负区间值相乘得到一个大的正区间值, 即<span class="markdown-them-math-inline">$imax[l][r] = max(imax[l][r], imin[l][k - 1] * imin[k][r])$</span></li>
-<li>两个小的正区间值相乘得到一个小的正区间值, 即<span class="markdown-them-math-inline">$imin[l][r] = min(imin[l][r], imin[l][k - 1] * imax[k][r])$</span></li>
-<li>一个正区间值和一个负区间值相乘得到一个负区间值, 即<span class="markdown-them-math-inline">$imin[l][r] = min(imin[l][r], imin[l][k - 1] * imin[k][r])$</span></li>
-<li>一个负区间值和一个正区间值相乘得到一个负区间值, 即<span class="markdown-them-math-inline">$imin[l][r] = min(imin[l][r], imax[l][k - 1] * imin[k][r])$</span></li>
+<li>两个大的正区间值相乘得到一个更大的正区间值，即<span class="markdown-them-math-inline">$imax[l][r] = max(imax[l][r], imax[l][k - 1] * imax[k][r])$</span></li>
+<li>两个小的负区间值相乘得到一个大的正区间值，即<span class="markdown-them-math-inline">$imax[l][r] = max(imax[l][r], imin[l][k - 1] * imin[k][r])$</span></li>
+<li>两个小的正区间值相乘得到一个小的正区间值，即<span class="markdown-them-math-inline">$imin[l][r] = min(imin[l][r], imin[l][k - 1] * imax[k][r])$</span></li>
+<li>一个正区间值和一个负区间值相乘得到一个负区间值，即<span class="markdown-them-math-inline">$imin[l][r] = min(imin[l][r], imin[l][k - 1] * imin[k][r])$</span></li>
+<li>一个负区间值和一个正区间值相乘得到一个负区间值，即<span class="markdown-them-math-inline">$imin[l][r] = min(imin[l][r], imax[l][k - 1] * imin[k][r])$</span></li>
 </ul>
-<p>当两个区间相加时:</p>
+<p>当两个区间相加时：</p>
 <ul>
-<li>两个大的正区间值相加得到一个更大的正区间值, 即<span class="markdown-them-math-inline">$imax[l][r] = max(imax[l][r], imax[l][k - 1] + imax[k][r])$</span></li>
-<li>两个小的负区间值相加得到一个更小的负区间值, 即<span class="markdown-them-math-inline">$imin[l][r] = min(imin[l][r], imin[l][k - 1] + imin[k][r])$</span></li>
+<li>两个大的正区间值相加得到一个更大的正区间值，即<span class="markdown-them-math-inline">$imax[l][r] = max(imax[l][r], imax[l][k - 1] + imax[k][r])$</span></li>
+<li>两个小的负区间值相加得到一个更小的负区间值，即<span class="markdown-them-math-inline">$imin[l][r] = min(imin[l][r], imin[l][k - 1] + imin[k][r])$</span></li>
 </ul>
 <p>所以只需要把对两个区间的操作换成以上七种就跟石子合并是一样的了</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
@@ -356,11 +357,11 @@ vector&lt;string&gt; res;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="palindrome-subsequence, hdu4632">Palindrome subsequence, hdu4632</h2>
+<h2 id="palindrome-subsequence，hdu4632">Palindrome subsequence，hdu4632</h2>
 <p>求一个字符串的回文子序列的数目</p>
 <p>设<span class="markdown-them-math-inline">$dp[i][j]$</span>为字符串<span class="markdown-them-math-inline">$s$</span>中从<span class="markdown-them-math-inline">$i$</span>到<span class="markdown-them-math-inline">$j$</span>的回文子序列的数目</p>
-<p><span class="markdown-them-math-inline">$dp[i][j]$</span>有<span class="markdown-them-math-inline">$dp[i+1][j]$</span>和<span class="markdown-them-math-inline">$dp[i][j-1]$</span>转移过来, 但考虑到有重叠部分<span class="markdown-them-math-inline">$i+1$</span>到<span class="markdown-them-math-inline">$j-1$</span>, 所以<span class="markdown-them-math-inline">$dp[i][j] = (dp[i + 1][j] + dp[i][j - 1] - dp[i + 1][j - 1] + MOD) \% MOD$</span></p>
-<p>当<span class="markdown-them-math-inline">$s[i]==s[j]$</span>时, <span class="markdown-them-math-inline">$s[i]$</span>和<span class="markdown-them-math-inline">$s[j]$</span>与<span class="markdown-them-math-inline">$s[i+1]$</span>到<span class="markdown-them-math-inline">$s[j-1]$</span>内的回文子序列都能构成一个新的回文序列, 两者本身也构成回文子序列, 即<span class="markdown-them-math-inline">$dp[i][j] = (dp[i][j] + dp[i + 1][j - 1] + 1 + MOD) \% MOD$</span></p>
+<p><span class="markdown-them-math-inline">$dp[i][j]$</span>有<span class="markdown-them-math-inline">$dp[i+1][j]$</span>和<span class="markdown-them-math-inline">$dp[i][j-1]$</span>转移过来，但考虑到有重叠部分<span class="markdown-them-math-inline">$i+1$</span>到<span class="markdown-them-math-inline">$j-1$</span>，所以<span class="markdown-them-math-inline">$dp[i][j] = (dp[i + 1][j] + dp[i][j - 1] - dp[i + 1][j - 1] + MOD) \% MOD$</span></p>
+<p>当<span class="markdown-them-math-inline">$s[i]==s[j]$</span>时，<span class="markdown-them-math-inline">$s[i]$</span>和<span class="markdown-them-math-inline">$s[j]$</span>与<span class="markdown-them-math-inline">$s[i+1]$</span>到<span class="markdown-them-math-inline">$s[j-1]$</span>内的回文子序列都能构成一个新的回文序列，两者本身也构成回文子序列，即<span class="markdown-them-math-inline">$dp[i][j] = (dp[i][j] + dp[i + 1][j - 1] + 1 + MOD) \% MOD$</span></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -392,14 +393,14 @@ vector&lt;string&gt; res;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="you-are the one, hdu4283">You Are the One, hdu4283</h2>
-<p>设<span class="markdown-them-math-inline">$dp[l][r]$</span>表示在不考虑其他人的情况下第<span class="markdown-them-math-inline">$l$</span>个人到第<span class="markdown-them-math-inline">$r$</span>个人产生的不开心值总和, 预处理一个数组<span class="markdown-them-math-inline">$sum[i]$</span>表示前<span class="markdown-them-math-inline">$i$</span>个人的屌丝值总和</p>
-<p>枚举<span class="markdown-them-math-inline">$l$</span>到<span class="markdown-them-math-inline">$r$</span>的分割点<span class="markdown-them-math-inline">$k$</span>, 两种情况</p>
+<h2 id="you-are the one，hdu4283">You Are the One，hdu4283</h2>
+<p>设<span class="markdown-them-math-inline">$dp[l][r]$</span>表示在不考虑其他人的情况下第<span class="markdown-them-math-inline">$l$</span>个人到第<span class="markdown-them-math-inline">$r$</span>个人产生的不开心值总和，预处理一个数组<span class="markdown-them-math-inline">$sum[i]$</span>表示前<span class="markdown-them-math-inline">$i$</span>个人的屌丝值总和</p>
+<p>枚举<span class="markdown-them-math-inline">$l$</span>到<span class="markdown-them-math-inline">$r$</span>的分割点<span class="markdown-them-math-inline">$k$</span>，两种情况</p>
 <ul>
-<li>第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>个人上台后第<span class="markdown-them-math-inline">$k$</span>到第<span class="markdown-them-math-inline">$r$</span>个人才上台, 这样第<span class="markdown-them-math-inline">$k$</span>到第<span class="markdown-them-math-inline">$r$</span>个人会不但会产生在不考虑其他人的情况下<span class="markdown-them-math-inline">$dp[k][r]$</span>的不开心值, 还会产生在等待第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>个人上台表演过程中产生的不开心值<span class="markdown-them-math-inline">$(sum[r] - sum[k - 1]) * (k - l)$</span>, 而第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>个人只会产生不考虑其他人的情况下产生的不开心值<span class="markdown-them-math-inline">$dp[l][k-1]$</span>, 最后有<span class="markdown-them-math-inline">$dp[l][r]=dp[l][k - 1] + dp[k][r] + (sum[r] - sum[k - 1]) * (k - l)$</span></li>
-<li>第<span class="markdown-them-math-inline">$k$</span>到第<span class="markdown-them-math-inline">$r$</span>个人上台后第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>的个人才上台, 这样第<span class="markdown-them-math-inline">$k$</span>到第<span class="markdown-them-math-inline">$r$</span>个人只会产生不考虑其他人的情况下产生的不开心值<span class="markdown-them-math-inline">$dp[k][r]$</span>, 而第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>个人会不但会产生在不考虑其他人的情况下<span class="markdown-them-math-inline">$dp[l][k-1]$</span>的不开心值, 还会产生在等待第<span class="markdown-them-math-inline">$k$</span>到第<span class="markdown-them-math-inline">$r$</span>个人上台表演过程中产生的不开心值<span class="markdown-them-math-inline">$(sum[k-1] - sum[l-1]) * (r-k+1)$</span>, 又因为栈是先进后出的, 所以这种情况下第<span class="markdown-them-math-inline">$l$</span>个人第一个进栈, 就会最后一个出栈, 第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>在等待的过程中又会额外增加不高兴值, 预处理一个数组<span class="markdown-them-math-inline">$buf[i][j]$</span>表示这种情况下第<span class="markdown-them-math-inline">$i$</span>到第<span class="markdown-them-math-inline">$j$</span>个人额外增加的不开心值, 最后有<span class="markdown-them-math-inline">$dp[l][r]=dp[l][k - 1] + dp[k][r] + (sum[k - 1] - sum[l - 1]) * (r - k + 1) + buf[l][k - 1]$</span></li>
+<li>第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>个人上台后第<span class="markdown-them-math-inline">$k$</span>到第<span class="markdown-them-math-inline">$r$</span>个人才上台，这样第<span class="markdown-them-math-inline">$k$</span>到第<span class="markdown-them-math-inline">$r$</span>个人会不但会产生在不考虑其他人的情况下<span class="markdown-them-math-inline">$dp[k][r]$</span>的不开心值，还会产生在等待第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>个人上台表演过程中产生的不开心值<span class="markdown-them-math-inline">$(sum[r] - sum[k - 1]) * (k - l)$</span>，而第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>个人只会产生不考虑其他人的情况下产生的不开心值<span class="markdown-them-math-inline">$dp[l][k-1]$</span>，最后有<span class="markdown-them-math-inline">$dp[l][r]=dp[l][k - 1] + dp[k][r] + (sum[r] - sum[k - 1]) * (k - l)$</span></li>
+<li>第<span class="markdown-them-math-inline">$k$</span>到第<span class="markdown-them-math-inline">$r$</span>个人上台后第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>的个人才上台，这样第<span class="markdown-them-math-inline">$k$</span>到第<span class="markdown-them-math-inline">$r$</span>个人只会产生不考虑其他人的情况下产生的不开心值<span class="markdown-them-math-inline">$dp[k][r]$</span>，而第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>个人会不但会产生在不考虑其他人的情况下<span class="markdown-them-math-inline">$dp[l][k-1]$</span>的不开心值，还会产生在等待第<span class="markdown-them-math-inline">$k$</span>到第<span class="markdown-them-math-inline">$r$</span>个人上台表演过程中产生的不开心值<span class="markdown-them-math-inline">$(sum[k-1] - sum[l-1]) * (r-k+1)$</span>，又因为栈是先进后出的，所以这种情况下第<span class="markdown-them-math-inline">$l$</span>个人第一个进栈，就会最后一个出栈，第<span class="markdown-them-math-inline">$l$</span>到第<span class="markdown-them-math-inline">$k-1$</span>在等待的过程中又会额外增加不高兴值，预处理一个数组<span class="markdown-them-math-inline">$buf[i][j]$</span>表示这种情况下第<span class="markdown-them-math-inline">$i$</span>到第<span class="markdown-them-math-inline">$j$</span>个人额外增加的不开心值，最后有<span class="markdown-them-math-inline">$dp[l][r]=dp[l][k - 1] + dp[k][r] + (sum[k - 1] - sum[l - 1]) * (r - k + 1) + buf[l][k - 1]$</span></li>
 </ul>
-<p>综上, <span class="markdown-them-math-inline">$dp[l][r]=min(dp[l][r],min(dp[l][k - 1] + dp[k][r] + (sum[k - 1] - sum[l - 1]) * (r - k + 1) + buf[l][k - 1],dp[l][k - 1] + dp[k][r] + (sum[r] - sum[k - 1]) * (k - l)))$</span></p>
+<p>综上，<span class="markdown-them-math-inline">$dp[l][r]=min(dp[l][r],min(dp[l][k - 1] + dp[k][r] + (sum[k - 1] - sum[l - 1]) * (r - k + 1) + buf[l][k - 1],dp[l][k - 1] + dp[k][r] + (sum[r] - sum[k - 1]) * (k - l)))$</span></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -453,12 +454,12 @@ vector&lt;string&gt; res;
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="anniversary-party, poj2342">Anniversary party, poj2342</h2>
-<p>设<span class="markdown-them-math-inline">$dp[u][0]$</span>表示选择<span class="markdown-them-math-inline">$u$</span>节点时子树欢乐值的最大值, <span class="markdown-them-math-inline">$dp[u][1]$</span>表示不选择<span class="markdown-them-math-inline">$u$</span>节点时子树快乐值的最大值</p>
-<p>设<span class="markdown-them-math-inline">$v$</span>是<span class="markdown-them-math-inline">$u$</span>的子节点, 两种情况</p>
+<h2 id="anniversary-party，poj2342">Anniversary party，poj2342</h2>
+<p>设<span class="markdown-them-math-inline">$dp[u][0]$</span>表示选择<span class="markdown-them-math-inline">$u$</span>节点时子树欢乐值的最大值，<span class="markdown-them-math-inline">$dp[u][1]$</span>表示不选择<span class="markdown-them-math-inline">$u$</span>节点时子树快乐值的最大值</p>
+<p>设<span class="markdown-them-math-inline">$v$</span>是<span class="markdown-them-math-inline">$u$</span>的子节点，两种情况</p>
 <ul>
-<li>不选择父节点<span class="markdown-them-math-inline">$u$</span>时, 其所有的子节点<span class="markdown-them-math-inline">$v$</span>可以选也可以不选, 即<span class="markdown-them-math-inline">$dp[u][0] += max(dp[v][0], dp[v][1])$</span></li>
-<li>选择父节点<span class="markdown-them-math-inline">$u$</span>时, 其所有的子节点都不能选, 即<span class="markdown-them-math-inline">$dp[u][1] += dp[v][0]$</span></li>
+<li>不选择父节点<span class="markdown-them-math-inline">$u$</span>时，其所有的子节点<span class="markdown-them-math-inline">$v$</span>可以选也可以不选，即<span class="markdown-them-math-inline">$dp[u][0] += max(dp[v][0], dp[v][1])$</span></li>
+<li>选择父节点<span class="markdown-them-math-inline">$u$</span>时，其所有的子节点都不能选，即<span class="markdown-them-math-inline">$dp[u][1] += dp[v][0]$</span></li>
 </ul>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -505,13 +506,13 @@ vector&lt;<span class="hljs-keyword">int</span>&gt; nex[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="accumulation-degree, poj3585">Accumulation Degree, poj3585</h2>
-<p>换根的板子都差不多, 用链式前向星存图, 关键是公式如何推导</p>
-<p>设<span class="markdown-them-math-inline">$dp[u]$</span>表示第一次深搜得出每个节点最大的流量, <span class="markdown-them-math-inline">$res[u]$</span>表示以<span class="markdown-them-math-inline">$u$</span>为根节点时该结点最大的流量</p>
-<p>第二次深搜, 对于每一个子节点<span class="markdown-them-math-inline">$v$</span>有两种情况</p>
+<h2 id="accumulation-degree，poj3585">Accumulation Degree，poj3585</h2>
+<p>换根的板子都差不多，用链式前向星存图，关键是公式如何推导</p>
+<p>设<span class="markdown-them-math-inline">$dp[u]$</span>表示第一次深搜得出每个节点最大的流量，<span class="markdown-them-math-inline">$res[u]$</span>表示以<span class="markdown-them-math-inline">$u$</span>为根节点时该结点最大的流量</p>
+<p>第二次深搜，对于每一个子节点<span class="markdown-them-math-inline">$v$</span>有两种情况</p>
 <ul>
-<li>当这个节点的父节点<span class="markdown-them-math-inline">$u$</span>的度为<span class="markdown-them-math-inline">$1$</span>时, 节点<span class="markdown-them-math-inline">$u$</span>只有一个子节点<span class="markdown-them-math-inline">$v$</span>, 此时状态转移方程<span class="markdown-them-math-inline">$res[v] = dp[v] + edge[i].val$</span></li>
-<li>当这个节点的父节点<span class="markdown-them-math-inline">$u$</span>的度不为<span class="markdown-them-math-inline">$1$</span>时, 节点<span class="markdown-them-math-inline">$u$</span>不止一个子节点<span class="markdown-them-math-inline">$v$</span>, 所以先要求出除<span class="markdown-them-math-inline">$v$</span>节点以外所以<span class="markdown-them-math-inline">$u$</span>节点的子节点的流量和<span class="markdown-them-math-inline">$res[u] - min(dp[v], edge[i].val)$</span>, 画图后, 得出状态转移方程<span class="markdown-them-math-inline">$res[v] = dp[v] + min(edge[i].val, res[u] - min(dp[v], edge[i].val))$</span></li>
+<li>当这个节点的父节点<span class="markdown-them-math-inline">$u$</span>的度为<span class="markdown-them-math-inline">$1$</span>时，节点<span class="markdown-them-math-inline">$u$</span>只有一个子节点<span class="markdown-them-math-inline">$v$</span>，此时状态转移方程<span class="markdown-them-math-inline">$res[v] = dp[v] + edge[i].val$</span></li>
+<li>当这个节点的父节点<span class="markdown-them-math-inline">$u$</span>的度不为<span class="markdown-them-math-inline">$1$</span>时，节点<span class="markdown-them-math-inline">$u$</span>不止一个子节点<span class="markdown-them-math-inline">$v$</span>，所以先要求出除<span class="markdown-them-math-inline">$v$</span>节点以外所以<span class="markdown-them-math-inline">$u$</span>节点的子节点的流量和<span class="markdown-them-math-inline">$res[u] - min(dp[v], edge[i].val)$</span>，画图后，得出状态转移方程<span class="markdown-them-math-inline">$res[v] = dp[v] + min(edge[i].val, res[u] - min(dp[v], edge[i].val))$</span></li>
 </ul>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -595,13 +596,13 @@ node edge[<span class="hljs-number">2</span> * N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="computer,-hdu2196">Computer, hdu2196</h2>
-<p>换根的题, 不过不能只记录一个根节点到叶子节点的最大值, 还要记录一个根节点到到叶子节点的第二大的值, 顺便记录一下每个节点的最大值是从哪个子节点转移过来的</p>
-<p>设<span class="markdown-them-math-inline">$maxn[i]$</span>和<span class="markdown-them-math-inline">$smaxn[i]$</span>分别表示<span class="markdown-them-math-inline">$i$</span>节点到叶子节点的最大值和第二大的值, <span class="markdown-them-math-inline">$m\_id[i]$</span>和<span class="markdown-them-math-inline">$sm\_id[i]$</span>分别表示<span class="markdown-them-math-inline">$i$</span>节点的最大值和第二大的值从哪个节点转移过来</p>
-<p>当从父节点<span class="markdown-them-math-inline">$u$</span>向子节点<span class="markdown-them-math-inline">$v$</span>转移的时候, 有两种情况</p>
+<h2 id="computer，hdu2196">Computer，hdu2196</h2>
+<p>换根的题，不过不能只记录一个根节点到叶子节点的最大值，还要记录一个根节点到到叶子节点的第二大的值，顺便记录一下每个节点的最大值是从哪个子节点转移过来的</p>
+<p>设<span class="markdown-them-math-inline">$maxn[i]$</span>和<span class="markdown-them-math-inline">$smaxn[i]$</span>分别表示<span class="markdown-them-math-inline">$i$</span>节点到叶子节点的最大值和第二大的值，<span class="markdown-them-math-inline">$m\_id[i]$</span>和<span class="markdown-them-math-inline">$sm\_id[i]$</span>分别表示<span class="markdown-them-math-inline">$i$</span>节点的最大值和第二大的值从哪个节点转移过来</p>
+<p>当从父节点<span class="markdown-them-math-inline">$u$</span>向子节点<span class="markdown-them-math-inline">$v$</span>转移的时候，有两种情况</p>
 <ul>
-<li>如果父节点<span class="markdown-them-math-inline">$u$</span>的最大值是从子节点<span class="markdown-them-math-inline">$v$</span>转移过来的, 那么就需要判断<span class="markdown-them-math-inline">$smaxn[u] + edge[i].val$</span>和<span class="markdown-them-math-inline">$smaxn[v]$</span>的大小关系, 如果前者比后者大, 则更新<span class="markdown-them-math-inline">$smaxn[v]$</span>和<span class="markdown-them-math-inline">$sm\_id[v]$</span>后再判断<span class="markdown-them-math-inline">$smaxn[v]$</span>和<span class="markdown-them-math-inline">$maxn[v]$</span>的大小关系</li>
-<li>如果父节点<span class="markdown-them-math-inline">$u$</span>的最大值不是从子节点<span class="markdown-them-math-inline">$v$</span>转移过来的, 那么就需要判断<span class="markdown-them-math-inline">$maxn[u] + edge[i].val$</span>和<span class="markdown-them-math-inline">$smaxn[v]$</span>的大小关系, 如果前者比后者大, 则更新<span class="markdown-them-math-inline">$smaxn[v]$</span>和<span class="markdown-them-math-inline">$sm\_id[v]$</span>后再判断<span class="markdown-them-math-inline">$smaxn[v]$</span>和<span class="markdown-them-math-inline">$maxn[v]$</span>的大小关系</li>
+<li>如果父节点<span class="markdown-them-math-inline">$u$</span>的最大值是从子节点<span class="markdown-them-math-inline">$v$</span>转移过来的，那么就需要判断<span class="markdown-them-math-inline">$smaxn[u] + edge[i].val$</span>和<span class="markdown-them-math-inline">$smaxn[v]$</span>的大小关系，如果前者比后者大，则更新<span class="markdown-them-math-inline">$smaxn[v]$</span>和<span class="markdown-them-math-inline">$sm\_id[v]$</span>后再判断<span class="markdown-them-math-inline">$smaxn[v]$</span>和<span class="markdown-them-math-inline">$maxn[v]$</span>的大小关系</li>
+<li>如果父节点<span class="markdown-them-math-inline">$u$</span>的最大值不是从子节点<span class="markdown-them-math-inline">$v$</span>转移过来的，那么就需要判断<span class="markdown-them-math-inline">$maxn[u] + edge[i].val$</span>和<span class="markdown-them-math-inline">$smaxn[v]$</span>的大小关系，如果前者比后者大，则更新<span class="markdown-them-math-inline">$smaxn[v]$</span>和<span class="markdown-them-math-inline">$sm\_id[v]$</span>后再判断<span class="markdown-them-math-inline">$smaxn[v]$</span>和<span class="markdown-them-math-inline">$maxn[v]$</span>的大小关系</li>
 </ul>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
@@ -694,11 +695,11 @@ node edge[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<h2 id="tree-painting, codeforces1187e">Tree Painting, CodeForces1187E</h2>
-<p>设<span class="markdown-them-math-inline">$sum[i]$</span>表示第一次深搜后第<span class="markdown-them-math-inline">$i$</span>个节点子树的节点数量, 设<span class="markdown-them-math-inline">$res[i]$</span>表示以<span class="markdown-them-math-inline">$i$</span>为根节点时答案</p>
-<p>假设第一次从节点<span class="markdown-them-math-inline">$1$</span>开始深搜, 则有<span class="markdown-them-math-inline">$res[1]=n+dp[2]+dp[3]+...+dp[n]$</span></p>
+<h2 id="tree-painting，codeforces1187e">Tree Painting，CodeForces1187E</h2>
+<p>设<span class="markdown-them-math-inline">$sum[i]$</span>表示第一次深搜后第<span class="markdown-them-math-inline">$i$</span>个节点子树的节点数量，设<span class="markdown-them-math-inline">$res[i]$</span>表示以<span class="markdown-them-math-inline">$i$</span>为根节点时答案</p>
+<p>假设第一次从节点<span class="markdown-them-math-inline">$1$</span>开始深搜，则有<span class="markdown-them-math-inline">$res[1]=n+dp[2]+dp[3]+...+dp[n]$</span></p>
 <p>当从<span class="markdown-them-math-inline">$1$</span>转移到它的子节点<span class="markdown-them-math-inline">$2$</span>时有<span class="markdown-them-math-inline">$res[2]=n+dp[3]+...+dp[n]+dp[1]-dp[2]$</span></p>
-<p>则有<span class="markdown-them-math-inline">$res[1]=res[2]+dp[1]-2*dp[2]$</span>, 推广得<span class="markdown-them-math-inline">$res[v]=res[u]+dp[1]-2*dp[v]$</span></p>
+<p>则有<span class="markdown-them-math-inline">$res[1]=res[2]+dp[1]-2*dp[2]$</span>，推广得<span class="markdown-them-math-inline">$res[v]=res[u]+dp[1]-2*dp[v]$</span></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -813,6 +814,10 @@ node edge[<span class="hljs-number">2</span> * N];
       <ul>
         
           <li>
+            <a href="../../../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
+        
+          <li>
             <a href="../../../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
           </li>
         
@@ -828,10 +833,6 @@ node edge[<span class="hljs-number">2</span> * N];
             <a href="../../../../2020/10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
           </li>
         
-          <li>
-            <a href="../../../../2020/09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -841,7 +842,7 @@ node edge[<span class="hljs-number">2</span> * N];
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 

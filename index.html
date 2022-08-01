@@ -42,6 +42,127 @@
       <div id="content" class="outer">
         <section id="main">
   
+    <article id="post-ubuntu部署ASP.NET Core WebApi" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/" class="article-date">
+  <time class="dt-published" datetime="2022-08-01T02:35:00.000Z" itemprop="datePublished">2022-08-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="categories/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="修改项目端口">修改项目端口</h2>
+<p>项目创建完成后，需要修改Program.cs文件，手动指定启动的url为http://*:5000</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> IHostBuilder <span class="hljs-title">CreateHostBuilder</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] args</span>)</span> =&gt;
+    Host.CreateDefaultBuilder(args)
+        .ConfigureWebHostDefaults(webBuilder =&gt;
+        &#123;
+            webBuilder.UseUrls(<span class="hljs-string">&quot;http://*:5000&quot;</span>).UseStartup&lt;Startup&gt;();
+        &#125;);
+</code></pre></div>
+<h2 id="发布项目到本地">发布项目到本地</h2>
+<ol>
+<li>右击项目，选择发布</li>
+</ol>
+<p><img src="/images/2022-08-01-10-35/20220801104742.png" alt=""></p>
+<ol start="2">
+<li>选择发布到文件夹</li>
+</ol>
+<p><img src="/images/2022-08-01-10-35/20220801104945.png" alt=""></p>
+<ol start="3">
+<li>在发布操作面板中选择发布即可</li>
+</ol>
+<p><img src="/iamges/2022-08-01-10-35/20220801105151.png" alt=""></p>
+<h2 id="本地运行测试">本地运行测试</h2>
+<ol>
+<li>在publish文件夹中打开cmd，运行<code>dotnet WeatherForecast.api.dll</code></li>
+</ol>
+<p><img src="/iamges/2022-08-01-10-35/20220801105413.png" alt=""></p>
+<ol start="2">
+<li>在浏览器打开localhost:5000/WeatherForecast测试接口</li>
+</ol>
+<p><img src="/images/2022-08-01-10-35/20220801105725.png" alt=""></p>
+<h2 id="部署到ubuntu服务器上">部署到ubuntu服务器上</h2>
+<ol>
+<li>安装dotnet环境</li>
+</ol>
+<div class="highlight"><pre class="code"><code>wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get update
+apt search dotnet-sdk
+sudo apt-get install dotnet-sdk-5.0
+</code></pre></div>
+<ol start="2">
+<li>安装Nginx</li>
+</ol>
+<div class="highlight"><pre class="code"><code>apt-get install nginx
+</code></pre></div>
+<ol start="3">
+<li>将publish文件夹中所有文件复制到服务器上，并执行<code>dotnet WeatherForecast.api.dll</code></li>
+</ol>
+<p><img src="/images/2022-08-01-10-35/20220801112215.png" alt=""></p>
+<ol start="4">
+<li>在浏览器输入<code>ip:5000/WeatherForecast</code>测试接口</li>
+</ol>
+<p><img src="/images/2022-08-01-10-35/20220801112317.png" alt=""></p>
+<h2 id="surpervisor创建后台进程">surpervisor创建后台进程</h2>
+<ol>
+<li>安装surpervisor</li>
+</ol>
+<div class="highlight"><pre class="code"><code>apt-get install supervisor
+</code></pre></div>
+<ol start="2">
+<li>在/etc/supervisor/conf.d目录下写入项目配置文件WeatherForecast.conf</li>
+</ol>
+<div class="highlight"><pre class="code"><code>[program:WeatherForecast]
+<span class="hljs-built_in">command</span>=dotnet WeatherForecast.dll
+directory=/home/ubuntu/api/WeatherForecast
+environment=ASPNETCORE__ENVIRONMENT=Production
+user=root
+autostart=<span class="hljs-literal">true</span>
+autorestart=<span class="hljs-literal">true</span>
+startsecs=1
+stderr_logfile=/var/<span class="hljs-built_in">log</span>/WeatherForecast.err.log
+stdout_logfile=/var/<span class="hljs-built_in">log</span>/WeatherForecast.out.log
+</code></pre></div>
+<ol start="3">
+<li>重启supervisor服务即可创建WeatherForecast后台进程</li>
+</ol>
+<div class="highlight"><pre class="code"><code>/ect/init.d/supervisor restart
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-2022年西安交通大学915上岸复盘" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/" class="article-date">
@@ -167,9 +288,9 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>链接: <a target="_blank" rel="noopener" href="https://codeforces.com/contest/1478">Codeforces Round #698 (Div.2)</a></p>
+        <p>链接：<a target="_blank" rel="noopener" href="https://codeforces.com/contest/1478">Codeforces Round #698 (Div.2)</a></p>
 <h2 id="nezzar-and colorful balls">Nezzar and Colorful Balls</h2>
-<p>思路: 答案就是出现次数最多的数出现的次数</p>
+<p>思路：答案就是出现次数最多的数出现的次数</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -203,7 +324,7 @@
 &#125;
 </code></pre></div>
 <h2 id="nezzar-and lucky number">Nezzar and Lucky Number</h2>
-<p>思路: 很显然<span class="markdown-them-math-inline">$x\geq 10*d$</span>时, <span class="markdown-them-math-inline">$x$</span>可以表示为<span class="markdown-them-math-inline">$x=(10*d+t)+d+d+\cdots$</span>的形式, <span class="markdown-them-math-inline">$0\leq t\leq 9$</span>, 显然<span class="markdown-them-math-inline">$10*d+t$</span>包含数字<span class="markdown-them-math-inline">$d$</span>, 所以答案肯定是YES, 当<span class="markdown-them-math-inline">$x &lt; 10*d$</span>时, 暴力即可</p>
+<p>思路：很显然<span class="markdown-them-math-inline">$x\geq 10*d$</span>时，<span class="markdown-them-math-inline">$x$</span>可以表示为<span class="markdown-them-math-inline">$x=(10*d+t)+d+d+\cdots$</span>的形式，<span class="markdown-them-math-inline">$0\leq t\leq 9$</span>，显然<span class="markdown-them-math-inline">$10*d+t$</span>包含数字<span class="markdown-them-math-inline">$d$</span>，所以答案肯定是YES，当<span class="markdown-them-math-inline">$x &lt; 10*d$</span>时，暴力即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -241,13 +362,13 @@
 &#125;
 </code></pre></div>
 <h2 id="nezzar-and symmetric array">Nezzar and Symmetric Array</h2>
-<p>思路: 假设<span class="markdown-them-math-inline">$a$</span>数组中的正数为<span class="markdown-them-math-inline">$a_{1}\ a_{2}\cdots a_{n}$</span>, 假设<span class="markdown-them-math-inline">$a_{1}&lt;a_{2}&lt;\cdots &lt;a_{n}$</span>, 然后推式子可得</p>
+<p>思路：假设<span class="markdown-them-math-inline">$a$</span>数组中的正数为<span class="markdown-them-math-inline">$a_{1}\ a_{2}\cdots a_{n}$</span>，假设<span class="markdown-them-math-inline">$a_{1}&lt;a_{2}&lt;\cdots &lt;a_{n}$</span>，然后推式子可得</p>
 <p><div class="markdown-them-math-block">$$d_{1}=2\sum_{1}^{n}a_{i}$$</div></p>
 <p><div class="markdown-them-math-block">$$d_{2}=2\sum_{1}^{n}a_{i}+2a_{2}-2a_{1}$$</div></p>
 <p><div class="markdown-them-math-block">$$d_{3}=2\sum_{1}^{n}a_{i}+4a_{3}-2a_{1}-2a_{2}$$</div></p>
 <p><div class="markdown-them-math-block">$$\vdots$$</div></p>
 <p><div class="markdown-them-math-block">$$d_{n}=2\sum_{1}^{n}+2(n-1)a_{n}-2a_{1}-2a_{2}\cdots -2a_{n-1}=2na_{n}$$</div></p>
-<p>通过<span class="markdown-them-math-inline">$d_{n}$</span>求出<span class="markdown-them-math-inline">$a_{n}$</span>后, <span class="markdown-them-math-inline">$d_{i}-d_{i-1}=2(i-1)a_{i}-2(i-1)a_{i-1}$</span>, 然后从后向前反推出<span class="markdown-them-math-inline">$a$</span>数组, 最后判断<span class="markdown-them-math-inline">$a[1]$</span>是否大于0即可</p>
+<p>通过<span class="markdown-them-math-inline">$d_{n}$</span>求出<span class="markdown-them-math-inline">$a_{n}$</span>后，<span class="markdown-them-math-inline">$d_{i}-d_{i-1}=2(i-1)a_{i}-2(i-1)a_{i-1}$</span>，然后从后向前反推出<span class="markdown-them-math-inline">$a$</span>数组，最后判断<span class="markdown-them-math-inline">$a[1]$</span>是否大于0即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -297,7 +418,7 @@ vector&lt;ll&gt; alls;
 &#125;
 </code></pre></div>
 <h2 id="nezzar-and board">Nezzar and Board</h2>
-<p>思路: 选中的<span class="markdown-them-math-inline">$x$</span>、<span class="markdown-them-math-inline">$y$</span>的系数为1, 组成的数<span class="markdown-them-math-inline">$2x-y$</span>的系数和也为1, 所以无论怎么组合, 最后组成成的数系数和一定为1, 对于每一个组合成的数, 都可以表示成<span class="markdown-them-math-inline">$k=x_{1}(a_{2}-a_{1})+x_{2}(a_{3}-a_{1})+\cdots + x_{n-1}(a_{n}-a_{1})+a_{i}$</span>, 即</p>
+<p>思路：选中的<span class="markdown-them-math-inline">$x$</span>、<span class="markdown-them-math-inline">$y$</span>的系数为1，组成的数<span class="markdown-them-math-inline">$2x-y$</span>的系数和也为1，所以无论怎么组合，最后组成成的数系数和一定为1，对于每一个组合成的数，都可以表示成<span class="markdown-them-math-inline">$k=x_{1}(a_{2}-a_{1})+x_{2}(a_{3}-a_{1})+\cdots + x_{n-1}(a_{n}-a_{1})+a_{i}$</span>，即</p>
 <p><div class="markdown-them-math-block">$$k-a_{i}=x_{1}(a_{2}-a_{1})+x_{2}(a_{3}-a_{1})+\cdots + x_{n-1}(a_{n}-a_{1})$$</div></p>
 <p>根据裴蜀定理<span class="markdown-them-math-inline">$O(n)$</span>遍历<span class="markdown-them-math-inline">$a_{i}$</span>验证即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
@@ -5224,12 +5345,12 @@ map&lt;ll, <span class="hljs-keyword">int</span>&gt; mp;
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>链接: <a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=6265">Master of Phi</a></p>
-<p>题意: 求<span class="markdown-them-math-inline">$\sum_{d\mid n} \phi(d)* \frac{n}{d}$</span>, 其中<span class="markdown-them-math-inline">$n=\prod_{i=1}^{m}{p_{i}}^{q_{i}}$</span></p>
-<p>思路: 设<span class="markdown-them-math-inline">$f(n)=\sum_{d\mid n} \phi(d)* \frac{n}{d}$</span>, 显然<span class="markdown-them-math-inline">$f(n)$</span>是积性函数</p>
+        <p>链接：<a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=6265">Master of Phi</a></p>
+<p>题意：求<span class="markdown-them-math-inline">$\sum_{d\mid n} \phi(d)* \frac{n}{d}$</span>，其中<span class="markdown-them-math-inline">$n=\prod_{i=1}^{m}{p_{i}}^{q_{i}}$</span></p>
+<p>思路：设<span class="markdown-them-math-inline">$f(n)=\sum_{d\mid n} \phi(d)* \frac{n}{d}$</span>，显然<span class="markdown-them-math-inline">$f(n)$</span>是积性函数</p>
 <p><span class="markdown-them-math-inline">$f(n)=f({p_1}^{c_1}*{p_2}^{c_2}*\cdots * {p_m}^{c_m})=f({p_1}^{c_1})*f({p_2}^{c_2})*\cdots *f({p_m}^{c_m})$</span></p>
 <p>由f(n)定义得</p>
-<p>设<span class="markdown-them-math-inline">$n=p^c$</span>, 则</p>
+<p>设<span class="markdown-them-math-inline">$n=p^c$</span>，则</p>
 <p><div class="markdown-them-math-block">$$f(n)=\phi(1)*n+\phi(p)*\frac{n}{p}+\phi(p^2)*\frac{n}{p^2}+\cdots +\phi(p^c)*\frac{n}{p^c}$$</div></p>
 <p><div class="markdown-them-math-block">$$f(n)=n+(p-1)*\frac{n}{p}+(p^2-p)*\frac{n}{p^2}+\cdots +(p^c-p^{c-1})*\frac{n}{p^c}$$</div></p>
 <p><div class="markdown-them-math-block">$$f(n)=n*(1+c*\frac{p-1}{p})=p*c+c*(p-1)*p^{c-1}$$</div></p>
@@ -5322,10 +5443,10 @@ map&lt;ll, <span class="hljs-keyword">int</span>&gt; mp;
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>链接: <a target="_blank" rel="noopener" href="http://codeforces.com/contest/1343">Codeforces Round #636 (Div. 3)</a></p>
+        <p>链接：<a target="_blank" rel="noopener" href="http://codeforces.com/contest/1343">Codeforces Round #636 (Div. 3)</a></p>
 <h2 id="candies">Candies</h2>
-<p>题意: 求出一个x满足<span class="markdown-them-math-inline">$x + 2*x + 4*x + \dots + 2^{k-1}*x = n$</span>且<span class="markdown-them-math-inline">$k&gt;1$</span></p>
-<p>思路: 提出x得<span class="markdown-them-math-inline">$x*(1+2+4+\dots + 2^{k-1})=n$</span>, 从小到大枚举k, 直到满足<span class="markdown-them-math-inline">$n \mid (1+2+4+\dots + 2^{k-1})$</span></p>
+<p>题意：求出一个x满足<span class="markdown-them-math-inline">$x + 2*x + 4*x + \dots + 2^{k-1}*x = n$</span>且<span class="markdown-them-math-inline">$k&gt;1$</span></p>
+<p>思路：提出x得<span class="markdown-them-math-inline">$x*(1+2+4+\dots + 2^{k-1})=n$</span>，从小到大枚举k，直到满足<span class="markdown-them-math-inline">$n \mid (1+2+4+\dots + 2^{k-1})$</span></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -5353,8 +5474,8 @@ map&lt;ll, <span class="hljs-keyword">int</span>&gt; mp;
 &#125;
 </code></pre></div>
 <h2 id="balanced-array">Balanced Array</h2>
-<p>题意: 给你一个偶数n, 要求你构造出一个数列, 满足前<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数为偶数, 后<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数为奇数, 每个数都为互不相同的正整数, 且前<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数的和等于后<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数的和</p>
-<p>思路: 奇数和偶数的差为奇数, 如果<span class="markdown-them-math-inline">$\frac{n}{2}-1$</span>为奇数, 那么对于前<span class="markdown-them-math-inline">$\frac{n}{2}-1$</span>对奇数和偶数, 合起来的差为偶数, 那么第<span class="markdown-them-math-inline">$\frac{n}{2}$</span>对奇数和偶数就无法构造出来, 所以<span class="markdown-them-math-inline">$\frac{n}{2}$</span>必须为偶数, 即<span class="markdown-them-math-inline">$n\mid 4$</span>, 显然可以构造出这样的数列<span class="markdown-them-math-inline">$2\ \ 4\ \ 6\cdots n\ \ 1\ \ 3\ \ 5\cdots (n-3)\ \ (n+\frac{n}{2}-1)$</span></p>
+<p>题意：给你一个偶数n，要求你构造出一个数列，满足前<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数为偶数，后<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数为奇数，每个数都为互不相同的正整数，且前<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数的和等于后<span class="markdown-them-math-inline">$\frac{n}{2}$</span>个数的和</p>
+<p>思路：奇数和偶数的差为奇数，如果<span class="markdown-them-math-inline">$\frac{n}{2}-1$</span>为奇数，那么对于前<span class="markdown-them-math-inline">$\frac{n}{2}-1$</span>对奇数和偶数，合起来的差为偶数，那么第<span class="markdown-them-math-inline">$\frac{n}{2}$</span>对奇数和偶数就无法构造出来，所以<span class="markdown-them-math-inline">$\frac{n}{2}$</span>必须为偶数，即<span class="markdown-them-math-inline">$n\mid 4$</span>，显然可以构造出这样的数列<span class="markdown-them-math-inline">$2\ \ 4\ \ 6\cdots n\ \ 1\ \ 3\ \ 5\cdots (n-3)\ \ (n+\frac{n}{2}-1)$</span></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -5384,8 +5505,8 @@ map&lt;ll, <span class="hljs-keyword">int</span>&gt; mp;
 &#125;
 </code></pre></div>
 <h2 id="alternating-subsequence">Alternating Subsequence</h2>
-<p>题意: 就是给你n个数, 你需要找出其中的最长子序列, 并且这个子序列是正负交替的, 并且尽量让这个子序列的和最大</p>
-<p>思路: 由于要子序列最长, 所以把n个数按照正负分成几块(块内元素正负性相同), 然后再在每个块内贪心取一个数即可</p>
+<p>题意：就是给你n个数，你需要找出其中的最长子序列，并且这个子序列是正负交替的，并且尽量让这个子序列的和最大</p>
+<p>思路：由于要子序列最长，所以把n个数按照正负分成几块(块内元素正负性相同)，然后再在每个块内贪心取一个数即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -5439,8 +5560,8 @@ ll a[N];
 &#125;
 </code></pre></div>
 <h2 id="constant-palindrome sum">Constant Palindrome Sum</h2>
-<p>题意: 给定一个长度为n的数列, n为偶数, 保证每个元素在[1,k]之间, 每次操作可以把某个位置的数字变成[1,k]内的任意数字, 要求让这个数列满足: 对于所有的i<span class="markdown-them-math-inline">$\in$</span>[1,<span class="markdown-them-math-inline">$\frac{n}{2}$</span>], a[i]+a[n-i+1]是一个定值, 问最少的操作次数</p>
-<p>思路: 设imin=min(a[i],a[n-i+1]), imax=max(a[i],a[n-i+1]), 分三种情况, 不进行操作a[i]+a[n-i+1]不变, 操作一次能够使a[i]+a[n-i+1]<span class="markdown-them-math-inline">$\in$</span>[imin+1,imax+k], 操作两次能使a[i]+a[n-i+1]<span class="markdown-them-math-inline">$\in$</span>[2,2<em>k], 根据贪心的思想, 对于每一对(a[i],a[n-i+1]), [imin+1,imax+k]操作次数加1, [2,imin]和[imax+k+1,2</em>k]操作次数加2, a[i]+a[n-i+1]操作次数不变, 用差分数组维护一下, 最后找到[2,2*k]内的最小操作次数即可</p>
+<p>题意：给定一个长度为n的数列，n为偶数，保证每个元素在[1,k]之间，每次操作可以把某个位置的数字变成[1,k]内的任意数字，要求让这个数列满足：对于所有的i<span class="markdown-them-math-inline">$\in$</span>[1,<span class="markdown-them-math-inline">$\frac{n}{2}$</span>]，a[i]+a[n-i+1]是一个定值，问最少的操作次数</p>
+<p>思路：设imin=min(a[i],a[n-i+1])，imax=max(a[i],a[n-i+1])，分三种情况，不进行操作a[i]+a[n-i+1]不变，操作一次能够使a[i]+a[n-i+1]<span class="markdown-them-math-inline">$\in$</span>[imin+1,imax+k]，操作两次能使a[i]+a[n-i+1]<span class="markdown-them-math-inline">$\in$</span>[2,2<em>k]，根据贪心的思想，对于每一对(a[i],a[n-i+1])，[imin+1,imax+k]操作次数加1，[2,imin]和[imax+k+1,2</em>k]操作次数加2，a[i]+a[n-i+1]操作次数不变，用差分数组维护一下，最后找到[2,2*k]内的最小操作次数即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -5485,9 +5606,9 @@ ll a[N];
 &#125;
 </code></pre></div>
 <h2 id="weights-distributing">Weights Distributing</h2>
-<p>题意: 给定一张n个顶点的有权无向图, m条边和m个权值和三个点a, b, c.  问如何分配边权能使a到b, b再到c的权值和最小, 求最小值</p>
-<p>思路: 很直观的感受就是, 求出a到b, b再到c的最短路径, 然后将m个权值从小到大分配即可, 如果同时有多条最短路径, 我们应该选择重合最多的两条最短路径(因为这样用的边会更少), 并且此时重合的部分应该分配权值最小的边, 所以我们可以用bfs或者dfs求出a, b, c到其他所有点的最短距离da[],db[],dc[], 然后枚举每个点x, 假设a到b, b再到c的路径拆为a到x, x到b, b到x, x再到c, 枚举所有的点x, 一定会包含上述的两种(两条路径重叠与不重叠)的情况, 并且此时b到x应该分配最小的边权, 将m个边权排序, 求前缀和sum[], 那么对于点x, 答案就是sum[db[x]]+sum[da[x]+db[x]+dc[x]]</p>
-<p>参考: <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34261446/article/details/105753266">https://blog.csdn.net/qq_34261446/article/details/105753266</a></p>
+<p>题意：给定一张n个顶点的有权无向图，m条边和m个权值和三个点a，b，c。问如何分配边权能使a到b，b再到c的权值和最小，求最小值</p>
+<p>思路：很直观的感受就是，求出a到b，b再到c的最短路径，然后将m个权值从小到大分配即可，如果同时有多条最短路径，我们应该选择重合最多的两条最短路径(因为这样用的边会更少)，并且此时重合的部分应该分配权值最小的边，所以我们可以用bfs或者dfs求出a，b，c到其他所有点的最短距离da[],db[],dc[]，然后枚举每个点x，假设a到b，b再到c的路径拆为a到x，x到b，b到x，x再到c，枚举所有的点x，一定会包含上述的两种(两条路径重叠与不重叠)的情况，并且此时b到x应该分配最小的边权，将m个边权排序，求前缀和sum[]，那么对于点x，答案就是sum[db[x]]+sum[da[x]+db[x]+dc[x]]</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34261446/article/details/105753266">https://blog.csdn.net/qq_34261446/article/details/105753266</a></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -5614,17 +5735,17 @@ queue&lt;<span class="hljs-keyword">int</span>&gt; q;
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>用<span class="markdown-them-math-inline">$g(x)=A*x^2+B*x+C$</span>来代替原函数<span class="markdown-them-math-inline">$f(x)$</span>, 设<span class="markdown-them-math-inline">$g(x)$</span>原函数为<span class="markdown-them-math-inline">$G(x)$</span>, 显然<span class="markdown-them-math-inline">$G(x)=\frac{1}{3}*A*x^3+\frac{1}{2}*B*x^2+C*x$</span></p>
+        <p>用<span class="markdown-them-math-inline">$g(x)=A*x^2+B*x+C$</span>来代替原函数<span class="markdown-them-math-inline">$f(x)$</span>，设<span class="markdown-them-math-inline">$g(x)$</span>原函数为<span class="markdown-them-math-inline">$G(x)$</span>，显然<span class="markdown-them-math-inline">$G(x)=\frac{1}{3}*A*x^3+\frac{1}{2}*B*x^2+C*x$</span></p>
 <p><span class="markdown-them-math-inline">$\int_a^b f(x) dx \approx \int_a^b g(x) dx=G(b)-G(a)$</span></p>
 <p>代入化简得</p>
 <p><div class="markdown-them-math-block">$$\int_a^b f(x) dx \approx \frac{a-b}{6}*[g(a)+g(b)+4*g(\frac{a+b}{2})]$$</div></p>
-<p>二分区间, 然后计算区间积分, 通过期望容差来控制二分</p>
-<p>如果<span class="markdown-them-math-inline">$|S(a,mid)+S(mid,b)-S(a,b)|&lt;15*\varepsilon $</span>, 则中止二分, 并且认为</p>
+<p>二分区间，然后计算区间积分，通过期望容差来控制二分</p>
+<p>如果<span class="markdown-them-math-inline">$|S(a,mid)+S(mid,b)-S(a,b)|&lt;15*\varepsilon $</span>，则中止二分，并且认为</p>
 <p><div class="markdown-them-math-block">$$S(a,b)=S(a,m)+S(m,b)+\frac{S(a,mid)+S(mid,b)-S(a,b)}{15}$$</div></p>
 <p>否则继续二分</p>
 <p>其中<span class="markdown-them-math-inline">$mid=\frac{a+b}{2},\varepsilon为期望容差$</span></p>
-<p>参考博客: <a target="_blank" rel="noopener" href="https://www.cnblogs.com/chy-2003/p/11644112.html">https://www.cnblogs.com/chy-2003/p/11644112.html</a></p>
-<p>例题:</p>
+<p>参考博客：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/chy-2003/p/11644112.html">https://www.cnblogs.com/chy-2003/p/11644112.html</a></p>
+<p>例题：</p>
 <p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4525">luogu 4525 【模板】自适应辛普森法1</a></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -5800,7 +5921,7 @@ queue&lt;<span class="hljs-keyword">int</span>&gt; q;
         
   
     <h1 itemprop="name">
-      <a class="p-name article-title" href="2020/08/08/2020%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B9%9D%E5%9C%BA%EF%BC%89-%20E.%20Groundhog%20Chasing%20Death/">2020牛客暑期多校训练营 (第九场) - E. Groundhog Chasing Death</a>
+      <a class="p-name article-title" href="2020/08/08/2020%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B9%9D%E5%9C%BA%EF%BC%89-%20E.%20Groundhog%20Chasing%20Death/">2020牛客暑期多校训练营（第九场）- E. Groundhog Chasing Death</a>
     </h1>
   
 
@@ -5809,15 +5930,15 @@ queue&lt;<span class="hljs-keyword">int</span>&gt; q;
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题目链接: <a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/5674/E">Groundhog Chasing Death</a></p>
-<p>题意: 给你一个a, b, c, d, x, y, 求<span class="markdown-them-math-inline">$\prod_{i=a}^{b} \prod_{j=c}^{d} gcd(x^i,y^j)$</span>的值</p>
-<p>思路: 对x, y质因数分解, 对于x和y的某一个公共质因子p, 假设x分解后p的幂次为a, y分解后p的幂次位为b, 当i,j确定时, p对答案贡献为<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}$</span>, 接下来考虑一下a<em>i和b</em>j的大小</p>
-<p>当<span class="markdown-them-math-inline">$j\geq \lceil \frac{a*i}{b} \rceil$</span>时有<span class="markdown-them-math-inline">$a*i\leq b*j$</span>, 此时<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}=p^{a*i}$</span></p>
-<p>当<span class="markdown-them-math-inline">$j&lt; \lceil \frac{a*i}{b} \rceil$</span>时有<span class="markdown-them-math-inline">$a*i&gt;b*j$</span>, 此时<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}=p^{b*j}$</span></p>
-<p>对于每个p, 我们可以枚举i, 显然<span class="markdown-them-math-inline">$\lceil \frac{a*i}{b} \rceil$</span>时确定的</p>
-<p>对于<span class="markdown-them-math-inline">$\geq \lceil \frac{a*i}{b} \rceil$</span>的j来说, p的幂次为<span class="markdown-them-math-inline">$a*i*(d- \lceil \frac{a*i}{b} \rceil +1)$</span></p>
-<p>对于<span class="markdown-them-math-inline">$&lt; \lceil \frac{a*i}{b} \rceil$</span>的j来说, p的幂次为<span class="markdown-them-math-inline">$b*[c+(c+1)+\dots +(\lceil \frac{a*i}{b} \rceil -1)]$</span></p>
-<p>算出每个p的总的幂次(幂次加的过程中需要欧拉降幂), 然后快速幂求解即可</p>
+        <p>题目链接：<a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/5674/E">Groundhog Chasing Death</a></p>
+<p>题意：给你一个a，b，c，d，x，y，求<span class="markdown-them-math-inline">$\prod_{i=a}^{b} \prod_{j=c}^{d} gcd(x^i,y^j)$</span>的值</p>
+<p>思路：对x，y质因数分解，对于x和y的某一个公共质因子p，假设x分解后p的幂次为a，y分解后p的幂次位为b，当i,j确定时，p对答案贡献为<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}$</span>，接下来考虑一下a<em>i和b</em>j的大小</p>
+<p>当<span class="markdown-them-math-inline">$j\geq \lceil \frac{a*i}{b} \rceil$</span>时有<span class="markdown-them-math-inline">$a*i\leq b*j$</span>，此时<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}=p^{a*i}$</span></p>
+<p>当<span class="markdown-them-math-inline">$j&lt; \lceil \frac{a*i}{b} \rceil$</span>时有<span class="markdown-them-math-inline">$a*i&gt;b*j$</span>，此时<span class="markdown-them-math-inline">$p^{min(a*i,b*j)}=p^{b*j}$</span></p>
+<p>对于每个p，我们可以枚举i，显然<span class="markdown-them-math-inline">$\lceil \frac{a*i}{b} \rceil$</span>时确定的</p>
+<p>对于<span class="markdown-them-math-inline">$\geq \lceil \frac{a*i}{b} \rceil$</span>的j来说，p的幂次为<span class="markdown-them-math-inline">$a*i*(d- \lceil \frac{a*i}{b} \rceil +1)$</span></p>
+<p>对于<span class="markdown-them-math-inline">$&lt; \lceil \frac{a*i}{b} \rceil$</span>的j来说，p的幂次为<span class="markdown-them-math-inline">$b*[c+(c+1)+\dots +(\lceil \frac{a*i}{b} \rceil -1)]$</span></p>
+<p>算出每个p的总的幂次(幂次加的过程中需要欧拉降幂)，然后快速幂求解即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -5968,11 +6089,11 @@ ll mi[N];
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>题目链接: <a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=6833">A Very Easy Math Problem</a></p>
-<p>题意: 给你一个T, x, k, 表示有T次询问, 每次询问给你一个n, 求:</p>
+        <p>题目链接：<a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=6833">A Very Easy Math Problem</a></p>
+<p>题意：给你一个T，x，k，表示有T次询问，每次询问给你一个n，求：</p>
 <p><div class="markdown-them-math-block">$$\sum_{a_1=1}^{n}\sum_{a_2=1}^{n}\ldots \sum_{a_x=1}^{n}\left (\prod_{j=1}^{x}a_j^k\right )f(\gcd(a_1,a_2,\ldots ,a_x)) * \gcd(a_1,a_2,\ldots ,a_x)$$</div></p>
-<p>其中, 如果x有平方因子, 则f(x)=0, 否则f(x)=1, <span class="markdown-them-math-inline">$T\leq 10^4,1\leq k\leq 10^9,1\leq x\leq 10^9,1\leq n\leq 2\times 10^5$</span></p>
-<p>思路: 先考虑一下f(x)的求法, 将x质因子分解后, 如果某一个质数的幂次<span class="markdown-them-math-inline">$\geq 2$</span>, 那么x一定有平方因子, 那么f(x)=0, 并且由莫比乌斯函数的定义有<span class="markdown-them-math-inline">$\mu(x)=0$</span>, 当f(x)=1时, <span class="markdown-them-math-inline">$\mu(x)=1$</span>或者<span class="markdown-them-math-inline">$\mu(x)=-1$</span>, 所以可以得到<span class="markdown-them-math-inline">$f(x)={\mu(x)}^2$</span></p>
+<p>其中，如果x有平方因子，则f(x)=0，否则f(x)=1，<span class="markdown-them-math-inline">$T\leq 10^4,1\leq k\leq 10^9,1\leq x\leq 10^9,1\leq n\leq 2\times 10^5$</span></p>
+<p>思路：先考虑一下f(x)的求法，将x质因子分解后，如果某一个质数的幂次<span class="markdown-them-math-inline">$\geq 2$</span>，那么x一定有平方因子，那么f(x)=0，并且由莫比乌斯函数的定义有<span class="markdown-them-math-inline">$\mu(x)=0$</span>，当f(x)=1时，<span class="markdown-them-math-inline">$\mu(x)=1$</span>或者<span class="markdown-them-math-inline">$\mu(x)=-1$</span>，所以可以得到<span class="markdown-them-math-inline">$f(x)={\mu(x)}^2$</span></p>
 <p><div class="markdown-them-math-block">$$\sum_{a_1=1}^{n}\sum_{a_2=1}^{n}\ldots \sum_{a_x=1}^{n}\left (\prod_{j=1}^{x}a_j^k\right )f(\gcd(a_1,a_2,\ldots ,a_x)) * \gcd(a_1,a_2,\ldots ,a_x)$$</div></p>
 <p>令<span class="markdown-them-math-inline">$\gcd(a_1,a_2,\ldots ,a_x)=d$</span></p>
 <p><div class="markdown-them-math-block">$$\sum_{a_1=1}^{n}\sum_{a_2=1}^{n}\ldots \sum_{a_x=1}^{n}\left (\prod_{j=1}^{x}a_j^k\right )f(d) * d [\gcd(a_1,a_2,\ldots ,a_x)==d]$$</div></p>
@@ -5980,15 +6101,15 @@ ll mi[N];
 <p><div class="markdown-them-math-block">$$\sum_{d=1}^{n} \sum_{a_1=1}^{\frac{n}{d}}\sum_{a_2=1}^{\frac{n}{d}}\ldots \sum_{a_x=1}^{\frac{n}{d}}(a_1 \cdots a_x)^k * f(d) * d * d^{kx} [\gcd(a_1,a_2,\ldots ,a_x)==1]$$</div></p>
 <p>运用反演公式</p>
 <p><div class="markdown-them-math-block">$$\sum_{d=1}^{n} \sum_{a_1=1}^{\frac{n}{d}}\sum_{a_2=1}^{\frac{n}{d}}\ldots \sum_{a_x=1}^{\frac{n}{d}}(a_1 \cdots a_x)^k * f(d) * d * d^{kx} * \sum_{j \mid gcd} \mu(j)$$</div></p>
-<p>同样的, 把j提到前面</p>
+<p>同样的，把j提到前面</p>
 <p><div class="markdown-them-math-block">$$\sum_{d=1}^{n} \sum_{j=1}^{\frac{n}{d}} \sum_{a_1=1}^{\frac{n}{dj}}\sum_{a_2=1}^{\frac{n}{dj}}\ldots \sum_{a_x=1}^{\frac{n}{dj}}(a_1 \cdots a_x)^k * f(d) * d * d^{kx} * j^{kx} * \mu(j)$$</div></p>
 <p>由于<span class="markdown-them-math-inline">$\sum_{a_1=1}^{\frac{n}{dj}}\sum_{a_2=1}^{\frac{n}{dj}}\ldots \sum_{a_x=1}^{\frac{n}{dj}}(a_1 \cdots a_x)^k={[1^k+2^k+\cdots + (\frac{n}{dj})^k]}^x$</span></p>
 <p><div class="markdown-them-math-block">$$\sum_{d=1}^{n} \sum_{j=1}^{\frac{n}{d}} \mu(j) * (dj)^{kx} * f(d) * d * {[1^k+2^k+\cdots + (\frac{n}{dj})^k]}^x$$</div></p>
 <p>令T=dj</p>
 <p><div class="markdown-them-math-block">$$\sum_{T=1}^n \sum_{j \mid T} \mu(j) * T^{kx} * f(\frac{T}{j}) * \frac{T}{j} * {[1^k+2^k+\cdots + (\frac{n}{dj})^k]}^x$$</div></p>
 <p>令<span class="markdown-them-math-inline">$g(T)=\sum_{j \mid T} \mu(j) * T^{kx} * f(\frac{T}{j}) * \frac{T}{j}$</span></p>
-<p>枚举j的倍数预处理g(T), 直接预处理<span class="markdown-them-math-inline">${[1^k+2^k+\cdots + (\frac{n}{dj})^k]}^x$</span></p>
-<p>每次询问的时候对n数论分块, 时间复杂度<span class="markdown-them-math-inline">$T\sqrt n+nlogn$</span></p>
+<p>枚举j的倍数预处理g(T)，直接预处理<span class="markdown-them-math-inline">${[1^k+2^k+\cdots + (\frac{n}{dj})^k]}^x$</span></p>
+<p>每次询问的时候对n数论分块，时间复杂度<span class="markdown-them-math-inline">$T\sqrt n+nlogn$</span></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -6112,15 +6233,15 @@ ll k, x, s[N], qmi[N], g[N];
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>适用范围: 给出n个点<span class="markdown-them-math-inline">$(x_i,y_i)$</span>, 过这n个点能够确定一个最高n-1次的多项式<span class="markdown-them-math-inline">$f(x)$</span>, 求<span class="markdown-them-math-inline">$f(k)$</span></p>
-<p>做法: 如图所示, 我们将每一个点<span class="markdown-them-math-inline">$(x_i,y_i)$</span>在x轴上的投影<span class="markdown-them-math-inline">$(x_i,0)$</span>记为<span class="markdown-them-math-inline">$H_i$</span>.  对每一个i, 我们选择一个点集<span class="markdown-them-math-inline">$\lbrace P_i\rbrace \cup \lbrace H_j \vert 1 \le i\le n, j \neq i\rbrace$</span>, 求过这n个点的最高n-1次的多项式<span class="markdown-them-math-inline">$g_i(x)$</span>.  这样我们就得到了n个<span class="markdown-them-math-inline">$g_i(x)$</span>, 它们都在各自对应的<span class="markdown-them-math-inline">$x_i$</span>处的值为<span class="markdown-them-math-inline">$y_i$</span>, 并且在其它<span class="markdown-them-math-inline">$x_j(i \neq j)$</span>处值为0.</p>
+        <p>适用范围：给出n个点<span class="markdown-them-math-inline">$(x_i,y_i)$</span>，过这n个点能够确定一个最高n-1次的多项式<span class="markdown-them-math-inline">$f(x)$</span>，求<span class="markdown-them-math-inline">$f(k)$</span></p>
+<p>做法：如图所示，我们将每一个点<span class="markdown-them-math-inline">$(x_i,y_i)$</span>在x轴上的投影<span class="markdown-them-math-inline">$(x_i,0)$</span>记为<span class="markdown-them-math-inline">$H_i$</span>。对每一个i，我们选择一个点集<span class="markdown-them-math-inline">$\lbrace P_i\rbrace \cup \lbrace H_j \vert 1 \le i\le n, j \neq i\rbrace$</span>，求过这n个点的最高n-1次的多项式<span class="markdown-them-math-inline">$g_i(x)$</span>。这样我们就得到了n个<span class="markdown-them-math-inline">$g_i(x)$</span>，它们都在各自对应的<span class="markdown-them-math-inline">$x_i$</span>处的值为<span class="markdown-them-math-inline">$y_i$</span>，并且在其它<span class="markdown-them-math-inline">$x_j(i \neq j)$</span>处值为0。</p>
 <p><img src="/images/1588753-20200731151357181-1678052634.png" alt=""></p>
-<p>很容易就能够构造出<span class="markdown-them-math-inline">$g_i(x)$</span>的表达式:</p>
+<p>很容易就能够构造出<span class="markdown-them-math-inline">$g_i(x)$</span>的表达式：</p>
 <p><div class="markdown-them-math-block">$$g_i(x)=y_i*\prod_{j\neq i}\frac{x-x_j}{x_i-x_j}$$</div></p>
-<p>显然最后有:</p>
+<p>显然最后有：</p>
 <p><div class="markdown-them-math-block">$$f(x)=\sum_{i=1}^{n}g_i(x)=\sum _{i=1}^{n}y_i*\prod_{j\neq i}\frac{x-x_j}{x_i-x_j}$$</div></p>
-<p>由于只用求<span class="markdown-them-math-inline">$f(k)$</span>的值, 代入得<span class="markdown-them-math-inline">$f(k)=\sum _{i=1}^{n}y_i*\prod_{j\neq i}\frac{k-x_j}{x_i-x_j}$</span></p>
-<p>例题:</p>
+<p>由于只用求<span class="markdown-them-math-inline">$f(k)$</span>的值，代入得<span class="markdown-them-math-inline">$f(k)=\sum _{i=1}^{n}y_i*\prod_{j\neq i}\frac{k-x_j}{x_i-x_j}$</span></p>
+<p>例题：</p>
 <p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4781">luogu 4781 [模板]拉格朗日插值</a></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -6167,21 +6288,21 @@ ll k, x[N], y[N];
 &#125;
 </code></pre></div>
 <p><a target="_blank" rel="noopener" href="https://codeforces.com/problemset/problem/622/F">Codeforces - 622F The Sum of the k-th Powers</a></p>
-<p>题意: 求<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k,1\leq n\leq 10^9,0\leq k \leq 10^6$</span></p>
-<p>思路: 首先有一个结论, <span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k$</span>为k+1阶多项式, 所以我们只需要暴力算出<span class="markdown-them-math-inline">$f(n)=\sum_{i=1}^{n}i^k$</span>的前k+2项, 然后用拉格朗日插值法求第n项即可</p>
+<p>题意：求<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k,1\leq n\leq 10^9,0\leq k \leq 10^6$</span></p>
+<p>思路：首先有一个结论，<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k$</span>为k+1阶多项式，所以我们只需要暴力算出<span class="markdown-them-math-inline">$f(n)=\sum_{i=1}^{n}i^k$</span>的前k+2项，然后用拉格朗日插值法求第n项即可</p>
 <p>下面简单证明一下<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k$</span>为k+1阶多项式</p>
-<p>对于一个数列<span class="markdown-them-math-inline">${a_n}$</span>来说, 把数列<span class="markdown-them-math-inline">${a_n}$</span>的元素两两做差得到数列<span class="markdown-them-math-inline">${b_n}$</span>, 我们称数列<span class="markdown-them-math-inline">${b_n}$</span>为数列<span class="markdown-them-math-inline">${a_n}$</span>的一阶阶差数列, 如果再将数列<span class="markdown-them-math-inline">${b_n}$</span>的元素两两做差得到数列<span class="markdown-them-math-inline">${c_n}$</span>, 我们称数列<span class="markdown-them-math-inline">${c_n}$</span>为数列<span class="markdown-them-math-inline">${a_n}$</span>的一阶阶差数列, 依次类推定义p阶阶差数列</p>
+<p>对于一个数列<span class="markdown-them-math-inline">${a_n}$</span>来说，把数列<span class="markdown-them-math-inline">${a_n}$</span>的元素两两做差得到数列<span class="markdown-them-math-inline">${b_n}$</span>，我们称数列<span class="markdown-them-math-inline">${b_n}$</span>为数列<span class="markdown-them-math-inline">${a_n}$</span>的一阶阶差数列，如果再将数列<span class="markdown-them-math-inline">${b_n}$</span>的元素两两做差得到数列<span class="markdown-them-math-inline">${c_n}$</span>，我们称数列<span class="markdown-them-math-inline">${c_n}$</span>为数列<span class="markdown-them-math-inline">${a_n}$</span>的一阶阶差数列，依次类推定义p阶阶差数列</p>
 <hr>
-<p>定理: 数列<span class="markdown-them-math-inline">${a_n}$</span>是一个p阶等差数列的充要条件是数列的通项<span class="markdown-them-math-inline">$a_n$</span>为n的一个p次多项式</p>
-<p>证明: 设<span class="markdown-them-math-inline">$f(x)=\sum_{i=0}^{n}u_i x^i$</span>, 令<span class="markdown-them-math-inline">${b_n}$</span>为<span class="markdown-them-math-inline">${a_n}$</span>的一阶阶差数列</p>
+<p>定理：数列<span class="markdown-them-math-inline">${a_n}$</span>是一个p阶等差数列的充要条件是数列的通项<span class="markdown-them-math-inline">$a_n$</span>为n的一个p次多项式</p>
+<p>证明：设<span class="markdown-them-math-inline">$f(x)=\sum_{i=0}^{n}u_i x^i$</span>，令<span class="markdown-them-math-inline">${b_n}$</span>为<span class="markdown-them-math-inline">${a_n}$</span>的一阶阶差数列</p>
 <p>那么<span class="markdown-them-math-inline">$\Delta f(x)=f(x+1)-f(x)=\sum_{i=0}^{n}u_i (x+1)^i-\sum_{i=0}^{n}u_i x^i$</span></p>
 <p>我们只考虑<span class="markdown-them-math-inline">$x^n$</span>有<span class="markdown-them-math-inline">$\Delta f(x)=u_n(x+1)^n-u_n x^n$</span></p>
-<p>将<span class="markdown-them-math-inline">$u_n(x+1)^n$</span>二项式展开, 仅考虑<span class="markdown-them-math-inline">$x^n$</span>有<span class="markdown-them-math-inline">$\Delta f(x)=u_n x^n-u_n x^n=0$</span></p>
-<p>所以每次差分后多项式的最高次数会减1, p次差分后, 变为常数项, 此时多项式的最高次数为0, 定理成立</p>
-<p>显然, 如果一个多项式k次差分之后变为0, 那么这个多项式的最高次数为k-1</p>
+<p>将<span class="markdown-them-math-inline">$u_n(x+1)^n$</span>二项式展开，仅考虑<span class="markdown-them-math-inline">$x^n$</span>有<span class="markdown-them-math-inline">$\Delta f(x)=u_n x^n-u_n x^n=0$</span></p>
+<p>所以每次差分后多项式的最高次数会减1，p次差分后，变为常数项，此时多项式的最高次数为0，定理成立</p>
+<p>显然，如果一个多项式k次差分之后变为0，那么这个多项式的最高次数为k-1</p>
 <hr>
 <p>我们将<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k$</span>差分后得<span class="markdown-them-math-inline">$1^k,2^k,3^k\dots n^k$</span></p>
-<p>显然<span class="markdown-them-math-inline">$1^k,2^k,3^k\dots n^k$</span>为k阶多项式, 所以<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k$</span>为k+1阶多项式</p>
+<p>显然<span class="markdown-them-math-inline">$1^k,2^k,3^k\dots n^k$</span>为k阶多项式，所以<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k$</span>为k+1阶多项式</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -6238,9 +6359,9 @@ ll a[N], f[N], nf[N], now;
 &#125;
 </code></pre></div>
 <p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4593">luogu 4593 [TJOI2018]教科书般的亵渎</a></p>
-<p>题意: 求<span class="markdown-them-math-inline">$\sum_{i=0}^m f(n-a_i)-\sum_{i=0}^{m-1} \sum_{j=i+1}^{m}(a_j-a_i)^m+1$</span>, 其中<span class="markdown-them-math-inline">$f(n)=\sum_{i=1}^{n} i^{m+1}$</span></p>
-<p>思路: 后半部分<span class="markdown-them-math-inline">$\sum_{i=0}^{m-1} \sum_{j=i+1}^{m}(a_j-a_i)^m+1$</span>可以直接暴力求解</p>
-<p><span class="markdown-them-math-inline">$f(n)=\sum_{i=1}^{n} i^{m+1}$</span>为m+2阶多项式, 考虑到m不是很大, 所以我们可以插入m+3个值后, 暴力对每一个<span class="markdown-them-math-inline">$a_i$</span>求一次f(n-a_i), 最后相加即可</p>
+<p>题意：求<span class="markdown-them-math-inline">$\sum_{i=0}^m f(n-a_i)-\sum_{i=0}^{m-1} \sum_{j=i+1}^{m}(a_j-a_i)^m+1$</span>，其中<span class="markdown-them-math-inline">$f(n)=\sum_{i=1}^{n} i^{m+1}$</span></p>
+<p>思路：后半部分<span class="markdown-them-math-inline">$\sum_{i=0}^{m-1} \sum_{j=i+1}^{m}(a_j-a_i)^m+1$</span>可以直接暴力求解</p>
+<p><span class="markdown-them-math-inline">$f(n)=\sum_{i=1}^{n} i^{m+1}$</span>为m+2阶多项式，考虑到m不是很大，所以我们可以插入m+3个值后，暴力对每一个<span class="markdown-them-math-inline">$a_i$</span>求一次f(n-a_i)，最后相加即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
@@ -6316,10 +6437,10 @@ ll a[N], c[N], f[N], nf[N];
 &#125;
 </code></pre></div>
 <p><a target="_blank" rel="noopener" href="https://darkbzoj.tk/problem/3453">bzoj 3453 tyvj 1858 XLkxc</a></p>
-<p>题意: 求<span class="markdown-them-math-inline">$\sum_{i=0}^n \sum_{j=1}^{a+i*d} \sum_{x=1}^{j}x^k$</span></p>
-<p>思路: <span class="markdown-them-math-inline">$f(n)=\sum_{x=1}^{n}x^k$</span>, 为k+1阶多项式</p>
-<p><span class="markdown-them-math-inline">$g(n)=\sum_{i=1}^{n} \sum_{j=1}^{i} j^k$</span>, g(n)差分后的结果为f(n), 所以g(n)为k+2阶多项式</p>
-<p><span class="markdown-them-math-inline">$res(n)=\sum_{i=0}^{n}g(a+i*d)$</span>, res(n)进行k+5次差分后为0, 所以res(n)为k+4阶多项式</p>
+<p>题意：求<span class="markdown-them-math-inline">$\sum_{i=0}^n \sum_{j=1}^{a+i*d} \sum_{x=1}^{j}x^k$</span></p>
+<p>思路：<span class="markdown-them-math-inline">$f(n)=\sum_{x=1}^{n}x^k$</span>，为k+1阶多项式</p>
+<p><span class="markdown-them-math-inline">$g(n)=\sum_{i=1}^{n} \sum_{j=1}^{i} j^k$</span>，g(n)差分后的结果为f(n)，所以g(n)为k+2阶多项式</p>
+<p><span class="markdown-them-math-inline">$res(n)=\sum_{i=0}^{n}g(a+i*d)$</span>，res(n)进行k+5次差分后为0，所以res(n)为k+4阶多项式</p>
 <p>然后插值求解即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -6387,334 +6508,7 @@ ll f[N], g[N];
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;
 </code></pre></div>
-<p>参考: <a target="_blank" rel="noopener" href="https://oi-wiki.org/math/poly/lagrange/">https://oi-wiki.org/math/poly/lagrange/</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-二次剩余学习笔记" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="2020/07/29/%E4%BA%8C%E6%AC%A1%E5%89%A9%E4%BD%99%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
-  <time class="dt-published" datetime="2020-07-29T07:53:00.000Z" itemprop="datePublished">2020-07-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="categories/%E6%95%B0%E5%AD%A6/">数学</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="2020/07/29/%E4%BA%8C%E6%AC%A1%E5%89%A9%E4%BD%99%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">二次剩余学习笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>定义: 对一个数n, 如果不是p的倍数且模p同余于某个数的平方, 则称n为模p的二次剩余, 即对一个数n, 求解方程<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span></p>
-<p>二次剩余的作用: 对于一个数n, 如果要求<span class="markdown-them-math-inline">$\sqrt{n} mod\ p$</span>, 可以看为n是否是模p的二次剩余, 如果方程<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>有解, 就会有<span class="markdown-them-math-inline">$x\equiv \sqrt{n} (mod\ p)$</span>, 就可以用x代替<span class="markdown-them-math-inline">$\sqrt{n}$</span></p>
-<p>下面仅考虑p为奇素数的情况</p>
-<p>定理1: 对于<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>, 能满足 “n是模p的二次剩余” 的n一共有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个(不包括0), 非二次剩余有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个</p>
-<p>证明: 设<span class="markdown-them-math-inline">$u^2=a*p+n$</span>, 即<span class="markdown-them-math-inline">$u^2\equiv n(mod\ p)$</span></p>
-<p><span class="markdown-them-math-inline">$\because \forall t\in \mathbb{Z}, (u+t*p)^2=u^2+2*u*t*p+(t*p)^2=(a+t^2 * p + 2*u*t)*p+n$</span></p>
-<p><span class="markdown-them-math-inline">$\therefore u^2\equiv (u+t*p)^2 (mod\ p)$</span></p>
-<p>所以我们只用考虑当<span class="markdown-them-math-inline">$x\in [0,p-1]$</span>, 满足 “n是模p的二次剩余” 的n一共有多少个</p>
-<p>假设存在两个不同的数u,v带入方程, 使得<span class="markdown-them-math-inline">$u^2\equiv n(mod\ p)$</span>, <span class="markdown-them-math-inline">$v^2\equiv n(mod\ p)$</span></p>
-<p>那么就有<span class="markdown-them-math-inline">$u^2\equiv v^2(mod\ p)$</span>, 显然<span class="markdown-them-math-inline">$(u^2 - v^2)\mid p$</span>, 即<span class="markdown-them-math-inline">$(u-v)*(u+v)\mid p$</span></p>
-<p>因为<span class="markdown-them-math-inline">$u,v\in [0,p-1]$</span>, 所以<span class="markdown-them-math-inline">$(u-v)\nmid p$</span>, 只可能u+v=p, 那么这样的u, v有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>对, 即满足 “n是模p的二次剩余” 的n有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个</p>
-<hr>
-<p>我们引入勒让德符号<span class="markdown-them-math-inline">$(\frac{n}{p})$</span></p>
-<p>当<span class="markdown-them-math-inline">$p\nmid n$</span>且n是p的二次剩余时, <span class="markdown-them-math-inline">$(\frac{n}{p})=1$</span></p>
-<p>当<span class="markdown-them-math-inline">$p\nmid n$</span>且n不是p的二次剩余时, <span class="markdown-them-math-inline">$(\frac{n}{p})=-1$</span></p>
-<p>当<span class="markdown-them-math-inline">$p\mid n$</span>时, <span class="markdown-them-math-inline">$(\frac{n}{p})=0$</span></p>
-<p>欧拉判别准则: <span class="markdown-them-math-inline">$(\frac{n}{p})\equiv n^{\frac{p-1}{2}}(mod\ p)$</span>, n是p的二次剩余, 当且仅当<span class="markdown-them-math-inline">$n^{\frac{p-1}{2}}\equiv 1(mod\ p)$</span>, n不是p的二次剩余, 当且仅当<span class="markdown-them-math-inline">$n^{\frac{p-1}{2}}\equiv -1(mod p)$</span></p>
-<p>证明: 由费马小定理得<span class="markdown-them-math-inline">$x^{p-1}\equiv 1(mod\ p)$</span>一定存在解</p>
-<p>由于<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span></p>
-<p>所以<span class="markdown-them-math-inline">$x^{p-1}\equiv (x^2)^{\frac{p-1}{2}}\equiv n^{\frac{p-1}{2}}(mod\ p)$</span></p>
-<p>所以n为p的二次剩余的条件为<span class="markdown-them-math-inline">$n^{\frac{p-1}{2}}\equiv 1(mod\ p)$</span></p>
-<hr>
-<p>二次剩余解(x)的个数: 假设存在多组解<span class="markdown-them-math-inline">$x_0,x_1$</span>使得<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>成立, 于是有<span class="markdown-them-math-inline">$x_{0}^2\equiv x_{1}^2$</span>, 移项后得<span class="markdown-them-math-inline">$(x_0-x_1)*(x_0+x_1)\equiv 0(mod\ p)$</span></p>
-<p>因为<span class="markdown-them-math-inline">$x_0,x_1\in [0,p-1]$</span></p>
-<p>当<span class="markdown-them-math-inline">$x_0=x_1$</span>时, <span class="markdown-them-math-inline">$(x_0-x_1)*(x_0+x_1)\equiv 0(mod\ p)$</span>成立</p>
-<p>当<span class="markdown-them-math-inline">$x_0\neq x_1$</span>时, <span class="markdown-them-math-inline">$(x_0+x_1)\equiv 0(mod\ p)$</span>成立, 此时只存在两个不相等的解</p>
-<p>Cipolla定理: 设a满足<span class="markdown-them-math-inline">$\omega =a^2-n$</span>且<span class="markdown-them-math-inline">$\omega $</span>是模p得非二次剩余, 即<span class="markdown-them-math-inline">$x^2\equiv \omega (mod\ p)$</span>无解, 那么<span class="markdown-them-math-inline">$x\equiv (a+\sqrt{\omega })^{\frac{p+1}{2}}$</span>是<span class="markdown-them-math-inline">$x^2\equiv n(mod\ p)$</span>的解</p>
-<p>所以我们可以随机一个a, 然后来找到一个满足条件的解</p>
-<p>建立一个类似于 “复数域” 的域, 定义 “虚数单位” 为<span class="markdown-them-math-inline">$\omega$</span>, 然后进行求解, 由于满足 “n是模p的二次剩余” 的n一共有<span class="markdown-them-math-inline">$\frac{p-1}{2}$</span>个, 所以随机次数的期望为2</p>
-<hr>
-<p>例题:</p>
-<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P5491">luogu 5491 [模板]二次剩余</a></p>
-<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
-
-<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
-
-<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
-
-<span class="hljs-keyword">int</span> T;
-ll n, mod, I;
-
-<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">complex</span> &#123;</span>
-    ll r, i;
-    <span class="hljs-built_in">complex</span> (ll tr = <span class="hljs-number">0</span>, ll ti = <span class="hljs-number">0</span>) : <span class="hljs-built_in">r</span>(tr), <span class="hljs-built_in">i</span>(ti) &#123; &#125;
-&#125;;
-
-<span class="hljs-keyword">inline</span> <span class="hljs-keyword">bool</span> <span class="hljs-keyword">operator</span> == (complex x, complex y) &#123;
-    <span class="hljs-keyword">return</span> x.r == y.r &amp;&amp; x.i == y.i;
-&#125;
-
-<span class="hljs-keyword">inline</span> complex <span class="hljs-keyword">operator</span> * (complex x, complex y) &#123;
-    ll a = (x.r * y.r + I * x.i % mod * y.i) % mod;
-    ll b = (x.i * y.r + x.r * y.i) % mod;
-    <span class="hljs-keyword">return</span> <span class="hljs-built_in">complex</span>(a, b);
-&#125;
-
-<span class="hljs-function">complex <span class="hljs-title">power</span><span class="hljs-params">(complex a, ll n)</span>
-</span>&#123;
-    complex res = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">while</span> (n) &#123;
-        <span class="hljs-keyword">if</span> (n &amp; <span class="hljs-number">1</span>) res = res * a;
-        a = a * a;
-        n &gt;&gt;= <span class="hljs-number">1</span>;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">check</span><span class="hljs-params">(ll x)</span>
-</span>&#123;
-    <span class="hljs-keyword">return</span> <span class="hljs-built_in">power</span>(x, (mod - <span class="hljs-number">1</span>) &gt;&gt; <span class="hljs-number">1</span>) == <span class="hljs-number">1</span>;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">solve</span><span class="hljs-params">(ll n, ll &amp;x, ll &amp;xx)</span>
-</span>&#123;
-    ll a = <span class="hljs-built_in">rand</span>() % mod;
-    <span class="hljs-keyword">while</span> (!a || <span class="hljs-built_in">check</span>((a * a + mod - n) % mod)) a = <span class="hljs-built_in">rand</span>() % mod;
-    I = (a * a - n + mod) % mod;
-    x = <span class="hljs-built_in">power</span>(<span class="hljs-built_in">complex</span>(a, <span class="hljs-number">1</span>), (mod + <span class="hljs-number">1</span>) &gt;&gt; <span class="hljs-number">1</span>).r;
-    xx = mod - x;
-&#125;
-
-<span class="hljs-function">ll <span class="hljs-title">pint</span><span class="hljs-params">(ll a, ll n)</span>
-</span>&#123;
-    ll res = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">while</span> (n) &#123;
-        <span class="hljs-keyword">if</span> (n &amp; <span class="hljs-number">1</span>) res = res * a % mod;
-        a = a * a % mod;
-        n &gt;&gt;= <span class="hljs-number">1</span>;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
-    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
-    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
-    <span class="hljs-keyword">while</span> (T--) &#123;
-        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%lld&quot;</span>, &amp;n, &amp;mod);
-        <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == n) &#123;
-            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;0\n&quot;</span>);
-            <span class="hljs-keyword">continue</span>;
-        &#125;
-        <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> != <span class="hljs-built_in">pint</span>(n, (mod - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>)) &#123;
-            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Hola!\n&quot;</span>);
-            <span class="hljs-keyword">continue</span>;
-        &#125;
-        ll x = <span class="hljs-number">0</span>, xx = <span class="hljs-number">0</span>;
-        <span class="hljs-built_in">solve</span>(n, x, xx);
-        <span class="hljs-keyword">if</span> (x == xx) &#123;
-            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, x);
-            <span class="hljs-keyword">continue</span>;
-        &#125;
-        <span class="hljs-keyword">if</span> (x &gt; xx) <span class="hljs-built_in">swap</span>(x, xx);
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld %lld\n&quot;</span>, x, xx);
-    &#125;
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;
-</code></pre></div>
-<p><a target="_blank" rel="noopener" href="https://zoj.pintia.cn/problem-sets/91827364500/problems/91827369735">zoj 3774 Power of Fibonacci</a></p>
-<p>题意: 求<span class="markdown-them-math-inline">$\sum_{i=1}^{n}F_{i}^k$</span>, <span class="markdown-them-math-inline">$F_{i}$</span>为斐波那契数列的第i项, 模1000000009</p>
-<p>思路: 斐波那契数列的通项公式为<span class="markdown-them-math-inline">$F_n=\frac{1}{\sqrt{5}}[(\frac{1+\sqrt{5}}{2})^n-(\frac{1-\sqrt{5}}{2})^n]$</span></p>
-<p>令<span class="markdown-them-math-inline">$a=\frac{1+\sqrt{5}}{2}$</span>, <span class="markdown-them-math-inline">$b=\frac{1-\sqrt{5}}{2}$</span>, 则<span class="markdown-them-math-inline">$F_n=\frac{1}{\sqrt{5}}(a^n-b^n)$</span></p>
-<p><span class="markdown-them-math-inline">$F_n^k=(\frac{1}{\sqrt{5}})^k (a^n-b^n)^k$</span></p>
-<p><span class="markdown-them-math-inline">$(a^n-b^n)^k$</span>二项式展开得<span class="markdown-them-math-inline">$(a^n-b^n)^k=C_k^0(a^n)^k+C_k^1(a^n)^{k-1}(-b^n)^1+\dots +C_k^k(-b^n)^k=\sum_{r=0}^{k}(-1)^rC_k^r(a^{k-r}*b^r)^n$</span></p>
-<p>将前n项相加得<span class="markdown-them-math-inline">$res=(\frac{1}{\sqrt{5}})^k \sum_{r=0}^k\sum_{i=1}^{n}(-1)^rC_k^r(a^{k-r}*b^r)^i=(\frac{1}{\sqrt{5}})^k \sum_{r=0}^k(-1)^rC_k^r\sum_{i=1}^{n}(a^{k-r}*b^r)^i$</span></p>
-<p>令<span class="markdown-them-math-inline">$t=a^{k-r}*b^r$</span>, <span class="markdown-them-math-inline">$\sum_{i=1}^{n}(a^{k-r}*b^r)^i=\sum_{i=1}^{n}t^i$</span>, 为等比数列, 求和后为<span class="markdown-them-math-inline">$\frac{t*(t^n-1)}{t}$</span>, 预处理出<span class="markdown-them-math-inline">$a^i$</span>和<span class="markdown-them-math-inline">$b^i$</span>即可O(1)求出t</p>
-<p>所以<span class="markdown-them-math-inline">$res=(\frac{1}{\sqrt{5}})^k\sum_{i=0}^{k}(-1)^rC_k^r\frac{t*(t^n-1)}{t-1}$</span></p>
-<p>根据二次剩余, <span class="markdown-them-math-inline">$\sqrt{5}\equiv 383008016 mod\ 1000000009$</span>, <span class="markdown-them-math-inline">$\frac{1+\sqrt{5}}{2}\equiv 691504013 mod\ 1000000009$</span>, <span class="markdown-them-math-inline">$\frac{1-\sqrt{5}}{2}\equiv 308495997 mod\ 1000000009$</span></p>
-<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
-
-<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
-
-<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
-
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">100010</span>;
-<span class="hljs-keyword">const</span> ll mod = <span class="hljs-number">1000000009</span>;
-
-<span class="hljs-keyword">int</span> T, k;
-ll n, A[N], B[N], fac[N], inv[N];
-
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span>
-</span>&#123;
-    A[<span class="hljs-number">0</span>] = B[<span class="hljs-number">0</span>] = fac[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; N; i++) &#123;
-        A[i] = A[i - <span class="hljs-number">1</span>] * <span class="hljs-number">691504013</span> % mod;
-        B[i] = B[i - <span class="hljs-number">1</span>] * <span class="hljs-number">308495997</span> % mod;
-    &#125;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; N; i++) fac[i] = fac[i - <span class="hljs-number">1</span>] * i % mod;
-    inv[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt; N; i++) inv[i] = (mod - mod / i) * inv[mod % i] % mod;
-    inv[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; N; i++) inv[i] = inv[i] * inv[i - <span class="hljs-number">1</span>] % mod;
-&#125;
-
-<span class="hljs-function">ll <span class="hljs-title">C</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n, <span class="hljs-keyword">int</span> m)</span>
-</span>&#123;
-    <span class="hljs-keyword">return</span> fac[n] * inv[m] % mod * inv[n - m] % mod;
-&#125;
-
-<span class="hljs-function">ll <span class="hljs-title">power</span><span class="hljs-params">(ll a, ll n)</span>
-</span>&#123;
-    ll res = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">while</span> (n) &#123;
-        <span class="hljs-keyword">if</span> (n &amp; <span class="hljs-number">1</span>) res = res * a % mod;
-        a = a * a % mod;
-        n &gt;&gt;= <span class="hljs-number">1</span>;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
-    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
-    <span class="hljs-built_in">init</span>();
-    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
-    <span class="hljs-keyword">while</span> (T--) &#123;
-        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld%d&quot;</span>, &amp;n, &amp;k);
-        ll res = <span class="hljs-number">0</span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> r = <span class="hljs-number">0</span>; r &lt;= k; r++) &#123;
-            ll t = A[k - r] * B[r] % mod, tr = n % mod;
-            <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> != t) &#123;
-                tr = t * (<span class="hljs-built_in">power</span>(t, n) - <span class="hljs-number">1</span>) % mod;
-                tr = tr * <span class="hljs-built_in">power</span>(t - <span class="hljs-number">1</span>, mod - <span class="hljs-number">2</span>) % mod;
-            &#125;
-            tr = tr * <span class="hljs-built_in">C</span>(k, r) % mod;
-            <span class="hljs-keyword">if</span> (r &amp; <span class="hljs-number">1</span>) res -= tr;
-            <span class="hljs-keyword">else</span> res += tr;
-            res = (res % mod + mod) % mod;
-        &#125;
-        ll invt = <span class="hljs-built_in">power</span>(<span class="hljs-number">383008016</span>, mod - <span class="hljs-number">2</span>);
-        res = res * <span class="hljs-built_in">power</span>(invt, k) % mod;
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
-    &#125;
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;
-</code></pre></div>
-<p><a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=6755">2020 Multi-University Training Contest 1 - 1005. Fibonacci Sum</a></p>
-<p>题意: 求<span class="markdown-them-math-inline">$(F_{0})^k+(F_{c})^k+(F_{2*c})^k+\dots +(F_{n*c})^k$</span>, 模1000000009</p>
-<p>思路: 和上一题差不多, 时间卡的很紧, 需要用到欧拉降幂</p>
-<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
-
-<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
-
-<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
-
-<span class="hljs-keyword">const</span> ll mod = <span class="hljs-number">1000000009</span>;
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">100010</span>;
-
-ll fac[N], inv[N], pa[N], pb[N], n, c, k;
-<span class="hljs-keyword">int</span> T;
-
-<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span>
-</span>&#123;
-    fac[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; N; i++) fac[i] = fac[i - <span class="hljs-number">1</span>] * i % mod;
-    inv[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt; N; i++) inv[i] = (mod - mod / i) * inv[mod % i] % mod;
-    inv[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; N; i++) inv[i] = inv[i] * inv[i - <span class="hljs-number">1</span>] % mod;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">C</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n, <span class="hljs-keyword">int</span> m)</span>
-</span>&#123;
-    <span class="hljs-keyword">return</span> fac[n] * inv[m] % mod * inv[n - m] % mod;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">power</span><span class="hljs-params">(ll a, ll n)</span>
-</span>&#123;
-    ll res = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">while</span> (n) &#123;
-        <span class="hljs-keyword">if</span> (n &amp; <span class="hljs-number">1</span>) res = res * a % mod;
-        a = a * a % mod;
-        n &gt;&gt;= <span class="hljs-number">1</span>;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
-    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
-    <span class="hljs-built_in">init</span>();
-    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
-    <span class="hljs-keyword">while</span> (T--) &#123;
-        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld%lld%lld&quot;</span>, &amp;n, &amp;c, &amp;k);
-        ll res = <span class="hljs-number">0</span>;
-        pa[<span class="hljs-number">0</span>] = pb[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;
-        pa[<span class="hljs-number">1</span>] = <span class="hljs-built_in">power</span>(<span class="hljs-number">691504013</span>, c % (mod - <span class="hljs-number">1</span>));
-        pb[<span class="hljs-number">1</span>] = <span class="hljs-built_in">power</span>(<span class="hljs-number">308495997</span>, c % (mod - <span class="hljs-number">1</span>));
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= k; i++) &#123;
-            pa[i] = pa[i - <span class="hljs-number">1</span>] * pa[<span class="hljs-number">1</span>] % mod;
-            pb[i] = pb[i - <span class="hljs-number">1</span>] * pb[<span class="hljs-number">1</span>] % mod;
-        &#125;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> r = <span class="hljs-number">0</span>; r &lt;= k; r++) &#123;
-            ll t = pa[k - r] * pb[r] % mod;
-            ll tn = <span class="hljs-built_in">power</span>(t, n % (mod - <span class="hljs-number">1</span>));
-            ll tr = t * (tn - <span class="hljs-number">1</span>) % mod * <span class="hljs-built_in">power</span>(t - <span class="hljs-number">1</span>, mod - <span class="hljs-number">2</span>) % mod;
-            <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> == t) tr = n % mod;
-            <span class="hljs-keyword">if</span> (r &amp; <span class="hljs-number">1</span>) &#123;
-                res += mod - <span class="hljs-built_in">C</span>(k, r) * tr % mod;
-                res %= mod;
-            &#125;
-            <span class="hljs-keyword">else</span> &#123;
-                res += <span class="hljs-built_in">C</span>(k, r) * tr % mod;
-                res %= mod;
-            &#125;
-        &#125;
-        ll invt = <span class="hljs-built_in">power</span>(<span class="hljs-number">383008016</span>, mod - <span class="hljs-number">2</span>);
-        res = res * <span class="hljs-built_in">power</span>(invt, k) % mod;
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
-    &#125;
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;
-</code></pre></div>
+<p>参考：<a target="_blank" rel="noopener" href="https://oi-wiki.org/math/poly/lagrange/">https://oi-wiki.org/math/poly/lagrange/</a></p>
 
       
     </div>
@@ -6734,7 +6528,7 @@ ll fac[N], inv[N], pa[N], pb[N], n, c, k;
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="page-number" href="page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="page/5/">5</a><a class="extend next" rel="next" href="page/2/">下一页 &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="page-number" href="page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="page/6/">6</a><a class="extend next" rel="next" href="page/2/">下一页 &raquo;</a>
   </nav>
 
 </section>
@@ -6746,6 +6540,10 @@ ll fac[N], inv[N], pa[N], pb[N], n, c, k;
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
         
           <li>
             <a href="2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
@@ -6763,10 +6561,6 @@ ll fac[N], inv[N], pa[N], pb[N], n, c, k;
             <a href="2020/10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
           </li>
         
-          <li>
-            <a href="2020/09/02/Codeforces%20Round636%20(Div.%203)/">Codeforces Round636 (Div. 3)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -6776,7 +6570,7 @@ ll fac[N], inv[N], pa[N], pb[N], n, c, k;
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 
