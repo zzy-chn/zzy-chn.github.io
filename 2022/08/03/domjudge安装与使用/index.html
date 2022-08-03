@@ -353,8 +353,8 @@ make judgehost &amp;&amp; sudo make install-judgehost
 </table>
 <p>Group ID 对应 Categories 中的 ID，表示队伍的角色，如女队，打星队伍</p>
 <ul>
-<li>
-<p>accounts.tsv</p>
+<li>accounts.tsv</li>
+</ul>
 <p>该文件用于描述账号信息，同样包含版本行和账号行，每个账号占用一行。</p>
 <p>首行版本行的格式如下：</p>
 <table>
@@ -382,8 +382,6 @@ make judgehost &amp;&amp; sudo make install-judgehost
 </tbody>
 </table>
 <p>账号描述行格式如下：</p>
-</li>
-</ul>
 <table>
 <thead>
 <tr>
@@ -421,7 +419,7 @@ make judgehost &amp;&amp; sudo make install-judgehost
 </tbody>
 </table>
 <p>Account Type 取值为：team, judge, admin, analyst。这里要导入队伍账号，所以该字段在这固定为 team。</p>
-<p>**注意：**需要设置 <code>Username</code> 的格式才能将账号和队伍关联起来，规则为：<code>Username</code> 的整数部分需要和 <strong>team.tsv</strong> 中的 <code>Team Number</code> 一致。比如一支队伍 <code>Team Number</code> 为 99，则 <code>Username</code> 可以设置为 team-099。</p>
+<p>注意：需要设置 <code>Username</code> 的格式才能将账号和队伍关联起来，规则为：<code>Username</code> 的整数部分需要和 <strong>team.tsv</strong> 中的 <code>Team Number</code> 一致。比如一支队伍 <code>Team Number</code> 为 99，则 <code>Username</code> 可以设置为 team-099。</p>
 <p>导入样例：</p>
 <p>team.tsv</p>
 <div class="highlight"><pre class="code"><code>teams    1                        
