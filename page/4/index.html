@@ -42,6 +42,122 @@
       <div id="content" class="outer">
         <section id="main">
   
+    <article id="post-2020牛客寒假算法基础集训营3 - G. 牛牛的Link Power II(线段树)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="../../2020/02/09/2020%E7%89%9B%E5%AE%A2%E5%AF%92%E5%81%87%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80%E9%9B%86%E8%AE%AD%E8%90%A53%20-%20G.%20%E7%89%9B%E7%89%9B%E7%9A%84Link%20Power%20II(%E7%BA%BF%E6%AE%B5%E6%A0%91)/" class="article-date">
+  <time class="dt-published" datetime="2020-02-09T03:43:00.000Z" itemprop="datePublished">2020-02-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="../../2020/02/09/2020%E7%89%9B%E5%AE%A2%E5%AF%92%E5%81%87%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80%E9%9B%86%E8%AE%AD%E8%90%A53%20-%20G.%20%E7%89%9B%E7%89%9B%E7%9A%84Link%20Power%20II(%E7%BA%BF%E6%AE%B5%E6%A0%91)/">2020牛客寒假算法基础集训营3 - G. 牛牛的Link Power II(线段树)</a>
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>题目链接：<a target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/3004/G">牛牛的Link Power II</a></p>
+<p>题意：给你一个只含<span class="markdown-them-math-inline">$0$</span>和<span class="markdown-them-math-inline">$1$</span>的串，定义串的<span class="markdown-them-math-inline">$Link$</span>值为串中两个的<span class="markdown-them-math-inline">$1$</span>之间的距离的和，<span class="markdown-them-math-inline">$(u,v)$</span>和<span class="markdown-them-math-inline">$(v,u)$</span>被看认为是同一对，有<span class="markdown-them-math-inline">$m$</span>次操作，每次操作可以把串中某个<span class="markdown-them-math-inline">$1$</span>变为<span class="markdown-them-math-inline">$0$</span>，或者把某个<span class="markdown-them-math-inline">$0$</span>变为<span class="markdown-them-math-inline">$1$</span>，求一开始和每次操作后串的<span class="markdown-them-math-inline">$Link$</span>值。</p>
+<p>思路：线段树，维护区间内<span class="markdown-them-math-inline">$1$</span>的数量<span class="markdown-them-math-inline">$cnt、$</span>区间的<span class="markdown-them-math-inline">$Link$</span>值<span class="markdown-them-math-inline">$w、$</span>区间内所有的<span class="markdown-them-math-inline">$1$</span>到区间左边界的距离之和<span class="markdown-them-math-inline">$dl、$</span>区间内所有的<span class="markdown-them-math-inline">$1$</span>到区间右边界的距离之和<span class="markdown-them-math-inline">$dr$</span>，查询时只要输出<span class="markdown-them-math-inline">$tree[1].w$</span>即可，修改时只用改变区间内<span class="markdown-them-math-inline">$1$</span>的<span class="markdown-them-math-inline">$cnt$</span>，然后进行区间合并，区间合并的公式画个图推导一下即可。</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">100010</span>;
+<span class="hljs-keyword">const</span> ll mod = <span class="hljs-number">1000000007</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
+    <span class="hljs-keyword">int</span> l, r;
+    ll dl, dr, w, cnt;
+&#125;;
+
+node tree[<span class="hljs-number">4</span> * N];
+<span class="hljs-keyword">char</span> s[N];
+<span class="hljs-keyword">int</span> n, q;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k)</span>
+</span>&#123;
+    tree[k].cnt = tree[<span class="hljs-number">2</span> * k].cnt + tree[<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>].cnt;
+    ll t = tree[<span class="hljs-number">2</span> * k].cnt * tree[<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>].dl + tree[<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>].cnt * tree[<span class="hljs-number">2</span> * k].dr;
+    tree[k].w = tree[<span class="hljs-number">2</span> * k].w + tree[<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>].w + t + tree[<span class="hljs-number">2</span> * k].cnt * tree[<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>].cnt;
+    tree[k].dl = tree[<span class="hljs-number">2</span> * k].dl + tree[<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>].dl + tree[<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>].cnt * (tree[<span class="hljs-number">2</span> * k].r - tree[<span class="hljs-number">2</span> * k].l + <span class="hljs-number">1</span>);
+    tree[k].dr = tree[<span class="hljs-number">2</span> * k].dr + tree[<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>].dr + tree[<span class="hljs-number">2</span> * k].cnt * (tree[<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>].r - tree[<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>].l + <span class="hljs-number">1</span>);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">build</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k, <span class="hljs-keyword">int</span> lef, <span class="hljs-keyword">int</span> rig)</span>
+</span>&#123;
+    tree[k].l = lef, tree[k].r = rig;
+    <span class="hljs-keyword">if</span> (tree[k].l == tree[k].r) &#123;
+        tree[k].w = tree[k].dl = tree[k].dr = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;1&#x27;</span> == s[tree[k].l]) tree[k].cnt = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">else</span> tree[k].cnt = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-keyword">int</span> mid = (lef + rig) / <span class="hljs-number">2</span>;
+    <span class="hljs-built_in">build</span>(k * <span class="hljs-number">2</span>, lef, mid);
+    <span class="hljs-built_in">build</span>(k * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, rig);
+    <span class="hljs-built_in">update</span>(k);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">change_point</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k, <span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y)</span>
+</span>&#123;
+    <span class="hljs-keyword">if</span> (tree[k].l == tree[k].r) &#123;
+        tree[k].cnt = y;
+        <span class="hljs-keyword">return</span>;
+    &#125;
+    <span class="hljs-keyword">int</span> mid = (tree[k].l + tree[k].r) / <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">if</span> (x &lt;= mid) <span class="hljs-built_in">change_point</span>(<span class="hljs-number">2</span> * k, x, y);
+    <span class="hljs-keyword">else</span> <span class="hljs-built_in">change_point</span>(<span class="hljs-number">2</span> * k + <span class="hljs-number">1</span>, x, y);
+    <span class="hljs-built_in">update</span>(k);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%s&quot;</span>, &amp;n, s + <span class="hljs-number">1</span>);
+    <span class="hljs-built_in">build</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, n);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, tree[<span class="hljs-number">1</span>].w % mod);
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;q);
+    <span class="hljs-keyword">while</span> (q--) &#123;
+        <span class="hljs-keyword">int</span> kd, pos;
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;kd, &amp;pos);
+        <span class="hljs-built_in">change_point</span>(<span class="hljs-number">1</span>, pos, <span class="hljs-number">1</span> == kd ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>);
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, tree[<span class="hljs-number">1</span>].w % mod);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+</code></pre></div>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Educational Codeforces Round 81 (Rated for Div. 2) - D. Same GCDs(数学)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="../../2020/02/03/Educational%20Codeforces%20Round%2081%20(Rated%20for%20Div.%202)%20-%20D.%20Same%20GCDs(%E6%95%B0%E5%AD%A6)/" class="article-date">
@@ -1017,147 +1133,6 @@ priority_queue&lt; <span class="hljs-keyword">int</span>, vector&lt;<span class=
 
 
   
-    <article id="post-Codeforces Round606 (Div. 2) - E. Two Fairs(割点+dfs)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="../../2020/01/10/Codeforces%20Round606%20(Div.%202)%20-%20E.%20Two%20Fairs(%E5%89%B2%E7%82%B9+dfs)/" class="article-date">
-  <time class="dt-published" datetime="2020-01-10T08:33:00.000Z" itemprop="datePublished">2020-01-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="../../categories/%E5%9B%BE%E8%AE%BA/">图论</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="../../2020/01/10/Codeforces%20Round606%20(Div.%202)%20-%20E.%20Two%20Fairs(%E5%89%B2%E7%82%B9+dfs)/">Codeforces Round606 (Div. 2) - E. Two Fairs(割点+dfs)</a>
-    </h1>
-  
-
-      </header>
-    
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>题意：给你一张无向连通图，对于求有多少对<span class="markdown-them-math-inline">$(x,y)$</span>满足互相到达必须经过<span class="markdown-them-math-inline">$(a,b)$</span>，其中<span class="markdown-them-math-inline">$x\neq a,x\neq b,y\neq a,y\neq b$</span></p>
-<p>思路：显然<span class="markdown-them-math-inline">$a,b$</span>都必须为割点，所以先用<span class="markdown-them-math-inline">$tarjan$</span>判断<span class="markdown-them-math-inline">$a,b$</span>是否都为割点，如果<span class="markdown-them-math-inline">$a$</span>或<span class="markdown-them-math-inline">$b$</span>有一个不为割点，那么答案就是<span class="markdown-them-math-inline">$0$</span></p>
-<p><img src="/images/1588753-20200110161203006-1063370167.png" alt=""></p>
-<p>当<span class="markdown-them-math-inline">$a,b$</span>都为割点时，答案为连通块<span class="markdown-them-math-inline">$1$</span>内点的个数<span class="markdown-them-math-inline">$*$</span>连通块<span class="markdown-them-math-inline">$2$</span>内点的个数，以求连通块<span class="markdown-them-math-inline">$1$</span>内点的个数为例，从<span class="markdown-them-math-inline">$b$</span>点开始<span class="markdown-them-math-inline">$dfs$</span>，当遇到<span class="markdown-them-math-inline">$a$</span>点时停止，统计出<span class="markdown-them-math-inline">$($</span>连通块<span class="markdown-them-math-inline">$2+$</span>复杂网络<span class="markdown-them-math-inline">$+b+a)$</span>这些点的个数，连通块<span class="markdown-them-math-inline">$1$</span>内点的个数就是用<span class="markdown-them-math-inline">$n$</span>减去<span class="markdown-them-math-inline">$dfs$</span>求出的点的个数，求连通块<span class="markdown-them-math-inline">$2$</span>内点的个数从<span class="markdown-them-math-inline">$a$</span>点开始<span class="markdown-them-math-inline">$dfs$</span>即可。</p>
-<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
-
-<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
-
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">500010</span>;
-
-<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
-
-<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
-    <span class="hljs-keyword">int</span> to, nex;
-&#125;;
-
-node edge[<span class="hljs-number">2</span> * N];
-<span class="hljs-keyword">int</span> t, n, m, a, b, cnt, head[N];
-<span class="hljs-keyword">int</span> dfn[N], timing, pcut[N];
-<span class="hljs-keyword">int</span> cnta, cntb, vis[N];
-
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> mk, <span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b)</span>
-</span>&#123;
-    vis[u] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == mk) cnta++;
-    <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> == mk) cntb++;
-    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == mk &amp;&amp; u == b) <span class="hljs-keyword">return</span>;
-    <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> == mk &amp;&amp; u == a) <span class="hljs-keyword">return</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = head[u]; <span class="hljs-number">0</span> != i; i = edge[i].nex) &#123;
-        <span class="hljs-keyword">int</span> v = edge[i].to;
-        <span class="hljs-keyword">if</span> (!vis[v]) <span class="hljs-built_in">dfs</span>(v, mk, a, b);
-    &#125;
-    <span class="hljs-keyword">return</span>;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add_edge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> v)</span>
-</span>&#123;
-    edge[++cnt].to = v;
-    edge[cnt].nex = head[u];
-    head[u] = cnt;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> fa)</span>
-</span>&#123;
-    <span class="hljs-keyword">int</span> child = <span class="hljs-number">0</span>, lowu;
-    lowu = dfn[u] = ++timing;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = head[u]; <span class="hljs-number">0</span> != i; i = edge[i].nex) &#123;
-        <span class="hljs-keyword">int</span> v = edge[i].to;
-        <span class="hljs-keyword">if</span> (!dfn[v]) &#123;
-            child++;
-            <span class="hljs-keyword">int</span> lowv = <span class="hljs-built_in">tarjan</span>(v, u);
-            <span class="hljs-keyword">if</span> (lowv &gt;= dfn[u] &amp;&amp; u != fa) pcut[u] = <span class="hljs-number">1</span>;
-            lowu = <span class="hljs-built_in">min</span>(lowu, lowv);
-        &#125;
-        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (v != fa) &#123;
-            lowu = <span class="hljs-built_in">min</span>(lowu, dfn[v]);
-        &#125;
-    &#125;
-    <span class="hljs-keyword">if</span> (u == fa &amp;&amp; child &gt; <span class="hljs-number">1</span>) pcut[u] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">return</span> lowu;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span>
-</span>&#123;
-    cnt = timing = cnta = cntb = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
-        pcut[i] = dfn[i] = head[i] = <span class="hljs-number">0</span>;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;t);
-    <span class="hljs-keyword">while</span> (t--) &#123;
-        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d%d%d&quot;</span>, &amp;n, &amp;m, &amp;a, &amp;b);
-        <span class="hljs-built_in">init</span>();
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) &#123;
-            <span class="hljs-keyword">int</span> u, v;
-            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;u, &amp;v);
-            <span class="hljs-built_in">add_edge</span>(u, v), <span class="hljs-built_in">add_edge</span>(v, u);
-        &#125;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
-            <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == dfn[i]) <span class="hljs-built_in">tarjan</span>(i, i);
-        &#125;
-        <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == pcut[a] || <span class="hljs-number">0</span> == pcut[b]) &#123;
-            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;0\n&quot;</span>);
-            <span class="hljs-keyword">continue</span>;
-        &#125;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) vis[i] = <span class="hljs-number">0</span>;
-        <span class="hljs-built_in">dfs</span>(a, <span class="hljs-number">0</span>, a, b);
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) vis[i] = <span class="hljs-number">0</span>;
-        <span class="hljs-built_in">dfs</span>(b, <span class="hljs-number">1</span>, a, b);
-        ll x = <span class="hljs-built_in">ll</span>(n - cnta), y = <span class="hljs-built_in">ll</span>(n - cntb);
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, x * y);
-    &#125;
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;
-</code></pre></div>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1176,6 +1151,10 @@ node edge[<span class="hljs-number">2</span> * N];
       <ul>
         
           <li>
+            <a href="../../2022/08/03/domjudge%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">domjudge安装与使用</a>
+          </li>
+        
+          <li>
             <a href="../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
           </li>
         
@@ -1191,10 +1170,6 @@ node edge[<span class="hljs-number">2</span> * N];
             <a href="../../2021/01/17/Codeforces%E8%AE%AD%E7%BB%83%E8%AE%B0%E5%BD%95/">Codeforces训练记录</a>
           </li>
         
-          <li>
-            <a href="../../2020/10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1204,7 +1179,7 @@ node edge[<span class="hljs-number">2</span> * N];
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/domjudge/">domjudge</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 

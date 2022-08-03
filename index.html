@@ -42,6 +42,491 @@
       <div id="content" class="outer">
         <section id="main">
   
+    <article id="post-domjudge安装与使用" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="2022/08/03/domjudge%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/" class="article-date">
+  <time class="dt-published" datetime="2022-08-03T01:51:00.000Z" itemprop="datePublished">2022-08-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="categories/domjudge/">domjudge</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="2022/08/03/domjudge%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">domjudge安装与使用</a>
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="domjudge-安装与配置">Domjudge 安装与配置</h2>
+<p>Domjudge 需要安装两部分，一部分是 Domsever，一部分是 judgehost；操作系统为Ubuntu 18.04，domjudge版本为7.1.1。</p>
+<h3 id="domserver安装部分">Domserver安装部分</h3>
+<h4 id="预先安装的依赖包：">预先安装的依赖包：</h4>
+<div class="highlight"><pre class="code"><code>sudo apt-get upgrade &amp;&amp; sudo apt-get update
+sudo apt install gcc g++ make zip unzip mariadb-server \
+        apache2 php php-cli libapache2-mod-php php-zip \
+        php-gd php-curl php-mysql php-json php-xml php-intl php-mbstring \
+        acl bsdmainutils ntp phpmyadmin python-pygments \
+        libcgroup-dev linuxdoc-tools linuxdoc-tools-text \
+        groff texlive-latex-recommended texlive-latex-extra \
+        texlive-fonts-recommended texlive-lang-european composer
+sudo apt install libcurl4-gnutls-dev libjsoncpp-dev libmagic-dev
+sudo phpenmod json
+</code></pre></div>
+<h4 id="编译-domjudge">编译 Domjudge</h4>
+<div class="highlight"><pre class="code"><code>wget https://www.domjudge.org/releases/domjudge-7.1.1.tar.gz
+</code></pre></div>
+<p>这一句是从官网下载domjudge-7.1.1.tar.gz, 但其实更好的办法是先下载下来放到用户家目录，然后直接解压安装</p>
+<div class="highlight"><pre class="code"><code>tar -zxvf domjudge-7.1.1.tar.gz
+cd domjudge-7.1.1
+./configure --prefix=$HOME/domjudge --with-baseurl=127.0.0.1
+make domserver &amp;&amp; sudo make install-domserver
+make judgehost &amp;&amp; sudo make install-judgehost
+make docs &amp;&amp; sudo make install-docs
+</code></pre></div>
+<p>如果在执行 <code>./configure --prefix=$HOME/domjudge --with-baseurl=127.0.0.1</code> 这一步时不成功，按照提示在后面添加指定内容即可。</p>
+<p>后面三行即安装完毕，分别是安装 domserver、judgehost 和 文档。其中安装 docs时可能会遇到一些 python3 的第三方库安装不完整的提示，需要另外补全安装。</p>
+<h4 id="配置数据库">配置数据库</h4>
+<div class="highlight"><pre class="code"><code>cd ~/domjudge/domserver
+sudo bin/dj_setup_database -u root install
+</code></pre></div>
+<h4 id="配置-web 服务器">配置 Web 服务器</h4>
+<div class="highlight"><pre class="code"><code>cd ~/domjudge/domserver
+sudo ln -s /home/ubuntu/domjudge/domserver/etc/apache.conf \
+        /etc/apache2/conf-available/domjudge.conf
+sudo a2enmod rewrite
+sudo a2enconf domjudge
+sudo systemctl reload apache2
+</code></pre></div>
+<p>第二行中的 ubuntu 是实际的用户名</p>
+<p>到这里，就可以访问 <code>http://127.0.0.1/domjudge</code>，并使用 <code>admin</code> 作为用户名和密码登录后台了。密码也有可能生成在</p>
+<p><code>/home/ubuntu/domjudge/domserver/etc/initial_admin_password.secret</code> 中</p>
+<p>（如果要别的机器在局域网下面访问，记得开放 80 端口）</p>
+<h4 id="配置-mysql">配置 MySQL</h4>
+<p>编辑 <code>/etc/mysql/my.cnf</code>，追加内容</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-section">[mysqld]</span>
+<span class="hljs-attr">max_connections</span> = <span class="hljs-number">1000</span>
+<span class="hljs-attr">max_allowed_packet</span> = <span class="hljs-number">16</span>MB
+<span class="hljs-attr">innodb_log_file_size</span> = <span class="hljs-number">48</span>MB
+</code></pre></div>
+<p>其中 <code>max_allowed_packet</code> 数值改成两倍于题目测试数据文件的大小，<code>innodb_log_file_size</code> 数值改成十倍于题目测试数据文件的大小。</p>
+<p>然后重启 mysql</p>
+<div class="highlight"><pre class="code"><code>sudo systemctl restart mysql
+</code></pre></div>
+<h4 id="配置-php">配置 PHP</h4>
+<p>编辑 <code>~/domjudge/domserver/etc/apache.conf</code>，取消以下几行内容前的注释：</p>
+<div class="highlight"><pre class="code"><code>&lt;IfModule mod_php7.c&gt;
+php_value max_file_uploads      100
+php_value upload_max_filesize   128M
+php_value post_max_size         128M
+php_value memory_limit          512M
+&lt;/IfModule&gt;
+</code></pre></div>
+<p>编辑 <code>/etc/php/7.2/apache2/php.ini</code>，搜索 <code>date.timezone</code> 关键字，取消其行前注释，并将其值设为 <code>Asia/Shanghai</code>。</p>
+<div class="highlight"><pre class="code"><code>sudo systemctl restart apache2
+</code></pre></div>
+<h4 id="配置-apache">配置 Apache</h4>
+<p>编辑 <code>/etc/apache2/apache2.conf</code>，搜索 <code>KeepAlive</code> 关键字，将其值设为 <code>Off</code>，并在其后新增一行内容：</p>
+<div class="highlight"><pre class="code"><code>MaxClients 1000
+</code></pre></div>
+<p>然后重启 Apache</p>
+<div class="highlight"><pre class="code"><code>sudo systemctl restart apache2
+</code></pre></div>
+<h3 id="judgehost-部分">Judgehost 部分</h3>
+<h4 id="安装依赖包和功能">安装依赖包和功能</h4>
+<div class="highlight"><pre class="code"><code>sudo apt install make sudo debootstrap libcgroup-dev \
+        php-cli php-curl php-json php-xml php-zip procps \
+        gcc g++ openjdk-8-jre-headless \
+        openjdk-8-jdk ghc fp-compiler \
+        libcurl4-gnutls-dev libjsoncpp-dev libmagic-dev \
+        supervisor
+</code></pre></div>
+<h4 id="编译安装">编译安装</h4>
+<div class="highlight"><pre class="code"><code>wget https://www.domjudge.org/releases/domjudge-7.1.1.tar.gz
+</code></pre></div>
+<p>这一步跟上面安装 Domserver 一样，需要下载 Domjudge 。</p>
+<div class="highlight"><pre class="code"><code>cd domjudge-7.1.1
+./configure --prefix=$HOME/domjudge --with-baseurl=127.0.0.1
+make judgehost &amp;&amp; sudo make install-judgehost
+</code></pre></div>
+<h4 id="配置-judgehost">配置 Judgehost</h4>
+<div class="highlight"><pre class="code"><code>sudo useradd -d /nonexistent -U -M -s /bin/false domjudge-run
+</code></pre></div>
+<h4 id="配置-sudoers">配置 sudoers</h4>
+<p>将 <code>$HOME/domjudge/judgehost/etc/sudoers-domjudge</code> 复制到 <code>/etc/sudoers.d/</code> 目录下。</p>
+<div class="highlight"><pre class="code"><code>sudo cp <span class="hljs-variable">$HOME</span>/domjudge/judgehost/etc/sudoers-domjudge /etc/sudoers.d/
+</code></pre></div>
+<h4 id="修改-rest 密码">修改 rest 密码</h4>
+<p>使用 vim 等文本编辑器编辑 <code>~/domjudge/judgehost/etc/restapi.secret</code> 这个文件。把 DOMserver 中相应文件夹下的对应文件抄一下。（如果是多台 judge，一台server，那么配置 judge 时需要抄 server 上面的信息，IP地址也要对应，judge和server的文件对应起来即可）</p>
+<h4 id="构建-chroot 环境">构建 chroot 环境</h4>
+<p>使用 vim 等文本编辑器编辑 <code>~/domjudge/judgehost/bin/dj_make_chroot</code> 脚本，将 ubuntu 镜像改为国内源（第175行）。</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-meta">#</span><span class="bash"> Ubuntu mirror, modify to match closest mirror</span>
+[ -z &quot;$DEBMIRROR&quot; ] &amp;&amp; DEBMIRROR=&quot;http://mirrors.aliyun.com/ubuntu/&quot;
+</code></pre></div>
+<p>修改之后保存并运行此脚本。这一步会从源上下载必要的软件包，所以请耐心等待。</p>
+<h4 id="设置-cgroup">设置 cgroup</h4>
+<p>使用 vim 等文本编辑器编辑 <code>/etc/default/grub</code> 这个文件，对其中的这一行做如下修改：</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-attr">GRUB_CMDLINE_LINUX_DEFAULT</span>=<span class="hljs-string">&quot;quiet cgroup_enable=memory swapaccount=1&quot;</span>
+</code></pre></div>
+<p>然后执行：</p>
+<div class="highlight"><pre class="code"><code>sudo update-grub
+</code></pre></div>
+<p>之后重启计算机。</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-attribute">sudo reboot</span>
+</code></pre></div>
+<div class="highlight"><pre class="code"><code>cat /proc/cmdline
+</code></pre></div>
+<p>检查是否添加成功。</p>
+<h4 id="启动-judgehost">启动 judgehost</h4>
+<div class="highlight"><pre class="code"><code>sudo ~/domjudge/judgehost/bin/create_cgroups
+~/domjudge/judgehost/bin/judgedaemon
+</code></pre></div>
+<p>每一次启动都先执行一次 <code>create_cgroups</code>，然后再执行 <code>judgedaemon</code></p>
+<h3 id="公网访问">公网访问</h3>
+<p>此时，domjudge已经安装完毕，可以在局域网内进行访问，为了实现公网访问，我们需要将domjudge部署到服务器上，部署的过程和上面一样。</p>
+<p>部署完成之后，需要修改以下配置</p>
+<h4 id="开启php的错误显示">开启php的错误显示</h4>
+<p>使用 vim 等文本编辑器编辑 <code>/etc/php/7.2/apache2/php.ini</code> 这个文件，对其中的两行（474行和485行）做如下修改：</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-attr">display_errors</span> = <span class="hljs-literal">On</span>
+<span class="hljs-attr">display_startup_errors</span> = <span class="hljs-literal">On</span>
+</code></pre></div>
+<h4 id="修改文件权限">修改文件权限</h4>
+<p>将 <code>/home/ubuntu</code> 文件夹极其子文件的权限修改为777，其中 ubuntu 是实际的用户名。</p>
+<div class="highlight"><pre class="code"><code>sudo chmod -R 777 /home/ubunut
+</code></pre></div>
+<h4 id="重新启动apache2服务">重新启动apache2服务</h4>
+<div class="highlight"><pre class="code"><code>sudo systemctl restart apache2
+</code></pre></div>
+<p>到此为止，环境配置完毕，<a target="_blank" rel="noopener" href="http://xn--xxx-vs9dj4unynj51g7sa.xxx.xxx.xxx/domjudge%E8%AE%BF%E9%97%AE%E5%88%B0%E4%B8%BB%E9%A1%B5%E3%80%82">就可以通过xxx.xxx.xxx.xxx/domjudge访问到主页。</a></p>
+<h3 id="domjudge-使用">Domjudge 使用</h3>
+<p><img src="https://i.loli.net/2020/11/22/Xg9EKeDydzrJFZO.png" alt="image-20201117105441465.png"></p>
+<ol>
+<li>Before Contest
+<ul>
+<li>Contest 配置比赛</li>
+<li>Executables  可执行的语言</li>
+<li>Judgehosts 评测机状态等</li>
+<li>Judgehost Restrictions 评测机限制</li>
+<li>Languages 可提交的语言</li>
+<li>Problems 设置题目</li>
+<li>Users 用户</li>
+<li>Teams 队伍</li>
+<li>Team Categories 队伍分类</li>
+<li>Team Affiliations 队伍所属机构，即大学</li>
+</ul>
+</li>
+<li>During contest
+<ul>
+<li>Balloon Status 过题气球状态，送气球时看</li>
+<li>Clarifications</li>
+<li>Internal Errors 服务器判题发生的错误等等</li>
+<li>Rejudgings 重测</li>
+<li>Scoreboard</li>
+<li>Statistics/Analysis</li>
+<li>Submissions</li>
+</ul>
+</li>
+<li>Administrator
+<ul>
+<li>Configuration settings 通用配置设置</li>
+<li>Config checker 配置检查，可以看哪个题目没有上传测试数据等等</li>
+<li>Import / Export 导入导出</li>
+<li>Manage team passwords 管理队伍密码</li>
+<li>Refresh scoreboard cache 刷新榜单缓存</li>
+<li>Judging verifier</li>
+<li>Audit log 日志</li>
+</ul>
+</li>
+</ol>
+<h4 id="添加队伍和账号">添加队伍和账号</h4>
+<p>在 Import/Export 中，可以导入队伍和账号</p>
+<p><img src="https://i.loli.net/2020/11/22/bqYjoDW7VvlfTth.png" alt="image-20201117111731274.png"></p>
+<p>先导入 <code>teams.tsv</code> 再导入 <code>accounts.tst</code>，文件编码要用 <code>UTF-8</code></p>
+<ul>
+<li>teams.tsv</li>
+</ul>
+<p>第一行为版本行，格式如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Field</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Example</th>
+<th style="text-align:left">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">Label</td>
+<td style="text-align:left">teams</td>
+<td style="text-align:left">fixed string (always same value)</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">Version number</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">integer</td>
+</tr>
+</tbody>
+</table>
+<p>接下来是队伍描述行，一个队伍占用一行，格式如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Field</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Example</th>
+<th style="text-align:left">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">Team Number</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">integer</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">External ID</td>
+<td style="text-align:left">team_003</td>
+<td style="text-align:left">integer</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">Group ID</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">integer</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">Team name</td>
+<td style="text-align:left">test1_银河之光</td>
+<td style="text-align:left">string</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">Institution name</td>
+<td style="text-align:left">长安大学</td>
+<td style="text-align:left">string</td>
+</tr>
+<tr>
+<td style="text-align:left">6</td>
+<td style="text-align:left">Institution short name</td>
+<td style="text-align:left">CHD</td>
+<td style="text-align:left">string</td>
+</tr>
+<tr>
+<td style="text-align:left">7</td>
+<td style="text-align:left">Country Code</td>
+<td style="text-align:left">CHN</td>
+<td style="text-align:left">string ISO 3166-1 alpha-3</td>
+</tr>
+<tr>
+<td style="text-align:left">8</td>
+<td style="text-align:left">Affiliation External ID</td>
+<td style="text-align:left">长安大学</td>
+<td style="text-align:left">string</td>
+</tr>
+</tbody>
+</table>
+<p>Group ID 对应 Categories 中的 ID，表示队伍的角色，如女队，打星队伍</p>
+<ul>
+<li>
+<p>accounts.tsv</p>
+<p>该文件用于描述账号信息，同样包含版本行和账号行，每个账号占用一行。</p>
+<p>首行版本行的格式如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Field</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Example</th>
+<th style="text-align:left">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">Label</td>
+<td style="text-align:left">accounts</td>
+<td style="text-align:left">fixed string (always same value)</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">Version number</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">integer</td>
+</tr>
+</tbody>
+</table>
+<p>账号描述行格式如下：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Field</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Example</th>
+<th style="text-align:left">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">Account Type</td>
+<td style="text-align:left">team</td>
+<td style="text-align:left">string</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">Full Name</td>
+<td style="text-align:left">test1_银河之光</td>
+<td style="text-align:left">string</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">Username</td>
+<td style="text-align:left">team003</td>
+<td style="text-align:left">string</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">Password</td>
+<td style="text-align:left">D6rF8l</td>
+<td style="text-align:left">string</td>
+</tr>
+</tbody>
+</table>
+<p>Account Type 取值为：team, judge, admin, analyst。这里要导入队伍账号，所以该字段在这固定为 team。</p>
+<p>**注意：**需要设置 <code>Username</code> 的格式才能将账号和队伍关联起来，规则为：<code>Username</code> 的整数部分需要和 <strong>team.tsv</strong> 中的 <code>Team Number</code> 一致。比如一支队伍 <code>Team Number</code> 为 99，则 <code>Username</code> 可以设置为 team-099。</p>
+<p>导入样例：</p>
+<p>team.tsv</p>
+<div class="highlight"><pre class="code"><code>teams    1                        
+3    team003    3    test1_银河之光    长安大学    CHD    CHN    长安大学
+4    team004    3    test2_重甲神兵    长安大学    CHD    CHN    长安大学
+5    team005    3    test3_雷神之怒    长安大学    CHD    CHN    长安大学
+6    team006    3    test4_神风玉堂    长安大学    CHD    CHN    长安大学
+7    team007    3    test5_极夜幽冥    长安大学    CHD    CHN    长安大学
+8    team008    3    test6_涅槃    长安大学    CHD    CHN    长安大学
+</code></pre></div>
+<p>accounts.tsv</p>
+<div class="highlight"><pre class="code"><code>accounts    1        
+team    test1_银河之光    team003    D6rF8l
+team    test2_重甲神兵    team004    G6qQ8e
+team    test3_雷神之怒    team005    M3xQ4v
+team    test4_神风玉堂    team006    A9sF8q
+team    test5_极夜幽冥    team007    C8sJ3z
+team    test6_涅槃    team008    V7mT8y
+</code></pre></div>
+<p>tsv文件可以用 Excel 编辑，密码可以用随机函数生成，这里提供一个随机生成6位包含字母数字的函数：</p>
+<p><code>CHAR(INT(RAND()*26+65))&amp;INT(RAND()*9+1)&amp;CHAR(INT(RAND()*26+97))&amp;CHAR(INT(RAND()*26+65))&amp;INT(RAND()*9+1)&amp;CHAR(INT(RAND()*26+97))</code></p>
+<p>另外要注意Excel 保存后的格式一般不是 UTF-8，要用notepad++等工具进行修改</p>
+<h4 id="题目导入">题目导入</h4>
+<p>迎新赛正式赛的题目已经全部导入</p>
+<p><img src="https://i.loli.net/2020/11/22/SkC3BspwmAKaHU7.png" alt="image-20201117162636102.png"></p>
+<p>在 Problems 页面下可以编辑 Problem name, Time limit 这些信息，测试数据（Testcases）在页面上<strong>只能</strong>单点添加和修改，并且不能删除。</p>
+<p>如果想批量上传数据，需要按照固定格式打包上传</p>
+<div class="highlight"><pre class="code"><code>.
+├── data
+│   ├── sample
+│   └── secret
+├── submissions
+│   ├── accepted
+│   ├── time_limit_exceeded
+│   └── wrong_answer
+├── domjudge-problem.ini
+├── problem.pdf
+└── problem.yaml
+</code></pre></div>
+<p>如上为一般题目的文件格式</p>
+<p><a target="_blank" rel="noopener" href="https://www.domjudge.org/docs/manual/7.3/problem-format.html">https://www.domjudge.org/docs/manual/7.3/problem-format.html</a></p>
+<p>data文件夹中存放样例和测试数据（如果提供样例，那么比赛时用户可以进行下载）</p>
+<p><img src="https://i.loli.net/2020/11/22/o9HEUcm4rtnYIMk.png" alt="image-20201117163557259.png"></p>
+<p>输入文件以 .in 结尾，输出文件以 .ans 结尾，不论是否为SPJ都需要提供 .ans 文件。不论是sample还是secret，最终都会被评测机进行测试</p>
+<p>submissions 文件夹不是必须提供的，但是提前准备好 AC、WA、TLE等代码可以方便进行测试，这是准备一场完善的比赛所需要考虑到的</p>
+<p>domjudge-problem.ini 包含了一些键值对信息，例如：</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-attr">probid</span> = G
+<span class="hljs-attr">name</span> = 咖啡原料
+<span class="hljs-attr">timelimit</span> = <span class="hljs-number">1</span>
+color = <span class="hljs-comment">#E6E6FF</span>
+</code></pre></div>
+<p>problem.pdf 为该题目的题面</p>
+<p>problem.yaml</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-attr">limits:</span>
+  <span class="hljs-attr">memory:</span> <span class="hljs-number">64</span>
+</code></pre></div>
+<p>该题目的内容准备好之后，将这几个文件夹打包 zip 格式压缩，进行上传（注意是直接将这几个文件夹进行打包上传，不需要再把他们装入一个新的文件夹在进行打包）压缩后的名称会成为该题目的简写。</p>
+<p>上传新题目时，可以在此处上传，要先选择对应的比赛</p>
+<p><img src="https://i.loli.net/2020/11/22/6eRDtkLKQAsY5fu.png" alt="image-20201117164851440.png"></p>
+<p>也可以对某个题目进行修改</p>
+<p><img src="https://i.loli.net/2020/11/22/23nUERsDvg8jXGh.png" alt="image-20201117164934271.png"></p>
+<p>如果题目需要用到SPJ，那么需要使用 testlib 编写SPJ程序，所需要的 testlib.h 也需要打包上传</p>
+<p>由于 domjudge 对于 checker 的入口参数和返回值与传统的 checker 较为不同，需要使用 DomJudge 适配版本的 testlib.h。</p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/cn-xcpc-tools/testlib-for-domjudge">https://github.com/cn-xcpc-tools/testlib-for-domjudge</a></p>
+<p>将编写的 cheker.cpp 以及 testlib.h 放入 <code>output_validators/&#123;VALIDATOR_NAME&#125;</code> 中</p>
+<p>在 problem.yaml 中添加一行 <code>validation: custom</code></p>
+<p>格式如下：</p>
+<div class="highlight"><pre class="code"><code>.
+├── data
+│   ├── sample
+│   └── secret
+├── output_validators
+│   └── validate
+│       ├── checker.cpp
+│       └── testlib.h
+├── submissions
+│   ├── accepted
+│   ├── time_limit_exceeded
+│   └── wrong_answer
+├── domjudge-problem.ini
+├── problem.pdf
+└── problem.yaml
+</code></pre></div>
+<h4 id="其他">其他</h4>
+<ul>
+<li>
+<p>目前两台机器的账号都是 chd-acm， 密码为 CHD-ACM</p>
+</li>
+<li>
+<p>如果比赛（正式赛或热身赛）题面有更改，要在A题的修改页面重新上传 problem_txt</p>
+</li>
+<li></li>
+</ul>
+<h3 id="参考">参考</h3>
+<p><a target="_blank" rel="noopener" href="https://mcginn7.github.io/2018/10/04/DOMjudge%E9%85%8D%E7%BD%AE/">https://mcginn7.github.io/2018/10/04/DOMjudge配置/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.dazhuanlan.com/2019/12/16/5df684759aac0/">https://www.dazhuanlan.com/2019/12/16/5df684759aac0/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mcginn/p/8976797.html">https://www.cnblogs.com/mcginn/p/8976797.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://cubercsl.cn/note/DOMjudge-Note.html">https://cubercsl.cn/note/DOMjudge-Note.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://clics.ecs.baylor.edu/index.php?title=Contest_Control_System_Requirements#Appendix:_File_formats">https://clics.ecs.baylor.edu/index.php?title=Contest_Control_System_Requirements#Appendix:_File_formats</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-ubuntu部署ASP.NET Core WebApi" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/" class="article-date">
@@ -6206,324 +6691,6 @@ ll k, x, s[N], qmi[N], g[N];
 
 
   
-    <article id="post-拉格朗日插值法学习笔记" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="2020/07/31/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
-  <time class="dt-published" datetime="2020-07-31T08:23:00.000Z" itemprop="datePublished">2020-07-31</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="categories/%E6%95%B0%E5%AD%A6/">数学</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="2020/07/31/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">拉格朗日插值法学习笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>适用范围：给出n个点<span class="markdown-them-math-inline">$(x_i,y_i)$</span>，过这n个点能够确定一个最高n-1次的多项式<span class="markdown-them-math-inline">$f(x)$</span>，求<span class="markdown-them-math-inline">$f(k)$</span></p>
-<p>做法：如图所示，我们将每一个点<span class="markdown-them-math-inline">$(x_i,y_i)$</span>在x轴上的投影<span class="markdown-them-math-inline">$(x_i,0)$</span>记为<span class="markdown-them-math-inline">$H_i$</span>。对每一个i，我们选择一个点集<span class="markdown-them-math-inline">$\lbrace P_i\rbrace \cup \lbrace H_j \vert 1 \le i\le n, j \neq i\rbrace$</span>，求过这n个点的最高n-1次的多项式<span class="markdown-them-math-inline">$g_i(x)$</span>。这样我们就得到了n个<span class="markdown-them-math-inline">$g_i(x)$</span>，它们都在各自对应的<span class="markdown-them-math-inline">$x_i$</span>处的值为<span class="markdown-them-math-inline">$y_i$</span>，并且在其它<span class="markdown-them-math-inline">$x_j(i \neq j)$</span>处值为0。</p>
-<p><img src="/images/1588753-20200731151357181-1678052634.png" alt=""></p>
-<p>很容易就能够构造出<span class="markdown-them-math-inline">$g_i(x)$</span>的表达式：</p>
-<p><div class="markdown-them-math-block">$$g_i(x)=y_i*\prod_{j\neq i}\frac{x-x_j}{x_i-x_j}$$</div></p>
-<p>显然最后有：</p>
-<p><div class="markdown-them-math-block">$$f(x)=\sum_{i=1}^{n}g_i(x)=\sum _{i=1}^{n}y_i*\prod_{j\neq i}\frac{x-x_j}{x_i-x_j}$$</div></p>
-<p>由于只用求<span class="markdown-them-math-inline">$f(k)$</span>的值，代入得<span class="markdown-them-math-inline">$f(k)=\sum _{i=1}^{n}y_i*\prod_{j\neq i}\frac{k-x_j}{x_i-x_j}$</span></p>
-<p>例题：</p>
-<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4781">luogu 4781 [模板]拉格朗日插值</a></p>
-<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
-
-<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
-
-<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
-
-<span class="hljs-keyword">const</span> ll mod = <span class="hljs-number">998244353</span>;
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">2010</span>;
-
-<span class="hljs-keyword">int</span> n;
-ll k, x[N], y[N];
-
-<span class="hljs-function">ll <span class="hljs-title">power</span><span class="hljs-params">(ll a, ll n)</span>
-</span>&#123;
-    ll res = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">while</span> (n) &#123;
-        <span class="hljs-keyword">if</span> (n &amp; <span class="hljs-number">1</span>) res = res * a % mod;
-        a = a * a % mod;
-        n &gt;&gt;= <span class="hljs-number">1</span>;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%lld&quot;</span>, &amp;n, &amp;k);
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld%lld&quot;</span>, &amp;x[i], &amp;y[i]);
-    ll res = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;
-        ll ta = y[i] % mod, tb = <span class="hljs-number">1</span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> h = <span class="hljs-number">1</span>; h &lt;= n; h++) &#123;
-            <span class="hljs-keyword">if</span> (h == i) <span class="hljs-keyword">continue</span>;
-            ta = (ta * ((k - x[h]) % mod + mod) % mod) % mod;
-            tb = (tb * ((x[i] - x[h]) % mod + mod) % mod) % mod;
-        &#125;
-        res = (res + ta * <span class="hljs-built_in">power</span>(tb, mod - <span class="hljs-number">2</span>) % mod) % mod;
-    &#125;
-    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;
-</code></pre></div>
-<p><a target="_blank" rel="noopener" href="https://codeforces.com/problemset/problem/622/F">Codeforces - 622F The Sum of the k-th Powers</a></p>
-<p>题意：求<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k,1\leq n\leq 10^9,0\leq k \leq 10^6$</span></p>
-<p>思路：首先有一个结论，<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k$</span>为k+1阶多项式，所以我们只需要暴力算出<span class="markdown-them-math-inline">$f(n)=\sum_{i=1}^{n}i^k$</span>的前k+2项，然后用拉格朗日插值法求第n项即可</p>
-<p>下面简单证明一下<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k$</span>为k+1阶多项式</p>
-<p>对于一个数列<span class="markdown-them-math-inline">${a_n}$</span>来说，把数列<span class="markdown-them-math-inline">${a_n}$</span>的元素两两做差得到数列<span class="markdown-them-math-inline">${b_n}$</span>，我们称数列<span class="markdown-them-math-inline">${b_n}$</span>为数列<span class="markdown-them-math-inline">${a_n}$</span>的一阶阶差数列，如果再将数列<span class="markdown-them-math-inline">${b_n}$</span>的元素两两做差得到数列<span class="markdown-them-math-inline">${c_n}$</span>，我们称数列<span class="markdown-them-math-inline">${c_n}$</span>为数列<span class="markdown-them-math-inline">${a_n}$</span>的一阶阶差数列，依次类推定义p阶阶差数列</p>
-<hr>
-<p>定理：数列<span class="markdown-them-math-inline">${a_n}$</span>是一个p阶等差数列的充要条件是数列的通项<span class="markdown-them-math-inline">$a_n$</span>为n的一个p次多项式</p>
-<p>证明：设<span class="markdown-them-math-inline">$f(x)=\sum_{i=0}^{n}u_i x^i$</span>，令<span class="markdown-them-math-inline">${b_n}$</span>为<span class="markdown-them-math-inline">${a_n}$</span>的一阶阶差数列</p>
-<p>那么<span class="markdown-them-math-inline">$\Delta f(x)=f(x+1)-f(x)=\sum_{i=0}^{n}u_i (x+1)^i-\sum_{i=0}^{n}u_i x^i$</span></p>
-<p>我们只考虑<span class="markdown-them-math-inline">$x^n$</span>有<span class="markdown-them-math-inline">$\Delta f(x)=u_n(x+1)^n-u_n x^n$</span></p>
-<p>将<span class="markdown-them-math-inline">$u_n(x+1)^n$</span>二项式展开，仅考虑<span class="markdown-them-math-inline">$x^n$</span>有<span class="markdown-them-math-inline">$\Delta f(x)=u_n x^n-u_n x^n=0$</span></p>
-<p>所以每次差分后多项式的最高次数会减1，p次差分后，变为常数项，此时多项式的最高次数为0，定理成立</p>
-<p>显然，如果一个多项式k次差分之后变为0，那么这个多项式的最高次数为k-1</p>
-<hr>
-<p>我们将<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k$</span>差分后得<span class="markdown-them-math-inline">$1^k,2^k,3^k\dots n^k$</span></p>
-<p>显然<span class="markdown-them-math-inline">$1^k,2^k,3^k\dots n^k$</span>为k阶多项式，所以<span class="markdown-them-math-inline">$\sum_{i=1}^{n}i^k$</span>为k+1阶多项式</p>
-<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
- 
-<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
- 
-<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
- 
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">2000010</span>;
-<span class="hljs-keyword">const</span> ll mod = <span class="hljs-number">1000000007</span>;
- 
-<span class="hljs-keyword">int</span> n, k;
-ll a[N], f[N], nf[N], now;
- 
-<span class="hljs-function">ll <span class="hljs-title">power</span><span class="hljs-params">(ll a, ll n)</span>
-</span>&#123;
-    ll res = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">while</span> (n) &#123;
-        <span class="hljs-keyword">if</span> (n &amp; <span class="hljs-number">1</span>) res = res * a % mod;
-        a = a * a % mod;
-        n &gt;&gt;= <span class="hljs-number">1</span>;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
- 
-<span class="hljs-function">ll <span class="hljs-title">solve</span><span class="hljs-params">()</span>
-</span>&#123;
-    now = f[<span class="hljs-number">0</span>] = nf[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= k + <span class="hljs-number">2</span>; i++) &#123;
-        now = now * (n - i) % mod;
-        f[i] = f[i - <span class="hljs-number">1</span>] * i % mod;
-        nf[i] = -nf[i - <span class="hljs-number">1</span>] * i % mod;
-    &#125;
-    ll res = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= k + <span class="hljs-number">2</span>; i++) &#123;
-        ll t = <span class="hljs-built_in">power</span>(f[i - <span class="hljs-number">1</span>] * nf[k + <span class="hljs-number">2</span> - i] % mod, mod - <span class="hljs-number">2</span>);
-        res = (res + a[i] * now % mod * <span class="hljs-built_in">power</span>(n - i, mod - <span class="hljs-number">2</span>) % mod * t % mod) % mod;
-        res = (res + mod) % mod;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
- 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
-    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
-    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;k);
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-built_in">min</span>(k + <span class="hljs-number">2</span>, n); i++)
-        a[i] = (a[i - <span class="hljs-number">1</span>] + <span class="hljs-built_in">power</span>(i, k)) % mod;
-    <span class="hljs-keyword">if</span> (n &lt;= k + <span class="hljs-number">2</span>) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, a[n]);
-    <span class="hljs-keyword">else</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, <span class="hljs-built_in">solve</span>());
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;
-</code></pre></div>
-<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4593">luogu 4593 [TJOI2018]教科书般的亵渎</a></p>
-<p>题意：求<span class="markdown-them-math-inline">$\sum_{i=0}^m f(n-a_i)-\sum_{i=0}^{m-1} \sum_{j=i+1}^{m}(a_j-a_i)^m+1$</span>，其中<span class="markdown-them-math-inline">$f(n)=\sum_{i=1}^{n} i^{m+1}$</span></p>
-<p>思路：后半部分<span class="markdown-them-math-inline">$\sum_{i=0}^{m-1} \sum_{j=i+1}^{m}(a_j-a_i)^m+1$</span>可以直接暴力求解</p>
-<p><span class="markdown-them-math-inline">$f(n)=\sum_{i=1}^{n} i^{m+1}$</span>为m+2阶多项式，考虑到m不是很大，所以我们可以插入m+3个值后，暴力对每一个<span class="markdown-them-math-inline">$a_i$</span>求一次f(n-a_i)，最后相加即可</p>
-<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
-
-<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
-
-<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
-
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">60</span>;
-<span class="hljs-keyword">const</span> ll mod = <span class="hljs-number">1000000007</span>;
-
-<span class="hljs-keyword">int</span> T;
-ll n, m, now;
-ll a[N], c[N], f[N], nf[N];
-
-<span class="hljs-function">ll <span class="hljs-title">power</span><span class="hljs-params">(ll a, ll n)</span>
-</span>&#123;
-    ll res = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">while</span> (n) &#123;
-        <span class="hljs-keyword">if</span> (n &amp; <span class="hljs-number">1</span>) res = res * a % mod;
-        a = a * a % mod;
-        n &gt;&gt;= <span class="hljs-number">1</span>;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
-
-<span class="hljs-function">ll <span class="hljs-title">solve</span><span class="hljs-params">(ll n)</span>
-</span>&#123;
-    now = f[<span class="hljs-number">0</span>] = nf[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m + <span class="hljs-number">3</span>; i++) &#123;
-        now = now * (n - i) % mod;
-        f[i] = f[i - <span class="hljs-number">1</span>] * i % mod;
-        nf[i] = -nf[i - <span class="hljs-number">1</span>] * i % mod;
-    &#125;
-    ll res = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m + <span class="hljs-number">3</span>; i++) &#123;
-        ll t = <span class="hljs-built_in">power</span>(f[i - <span class="hljs-number">1</span>] * nf[m + <span class="hljs-number">3</span> - i] % mod, mod - <span class="hljs-number">2</span>);
-        res = (res + c[i] * now % mod * <span class="hljs-built_in">power</span>(n - i, mod - <span class="hljs-number">2</span>) % mod * t % mod) % mod;
-        res = (res + mod) % mod;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
-
-<span class="hljs-function">ll <span class="hljs-title">calc</span><span class="hljs-params">(ll x)</span>
-</span>&#123;
-    <span class="hljs-keyword">if</span> (x &lt;= m + <span class="hljs-number">3</span>) <span class="hljs-keyword">return</span> c[x];
-    <span class="hljs-keyword">return</span> <span class="hljs-built_in">solve</span>(x);
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
-    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
-    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
-    <span class="hljs-keyword">while</span> (T--) &#123;
-        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld%lld&quot;</span>, &amp;n, &amp;m);
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lld&quot;</span>, &amp;a[i]);
-        <span class="hljs-built_in">sort</span>(a + <span class="hljs-number">1</span>, a + m + <span class="hljs-number">1</span>);
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-built_in">min</span>(m + <span class="hljs-number">3</span>, n); i++)
-            c[i] = (c[i - <span class="hljs-number">1</span>] + <span class="hljs-built_in">power</span>(i, m + <span class="hljs-number">1</span>)) % mod;
-        ll res = <span class="hljs-number">0</span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;= m; i++) res = (res + <span class="hljs-built_in">calc</span>(n - a[i])) % mod;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;= m - <span class="hljs-number">1</span>; i++) &#123;
-            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> h = i + <span class="hljs-number">1</span>; h &lt;= m; h++) &#123;
-                ll t = <span class="hljs-built_in">power</span>(a[h] - a[i], m + <span class="hljs-number">1</span>);
-                res = ((res - t) % mod + mod) % mod;
-            &#125;
-        &#125;
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, res);
-    &#125;
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;
-</code></pre></div>
-<p><a target="_blank" rel="noopener" href="https://darkbzoj.tk/problem/3453">bzoj 3453 tyvj 1858 XLkxc</a></p>
-<p>题意：求<span class="markdown-them-math-inline">$\sum_{i=0}^n \sum_{j=1}^{a+i*d} \sum_{x=1}^{j}x^k$</span></p>
-<p>思路：<span class="markdown-them-math-inline">$f(n)=\sum_{x=1}^{n}x^k$</span>，为k+1阶多项式</p>
-<p><span class="markdown-them-math-inline">$g(n)=\sum_{i=1}^{n} \sum_{j=1}^{i} j^k$</span>，g(n)差分后的结果为f(n)，所以g(n)为k+2阶多项式</p>
-<p><span class="markdown-them-math-inline">$res(n)=\sum_{i=0}^{n}g(a+i*d)$</span>，res(n)进行k+5次差分后为0，所以res(n)为k+4阶多项式</p>
-<p>然后插值求解即可</p>
-<div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstdio&gt;</span></span>
-
-<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
-
-<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;
-
-<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">200</span>;
-<span class="hljs-keyword">const</span> ll mod = <span class="hljs-number">1234567891</span>;
-
-<span class="hljs-keyword">int</span> T, k;
-ll a, n, d, now, fc[N], nfc[N];
-ll f[N], g[N];
-
-<span class="hljs-function">ll <span class="hljs-title">power</span><span class="hljs-params">(ll a, ll n)</span>
-</span>&#123;
-    ll res = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">while</span> (n) &#123;
-        <span class="hljs-keyword">if</span> (n &amp; <span class="hljs-number">1</span>) res = res * a % mod;
-        a = a * a % mod;
-        n &gt;&gt;= <span class="hljs-number">1</span>;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
-
-<span class="hljs-function">ll <span class="hljs-title">solve</span><span class="hljs-params">(ll n, <span class="hljs-keyword">int</span> m, ll *c)</span>
-</span>&#123;
-    now = fc[<span class="hljs-number">0</span>] = nfc[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) &#123;
-        now = now * (n - i) % mod;
-        fc[i] = fc[i - <span class="hljs-number">1</span>] * i % mod;
-        nfc[i] = -nfc[i - <span class="hljs-number">1</span>] * i % mod;
-    &#125;
-    ll res = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) &#123;
-        ll t = <span class="hljs-built_in">power</span>(fc[i - <span class="hljs-number">1</span>] * nfc[m - i] % mod, mod - <span class="hljs-number">2</span>);
-        res = (res + c[i] * now % mod * <span class="hljs-built_in">power</span>(n - i, mod - <span class="hljs-number">2</span>) % mod * t % mod) % mod;
-        res = (res + mod) % mod;
-    &#125;
-    <span class="hljs-keyword">return</span> res;
-&#125;
-
-<span class="hljs-function">ll <span class="hljs-title">calc</span><span class="hljs-params">(ll n, <span class="hljs-keyword">int</span> m, ll *c)</span>
-</span>&#123;
-    <span class="hljs-keyword">if</span> (n &lt;= m) <span class="hljs-keyword">return</span> c[n];
-    <span class="hljs-keyword">return</span> <span class="hljs-built_in">solve</span>(n, m, c);
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-comment">// freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);</span>
-    <span class="hljs-comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span>
-    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;T);
-    <span class="hljs-keyword">while</span> (T--) &#123;
-        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%lld%lld%lld&quot;</span>, &amp;k, &amp;a, &amp;n, &amp;d);
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;= k + <span class="hljs-number">3</span>; i++) f[i] = (f[i - <span class="hljs-number">1</span>] + <span class="hljs-built_in">power</span>(i, k)) % mod;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= k + <span class="hljs-number">3</span>; i++) f[i] = (f[i] + f[i - <span class="hljs-number">1</span>]) % mod;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;= k + <span class="hljs-number">5</span>; i++) g[i] = <span class="hljs-built_in">calc</span>((a + i * d) % mod, k + <span class="hljs-number">3</span>, f);
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= k + <span class="hljs-number">5</span>; i++) g[i] = (g[i] + g[i - <span class="hljs-number">1</span>]) % mod;
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, <span class="hljs-built_in">calc</span>(n, k + <span class="hljs-number">5</span>, g));
-    &#125;
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;
-</code></pre></div>
-<p>参考：<a target="_blank" rel="noopener" href="https://oi-wiki.org/math/poly/lagrange/">https://oi-wiki.org/math/poly/lagrange/</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -6542,6 +6709,10 @@ ll f[N], g[N];
       <ul>
         
           <li>
+            <a href="2022/08/03/domjudge%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">domjudge安装与使用</a>
+          </li>
+        
+          <li>
             <a href="2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
           </li>
         
@@ -6557,10 +6728,6 @@ ll f[N], g[N];
             <a href="2021/01/17/Codeforces%E8%AE%AD%E7%BB%83%E8%AE%B0%E5%BD%95/">Codeforces训练记录</a>
           </li>
         
-          <li>
-            <a href="2020/10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -6570,7 +6737,7 @@ ll f[N], g[N];
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="categories/domjudge/">domjudge</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
     </div>
   </div>
 
