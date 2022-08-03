@@ -113,7 +113,7 @@ Base = declarative_base(engine)
         create_user()
     session.commit()
 </code></pre></div>
-<h3 id="c#调用python脚本">C#调用Python脚本</h3>
+<h2 id="c#调用python脚本">C#调用Python脚本</h2>
 <p>C#调用Python的代码如下所示</p>
 <div class="highlight"><pre class="code"><code>Process p = <span class="hljs-keyword">new</span> Process();
 <span class="hljs-built_in">string</span> path = <span class="hljs-string">&quot;/home/ubuntu/test/sql.py&quot;</span>;
@@ -128,7 +128,7 @@ p.StartInfo.CreateNoWindow = <span class="hljs-literal">true</span>;
 p.Start();
 </code></pre></div>
 <p>其中path是python脚本在ubuntu上的路径，FileName是ubuntu上python的位置。</p>
-<h3 id="结果">结果</h3>
+<h2 id="结果">结果</h2>
 <p>调用完成之后，可以看到数据库的users表中添加了100条记录。</p>
 <p>其实该方法不止适用于python脚本，也适用于其他语言，设置好脚本的位置和编译器的位置即可。</p>
 
