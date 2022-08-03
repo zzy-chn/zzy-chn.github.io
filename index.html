@@ -210,7 +210,7 @@ make judgehost &amp;&amp; sudo make install-judgehost
 </code></pre></div>
 <p>到此为止，环境配置完毕，<a target="_blank" rel="noopener" href="http://xn--xxx-vs9dj4unynj51g7sa.xxx.xxx.xxx/domjudge%E8%AE%BF%E9%97%AE%E5%88%B0%E4%B8%BB%E9%A1%B5%E3%80%82">就可以通过xxx.xxx.xxx.xxx/domjudge访问到主页。</a></p>
 <h3 id="domjudge-使用">Domjudge 使用</h3>
-<p><img src="https://i.loli.net/2020/11/22/Xg9EKeDydzrJFZO.png" alt="image-20201117105441465.png"></p>
+<p><img src="https://i.loli.net/2020/11/22/Xg9EKeDydzrJFZO.png" alt=""></p>
 <ol>
 <li>Before Contest
 <ul>
@@ -251,7 +251,7 @@ make judgehost &amp;&amp; sudo make install-judgehost
 </ol>
 <h4 id="添加队伍和账号">添加队伍和账号</h4>
 <p>在 Import/Export 中，可以导入队伍和账号</p>
-<p><img src="https://i.loli.net/2020/11/22/bqYjoDW7VvlfTth.png" alt="image-20201117111731274.png"></p>
+<p><img src="https://i.loli.net/2020/11/22/bqYjoDW7VvlfTth.png" alt=""></p>
 <p>先导入 <code>teams.tsv</code> 再导入 <code>accounts.tst</code>，文件编码要用 <code>UTF-8</code></p>
 <ul>
 <li>teams.tsv</li>
@@ -435,7 +435,7 @@ team    test6_涅槃    team008    V7mT8y
 <p>另外要注意Excel 保存后的格式一般不是 UTF-8，要用notepad++等工具进行修改</p>
 <h4 id="题目导入">题目导入</h4>
 <p>迎新赛正式赛的题目已经全部导入</p>
-<p><img src="https://i.loli.net/2020/11/22/SkC3BspwmAKaHU7.png" alt="image-20201117162636102.png"></p>
+<p><img src="https://i.loli.net/2020/11/22/SkC3BspwmAKaHU7.png" alt=""></p>
 <p>在 Problems 页面下可以编辑 Problem name, Time limit 这些信息，测试数据（Testcases）在页面上<strong>只能</strong>单点添加和修改，并且不能删除。</p>
 <p>如果想批量上传数据，需要按照固定格式打包上传</p>
 <div class="highlight"><pre class="code"><code>.
@@ -453,7 +453,7 @@ team    test6_涅槃    team008    V7mT8y
 <p>如上为一般题目的文件格式</p>
 <p><a target="_blank" rel="noopener" href="https://www.domjudge.org/docs/manual/7.3/problem-format.html">https://www.domjudge.org/docs/manual/7.3/problem-format.html</a></p>
 <p>data文件夹中存放样例和测试数据（如果提供样例，那么比赛时用户可以进行下载）</p>
-<p><img src="https://i.loli.net/2020/11/22/o9HEUcm4rtnYIMk.png" alt="image-20201117163557259.png"></p>
+<p><img src="https://i.loli.net/2020/11/22/o9HEUcm4rtnYIMk.png" alt=""></p>
 <p>输入文件以 .in 结尾，输出文件以 .ans 结尾，不论是否为SPJ都需要提供 .ans 文件。不论是sample还是secret，最终都会被评测机进行测试</p>
 <p>submissions 文件夹不是必须提供的，但是提前准备好 AC、WA、TLE等代码可以方便进行测试，这是准备一场完善的比赛所需要考虑到的</p>
 <p>domjudge-problem.ini 包含了一些键值对信息，例如：</p>
@@ -469,9 +469,9 @@ color = <span class="hljs-comment">#E6E6FF</span>
 </code></pre></div>
 <p>该题目的内容准备好之后，将这几个文件夹打包 zip 格式压缩，进行上传（注意是直接将这几个文件夹进行打包上传，不需要再把他们装入一个新的文件夹在进行打包）压缩后的名称会成为该题目的简写。</p>
 <p>上传新题目时，可以在此处上传，要先选择对应的比赛</p>
-<p><img src="https://i.loli.net/2020/11/22/6eRDtkLKQAsY5fu.png" alt="image-20201117164851440.png"></p>
+<p><img src="https://i.loli.net/2020/11/22/6eRDtkLKQAsY5fu.png" alt=""></p>
 <p>也可以对某个题目进行修改</p>
-<p><img src="https://i.loli.net/2020/11/22/23nUERsDvg8jXGh.png" alt="image-20201117164934271.png"></p>
+<p><img src="https://i.loli.net/2020/11/22/23nUERsDvg8jXGh.png" alt=""></p>
 <p>如果题目需要用到SPJ，那么需要使用 testlib 编写SPJ程序，所需要的 testlib.h 也需要打包上传</p>
 <p>由于 domjudge 对于 checker 的入口参数和返回值与传统的 checker 较为不同，需要使用 DomJudge 适配版本的 testlib.h。</p>
 <p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/cn-xcpc-tools/testlib-for-domjudge">https://github.com/cn-xcpc-tools/testlib-for-domjudge</a></p>
