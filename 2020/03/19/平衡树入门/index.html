@@ -1,100 +1,82 @@
 <!DOCTYPE html>
-<html lang='zh-CN'>
-
+<html>
 <head>
-  <meta name="generator" content="Hexo 5.4.1">
   <meta charset="utf-8">
   
-
-  <meta http-equiv='x-dns-prefetch-control' content='on' />
-  <link rel='dns-prefetch' href='https://fastly.jsdelivr.net'>
-  <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
-  <link rel='dns-prefetch' href='//unpkg.com'>
-
-  <meta name="renderer" content="webkit">
-  <meta name="force-rendering" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-  <meta name="HandheldFriendly" content="True" >
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="theme-color" content="#f8f8f8">
-  <title>平衡树入门 - zzy's blog</title>
-
   
-    <meta name="description" content="前置技能 平衡树是二叉搜索树的一种，二叉搜索树的定义如下：  空树是二叉搜索树 若二叉搜索树的左子树不为空，则其左子树上所有点的权值均小于其根节点的值 若二叉搜索树的右子树不为空，则其右子树上所有点的权值均大于其根节点的值 二叉搜索树的左右子树均为二叉搜索树 对于有$n$个节点的二叉搜索树，每次基本操作的最优复杂度为$O(logn)$，由于二叉搜索树可能退化成一条链，所以最坏复杂度$O(n)$">
-<meta property="og:type" content="article">
-<meta property="og:title" content="平衡树入门">
-<meta property="og:url" content="http://example.com/2020/03/19/%E5%B9%B3%E8%A1%A1%E6%A0%91%E5%85%A5%E9%97%A8/index.html">
-<meta property="og:site_name" content="zzy&#39;s blog">
-<meta property="og:description" content="前置技能 平衡树是二叉搜索树的一种，二叉搜索树的定义如下：  空树是二叉搜索树 若二叉搜索树的左子树不为空，则其左子树上所有点的权值均小于其根节点的值 若二叉搜索树的右子树不为空，则其右子树上所有点的权值均大于其根节点的值 二叉搜索树的左右子树均为二叉搜索树 对于有$n$个节点的二叉搜索树，每次基本操作的最优复杂度为$O(logn)$，由于二叉搜索树可能退化成一条链，所以最坏复杂度$O(n)$">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/images/1588753-20200317210803955-1345170871.jpg">
-<meta property="og:image" content="http://example.com/images/1588753-20200318001036784-1277583803.png">
-<meta property="og:image" content="http://example.com/images/1588753-20200318200205386-1891965177.png">
-<meta property="og:image" content="http://example.com/images/1588753-20200318215436748-697279789.png">
-<meta property="og:image" content="http://example.com/images/1588753-20200319163714589-1349866726.png">
-<meta property="og:image" content="http://example.com/images/1588753-20200319165751103-218677334.png">
-<meta property="og:image" content="http://example.com/images/1588753-20200319171955492-2122972566.png">
-<meta property="og:image" content="http://example.com/images/1588753-20200320152418362-1602592872.png">
-<meta property="article:published_time" content="2020-03-19T13:58:00.000Z">
-<meta property="article:modified_time" content="2022-02-23T09:04:48.732Z">
-<meta property="article:author" content="zzy">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/1588753-20200317210803955-1345170871.jpg">
+  <title>平衡树入门 | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="前置技能
+平衡树是二叉搜索树的一种，二叉搜索树的定义如下：
+
+空树是二叉搜索树
+若二叉搜索树的左子树不为空，则其左子树上所有点的权值均小于其根节点的值
+若二叉搜索树的右子树不为空，则其右子树上所有点的权值均大于其根节点的值
+二叉搜索树的左右子树均为二叉搜索树
+对于有$n$个节点的二叉搜索树，每次基本">
   
   
-
-  <!-- feed -->
   
-
+    <link rel="shortcut icon" href="../../../../favicon.ico">
   
-    
-<link rel="stylesheet" href="../../../../css/main.css">
-
+  <link rel="stylesheet" href="../../../../css/style.css">
   
-
+    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
   
-
-  
-</head>
+<meta name="generator" content="Hexo 5.4.1"></head>
 
 <body>
-  
-
-
-
-
-  <div class='l_body' id='start'>
-    <aside class='l_left' layout='post'>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
     
-
-
-<header class="header">
-
-<div class="logo-wrap"><a class="title" href="../../../../index.html"><div class="main">zzy's blog</div></a></div>
-<nav class="menu dis-select"></nav></header>
-
-<div class="widgets">
-
-
-<div class="widget-wrap" id="recent"><div class="widget-header cap dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="more-item"><a class="title" href="../../../../2022/08/04/ASP%20.NET%20WebApi%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/">ASP .NET WebApi解决跨域问题.md</a></div><div class="more-item"><a class="title" href="../../../../2022/08/03/ubuntu%E4%B8%8A%E5%88%A9%E7%94%A8CS%E8%B0%83%E7%94%A8Python%E8%84%9A%E6%9C%AC(%E5%90%AB%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93)/">ubuntu上利用CS调用Python脚本(含第三方库)</a></div><div class="more-item"><a class="title" href="../../../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a></div><div class="more-item"><a class="title" href="../../../../2022/08/03/domjudge%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">domjudge安装与使用</a></div><div class="more-item"><a class="title" href="../../../07/31/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">拉格朗日插值法学习笔记</a></div></div></div>
-
-
-
+      <a class="main-nav-link" href="../../../../index.html">Home</a>
+    
+      <a class="main-nav-link" href="../../../../archives">Archives</a>
+    
+    <div class="main-nav-space-between"></div>
+    
+  </nav>
+</div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
+  
 </div>
 
+      <div id="content" class="outer">
+        <section id="main"><article id="post-平衡树入门" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time class="dt-published" datetime="2020-03-19T13:58:00.000Z" itemprop="datePublished">2020-03-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
 
-    </aside>
-    <div class='l_main'>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      平衡树入门
+    </h1>
+  
+
+      </header>
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
       
-
-      
-
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></div><div id="post-meta">发布于&nbsp;<time datetime="2020-03-19T13:58:00.000Z">2020-03-19</time></div></div>
-
-<article class='content md post'>
-<h1 class="article-title"><span>平衡树入门</span></h1>
-<p><strong>前置技能</strong></p>
+        <p><strong>前置技能</strong></p>
 <p>平衡树是二叉搜索树的一种，二叉搜索树的定义如下：</p>
 <ul>
 <li>空树是二叉搜索树</li>
@@ -120,7 +102,7 @@
 <p>左旋：将自己变为右孩子的左孩子，同时将右孩子的左孩子变为自己的右孩子</p>
 </li>
 </ul>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/1588753-20200317210803955-1345170871.jpg" alt=""></p>
+<p><img src="/images/1588753-20200317210803955-1345170871.jpg" alt=""></p>
 <p><strong>替罪羊树</strong></p>
 <p>替罪羊树通过重构来维持树的平衡，在插入、删除操作之后，从上到下检测途经的节点，若发现失衡，则将以该节点为根的子树重构</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span>
@@ -149,7 +131,7 @@
 <li>先中序遍历展开存入向量，注意只有当前节点存在时(cnt&gt;0)才能够存入向量</li>
 <li>分治建二叉树(每次取区间中点作为根，然后递归两边为左右子树建树)</li>
 </ul>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/1588753-20200318001036784-1277583803.png" alt=""></p>
+<p><img src="/images/1588753-20200318001036784-1277583803.png" alt=""></p>
 <p>在分治的同时，更新重构后子树每个节点的sz和fsz</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;now)</span>
 </span>&#123;
@@ -430,7 +412,7 @@ vector&lt;<span class="hljs-keyword">int</span>&gt; v;
 接下来我们以按值分裂为例，假设权值小于等于val的那一棵树的根节点为x，称为第一棵树，另一棵树的根节点为y，称为第二棵树</li>
 </ul>
 <p>根据二叉搜索树的性质，如果当前节点now的权值小于等于val，那么当前节点now和now的左子树都属于第一棵树，然而now的右子树上的节点不一定都属于第一棵树，那么我们就继续递归分裂now的右子树，同理，如果当前节点now的权值大于val，那么当前节点now和now的右子树都属于第二棵树，然而now的左子树上的节点不一定都属于第二棵树，继续递归分裂now的左子树</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/1588753-20200318200205386-1891965177.png" alt=""></p>
+<p><img src="/images/1588753-20200318200205386-1891965177.png" alt=""></p>
 <p>注意：分裂的同时需要更新路径上节点的sz，x和y采用引用传递(比较好写)</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-keyword">int</span> now)</span>
 </span>&#123;
@@ -459,7 +441,7 @@ vector&lt;<span class="hljs-keyword">int</span>&gt; v;
 <li>第一棵树根节点x的key值比第二棵树根节点y的key值小，由于第一棵树上节点的权值都小于第二棵树上节点的权值，那么根据二叉搜索树和小根堆的性质，第一棵树就在第二棵树的“左上方”，此时就递归合并节点x的右子树和节点y</li>
 <li>第二棵树根节点x的key值比第二棵树根节点y的key值大，同理，那么第一棵树就在第二棵树的“左下方”，此时递归合并节点x和节点y的左子树</li>
 </ul>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/1588753-20200318215436748-697279789.png" alt=""></p>
+<p><img src="/images/1588753-20200318215436748-697279789.png" alt=""></p>
 <p>merge(x,y)表示将以x为根的树和以y为根的树合并同时返回合并后的根节点</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">merge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y)</span>
 </span>&#123;
@@ -1099,14 +1081,14 @@ node tree[N];
 &#125;;
 </code></pre></div>
 <p>Splay在每次操作后，一般把节点伸展到根节点处，而伸展操作又是通过左旋和右旋来实现的，分为以下六种情况，每种情况都是将x节点伸展到根节点处</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/1588753-20200319163714589-1349866726.png" alt=""></p>
+<p><img src="/images/1588753-20200319163714589-1349866726.png" alt=""></p>
 <p>情况1：对y右旋就可以将x节点伸展到根节点处，称为zig</p>
 <p>情况2：对y左旋就可以将x节点伸展到根节点处，称为zag</p>
 <p>情况3：先对节点z右旋，再对节点y右旋即可，称为zig-zig</p>
 <p>情况4：与情况3相反，先对节点左旋，再对节点y左旋即可，称为zag-zag</p>
 <p>情况5：先左旋节点y，再右旋节点z即可，称为zag-zig</p>
 <p>情况6：与情况5相反，先右旋节点y，再左旋节点z，称为zig-zag</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/1588753-20200319165751103-218677334.png" alt=""></p>
+<p><img src="/images/1588753-20200319165751103-218677334.png" alt=""></p>
 <p>如果需要将x节点伸展到y节点处，我们只需要递归把x节点伸展到z节点处，然后按照情况3处理即可</p>
 <div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">splaying</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> &amp;y)</span>
 </span>&#123;
@@ -1141,7 +1123,7 @@ node tree[N];
 <p>注意：zig、zag函数的参数是引用传递，旋转后节点会发生改变，所以情况3执行的是zig(y)，zig(y)，splaying函数递归的出口是情况1和情况2</p>
 <p>splay的插入操作和二叉树的插入操作差不多，插入后，将新插入的节点旋转到根节点即可</p>
 <p>对于删除操作，splay则是先把需要删除的节点now伸展到根节点，找到节点now的后继节点，将后继节点伸展为根节点的右儿子，显然被伸展过的后继节点没有左儿子，此时我们只需要将后继节点的左儿子指向根节点的左儿子，将根节点指向这个后继节点即可，删除后需要更新根节点的sz</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/1588753-20200319171955492-2122972566.png" alt=""></p>
+<p><img src="/images/1588753-20200319171955492-2122972566.png" alt=""></p>
 <p>查询某个数的排名qrank(x)和查询某个排名上的数qnum(x)和替罪羊树差不多，只是在查询之后，需要将查询到的节点伸展到根节点</p>
 <p>例题：<a target="_blank" rel="noopener" href="https://darkbzoj.tk/problem/3224">bzoj-3224普通平衡树</a></p>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
@@ -1315,7 +1297,7 @@ node spl[N];
 &#125;
 </code></pre></div>
 <p>splay也能像fhq-Treap一样能够对区间进行操作，同样按照元素在序列中的下标来维护二叉树的性质，当对区间[l,r]操作时，可以先将下标为l-1的节点伸展到根节点，将下标为r+1的节点伸展为根节点的右儿子，根据二叉搜索树的性质，显然根节点右儿子的左子树表示的区间就是[l,r]，我们就可以像fhq-Treap、线段树一样用懒标记解决区间问题</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/1588753-20200320152418362-1602592872.png" alt=""></p>
+<p><img src="/images/1588753-20200320152418362-1602592872.png" alt=""></p>
 <p>当需要在下标为x的元素后面插入一个新的元素时，我们可以先把下标为x的节点伸展到根节点，再将下标为x+1的节点伸展为根节点的右儿子，根据二叉树的性质，此时根节点右儿子的左子树为空，所以将这个新节点变为根节点右儿子的左子树即可</p>
 <p>当需要删除下标为x的元素时，可以先把下标为x-1的节点伸展到根节点，再将下标为x+1的节点伸展为根节点的右儿子，根据二叉树的性质有，根节点右儿子的左子树就是我们需要删除的那个元素，直接将根节点右儿子的左子树变为空即可</p>
 <p>注意：对于splay区间操作，一般在序列前后各加一个哨兵，方便处理，但由于在序列开始加入了哨兵，当处理序列上的区间[l,r]时，在splay上的区间应该是[l+1,r+1]</p>
@@ -1697,178 +1679,147 @@ node spl[N];
 </li>
 </ol>
 
-
-<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
-</div></section></div>
-
-</article>
-
-<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="../../../02/27/2019%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89-%20H.%20XOR(%E7%BA%BF%E6%80%A7%E5%9F%BA)/">2019牛客暑期多校训练营（第一场）- H. XOR(线性基)<span class="note">较早</span></a><div class="line"></div><a id="prev" href="../../../04/02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/">后缀数组<span class="note">较新</span></a></section></div>
-
-
-
-
-
-
-
-
       
-<footer class="page-footer reveal fs12"><hr><div class="text"><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
-<p>本站由 <a href="http://example.com/">@zzy</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.8.0" title="v1.8.0">Stellar</a> 作为主题。</p>
-</div></footer>
-
-      <div class='float-panel mobile-only blur' style='display:none'>
-  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
-    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
-  </button>
-</div>
-
     </div>
+    <footer class="article-footer">
+      
+      
+      
+    </footer>
   </div>
-  <div class='scripts'>
-    <script type="text/javascript">
-  stellar = {
-    // 懒加载 css https://github.com/filamentgroup/loadCSS
-    loadCSS: (href, before, media, attributes) => {
-      var doc = window.document;
-      var ss = doc.createElement("link");
-      var ref;
-      if (before) {
-        ref = before;
-      } else {
-        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
-        ref = refs[refs.length - 1];
-      }
-      var sheets = doc.styleSheets;
-      if (attributes) {
-        for (var attributeName in attributes) {
-          if (attributes.hasOwnProperty(attributeName)) {
-            ss.setAttribute(attributeName, attributes[attributeName]);
-          }
-        }
-      }
-      ss.rel = "stylesheet";
-      ss.href = href;
-      ss.media = "only x";
-      function ready(cb) {
-        if (doc.body) {
-          return cb();
-        }
-        setTimeout(function () {
-          ready(cb);
-        });
-      }
-      ready(function () {
-        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
-      });
-      var onloadcssdefined = function (cb) {
-        var resolvedHref = ss.href;
-        var i = sheets.length;
-        while (i--) {
-          if (sheets[i].href === resolvedHref) {
-            return cb();
-          }
-        }
-        setTimeout(function () {
-          onloadcssdefined(cb);
-        });
-      };
-      function loadCB() {
-        if (ss.addEventListener) {
-          ss.removeEventListener("load", loadCB);
-        }
-        ss.media = media || "all";
-      }
-      if (ss.addEventListener) {
-        ss.addEventListener("load", loadCB);
-      }
-      ss.onloadcssdefined = onloadcssdefined;
-      onloadcssdefined(loadCB);
-      return ss;
-    },
-
-    // 从 butterfly 和 volantis 获得灵感
-    loadScript: (src, opt) => new Promise((resolve, reject) => {
-      var script = document.createElement('script');
-      script.src = src;
-      if (opt) {
-        for (let key of Object.keys(opt)) {
-          script[key] = opt[key]
-        }
-      } else {
-        // 默认异步，如果需要同步，第二个参数传入 {} 即可
-        script.async = true
-      }
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    }),
-
-    // https://github.com/jerryc127/hexo-theme-butterfly
-    jQuery: (fn) => {
-      if (typeof jQuery === 'undefined') {
-        stellar.loadScript(stellar.plugins.jQuery).then(fn)
-      } else {
-        fn()
-      }
-    }
-  };
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.8.0';
-  stellar.config = {
-    date_suffix: {
-      just: '刚刚',
-      min: '分钟前',
-      hour: '小时前',
-      day: '天前',
-      month: '个月前',
-    },
-  };
-
-  // required plugins (only load if needs)
-  stellar.plugins = {
-    jQuery: 'https://fastly.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
-    sitesjs: '../../../../js/plugins/sites.js',
-    friendsjs: '../../../../js/plugins/friends.js',
-  };
-
-  // optional plugins
-  if ('true' == 'true') {
-    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
-  }
-  if ('true' == 'true') {
-    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
-  }
-  if ('' == 'true') {
-    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://fastly.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
-  }
-  if ('true' == 'true') {
-    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://fastly.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://fastly.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
-  }
-  if ('true' == 'true') {
-    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
-  }
-  if ('false' == 'true') {
-    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
-  }
-</script>
-
-<!-- required -->
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../04/02/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          后缀数组
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../02/27/2019%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89-%20H.%20XOR(%E7%BA%BF%E6%80%A7%E5%9F%BA)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          2019牛客暑期多校训练营（第一场）- H. XOR(线性基)
+        
+      </div>
+    </a>
+  
+</nav>
 
   
-<script src="../../../../js/main.js" async></script>
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../../2022/08/04/ASP%20.NET%20WebApi%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/">ASP .NET WebApi解决跨域问题</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2022/08/03/ubuntu%E4%B8%8A%E5%88%A9%E7%94%A8CS%E8%B0%83%E7%94%A8Python%E8%84%9A%E6%9C%AC(%E5%90%AB%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93)/">ubuntu上利用CS调用Python脚本(含第三方库)</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2022/08/03/domjudge%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">domjudge安装与使用</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
+        
+          <li>
+            <a href="../../../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C#</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/domjudge/">domjudge</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="../../../../js/clipboard.min.js"></script>
+<script src="../../../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
 
 
 
-<!-- optional -->
 
 
 
-<!-- inject -->
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../mathjax/tex-chtml.js">
+</script>
+
 
 
   </div>

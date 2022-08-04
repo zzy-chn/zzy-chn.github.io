@@ -1,302 +1,255 @@
 <!DOCTYPE html>
-<html lang='zh-CN'>
-
+<html>
 <head>
-  <meta name="generator" content="Hexo 5.4.1">
   <meta charset="utf-8">
-  <meta name="robots" content="noindex,follow">
-
-  <meta http-equiv='x-dns-prefetch-control' content='on' />
-  <link rel='dns-prefetch' href='https://fastly.jsdelivr.net'>
-  <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
-  <link rel='dns-prefetch' href='//unpkg.com'>
-
-  <meta name="renderer" content="webkit">
-  <meta name="force-rendering" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-  <meta name="HandheldFriendly" content="True" >
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="theme-color" content="#f8f8f8">
-  <title>分类：动态规划 - zzy's blog</title>
-
-  
-    <meta property="og:type" content="website">
-<meta property="og:title" content="zzy&#39;s blog">
-<meta property="og:url" content="http://example.com/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/index.html">
-<meta property="og:site_name" content="zzy&#39;s blog">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="zzy">
-<meta name="twitter:card" content="summary">
   
   
-
-  <!-- feed -->
+  <title>分类: 动态规划 | zzy&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   
-
   
-    
-<link rel="stylesheet" href="../../css/main.css">
-
   
-
+    <link rel="shortcut icon" href="../../favicon.ico">
   
-
+  <link rel="stylesheet" href="../../css/style.css">
   
-</head>
+    <link rel="stylesheet" href="../../fancybox/jquery.fancybox-1.3.4.css">
+  
+<meta name="generator" content="Hexo 5.4.1"></head>
 
 <body>
-  
-
-
-  <div class='l_body' id='start'>
-    <aside class='l_left' layout=''>
+  <div id="container">
+    <div id="wrap">
+      <div id="nav-outer">
+  <nav id="main-nav" class="outer">
+    <a id="main-nav-toggle" class="nav-icon"></a>
     
-
-
-<header class="header">
-
-<div class="logo-wrap"><a class="title" href="../../index.html"><div class="main">zzy's blog</div></a></div>
-<nav class="menu dis-select"></nav></header>
-
-<div class="widgets">
-<div class="widget-wrap" id="markdown"><div class="widget-header cap dis-select"><span class="name">Stellar 入门指南</span></div><div class="widget-body fs14"><p>欢迎使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/">Stellar</a> 主题，下面是您的入门指南，祝您使用愉快！<br>
-<br><br>
-<strong>第一步</strong><br>
-创建 <code>blog/_config.stellar.yml</code> 文件，在此文件中填写需要自定义的主题配置。<br>
-<br><br>
-<strong>第二步</strong><br>
-创建 <code>blog/source/_data/widgets.yml</code> 文件，此文件中填写需要自定义的侧边栏组件，例如 <code>welcome</code> 组件。<br>
-<br><br>
-如果有任何疑问，请先查阅<a target="_blank" rel="noopener" href="https://xaoxuu.com/wiki/stellar/">文档</a>，如果文档中没有提供，请提 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/issues/">issue</a> 向开发中询问。</p>
-</div></div>
-
-<div class="widget-wrap" id="recent"><div class="widget-header cap dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="more-item"><a class="title" href="../../2022/08/04/ASP%20.NET%20WebApi%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/">ASP .NET WebApi解决跨域问题.md</a></div><div class="more-item"><a class="title" href="../../2022/08/03/ubuntu%E4%B8%8A%E5%88%A9%E7%94%A8CS%E8%B0%83%E7%94%A8Python%E8%84%9A%E6%9C%AC(%E5%90%AB%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93)/">ubuntu上利用CS调用Python脚本(含第三方库)</a></div><div class="more-item"><a class="title" href="../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a></div><div class="more-item"><a class="title" href="../../2022/08/03/domjudge%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">domjudge安装与使用</a></div><div class="more-item"><a class="title" href="../../2020/07/31/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">拉格朗日插值法学习笔记</a></div></div></div>
-</div>
-
-
-    </aside>
-    <div class='l_main list'>
-      
-  
-
-<header class="header mobile-only">
-
-<div class="logo-wrap"><a class="title" href="../../index.html"><div class="main">zzy's blog</div></a></div>
-</header>
-
-
-
-      
-
-  
-
-
-  <div class='nav-wrap'>
-  <nav class='sub post cap'>
+      <a class="main-nav-link" href="../../index.html">Home</a>
     
-      <a href='/'>近期发布</a>
+      <a class="main-nav-link" href="../../archives">Archives</a>
     
-    
-      
-        <a class='active' href='..'>分类：动态规划</a>
-      
-    
-    
-    
-      
-        <a href='../../archives'>归档</a>
-      
+    <div class="main-nav-space-between"></div>
     
   </nav>
 </div>
-
-  <div class="post-list post"><a class="post-card post " href="../../2020/07/22/Codeforces%20Round658%20(Div.%202)%20-%20D.%20Unmerge(dp)/">
-<article class="md"><h2 class="post-title">Codeforces Round658 (Div. 2) - D. Unmerge(dp)</h2><div class="excerpt"><p>题目链接：Unmerge
-题意：定义两个数组的合并merge(a，b)，每次将数组a第一个元素和数组b第一个元素中最小的那个放到数组c中，同时删除那个最小的元素，现在给你一个长度为2*n的排列，问是否能由两个长度为n的数组合并而成
-思路：对于长度为2*n的排列，显然是通过一段一段合并得到的，例如(3，2，6，1，5，7，8，4)，找到3后面比他大的第一个数6，6后面比他大的第一个数7，7后面...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2020-07-22T01:50:00.000Z">2020-07-22</time></span><span class="cap breadcrumb">动态规划</span></div></article>
-</a><a class="post-card post " href="../../2020/07/19/2020%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%89%E5%9C%BA%EF%BC%89E%20-%20Two%20Matchings(dp)/">
-<article class="md"><h2 class="post-title">2020牛客暑期多校训练营（第三场）E - Two Matchings(dp)</h2><div class="excerpt"><p>题目链接：Two Matchings
-题意：给你一个序列a，你要找到两种完全不同的整个序列的两两匹配，使得所有两两匹配差的绝对值的和最小，输出这个和
-思路：对序列a排序后，显然最小的匹配相邻两两匹配，即$(a_2-a_1)+(a_4-a_3)+\dots+(a_n - a_{n-1})$，关键在如何求第二小的匹配
-对于第二小的匹配，我们可以讲整个序列分为多个4个数的子序列和多个6个数的子序列...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2020-07-19T14:58:00.000Z">2020-07-19</time></span><span class="cap breadcrumb">动态规划</span></div></article>
-</a><a class="post-card post " href="../../2019/11/21/Educational%20Codeforces%20Round%2076%20(Rated%20for%20Div.%202)%20-%20E.%20The%20Contest(dp)/">
-<article class="md"><h2 class="post-title">Educational Codeforces Round 76 (Rated for Div. 2) - E. The Contest(dp)</h2><div class="excerpt"><p>题意：有三个人去写编号从$1$到$n$的$n$个题目，现在这三个人分别有$k_1$，$k_2$，$k_3$个题目（$k_1+k_2+k_3=n$），每次操作你可以将一个人的某一个题目给另一个人，问你最少经过多少次操作使得第一个人写这$n$个题目的前缀，第三个人写这$n$个题目的后缀，第二个人写其他部分，可以有人不写题目。
-思路：设$dp[i][j]$表示把第$i$个题目给第$j$个人最少的次...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2019-11-21T06:04:00.000Z">2019-11-21</time></span><span class="cap breadcrumb">动态规划</span></div></article>
-</a><a class="post-card post " href="../../2019/08/01/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E7%BA%BF%E6%80%A7%EF%BC%8C%E5%8C%BA%E9%97%B4%EF%BC%8C%E6%A0%91%E5%BD%A2%EF%BC%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96%EF%BC%8C%E5%9B%9B%E8%BE%B9%E5%BD%A2%E4%B8%8D%E7%AD%89%E5%BC%8F%EF%BC%89/">
-<article class="md"><h2 class="post-title">动态规划（线性，区间，树形，数据结构优化，四边形不等式）</h2><div class="excerpt"><p>To The Max，hdu1081
-求最大子矩阵和，把二维转换到一维，把每一行的某些列的和看作一个元素，这样就成了一维下的最大子段和，预处理每行的前缀和，暴力枚举每行的的列数情况即可
-#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-#include &lt;cstring&gt;
-
-using namespace std;
-
-con...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2019-08-01T13:44:00.000Z">2019-08-01</time></span><span class="cap breadcrumb">动态规划</span></div></article>
-</a></div>
+<div id="header-title">
+  <h1 id="logo-wrap">
+    <a href="../../index.html" id="logo">zzy&#39;s blog</a>
+  </h1>
   
-
-
-
-
-
-      
-<footer class="page-footer reveal fs12"><hr><div class="text"><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
-<p>本站由 <a href="http://example.com/">@zzy</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.8.0" title="v1.8.0">Stellar</a> 作为主题。</p>
-</div></footer>
-
-      <div class='float-panel mobile-only blur' style='display:none'>
-  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
-    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
-  </button>
 </div>
 
+      <div id="content" class="outer">
+        <section id="main">
+  
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="../../archives/2020" class="archive-year">2020</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="../../2020/07/22/Codeforces%20Round658%20(Div.%202)%20-%20D.%20Unmerge(dp)/">Codeforces Round658 (Div. 2) - D. Unmerge(dp)</a>
+    </h1>
+  
+
+      <div class="archive-article-line"></div>
+      <a href="../../2020/07/22/Codeforces%20Round658%20(Div.%202)%20-%20D.%20Unmerge(dp)/" class="archive-article-date">
+  <time class="dt-published" datetime="2020-07-22T01:50:00.000Z" itemprop="datePublished">2020-07-22</time>
+</a>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="../../2020/07/19/2020%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%89%E5%9C%BA%EF%BC%89E%20-%20Two%20Matchings(dp)/">2020牛客暑期多校训练营（第三场）E - Two Matchings(dp)</a>
+    </h1>
+  
+
+      <div class="archive-article-line"></div>
+      <a href="../../2020/07/19/2020%E7%89%9B%E5%AE%A2%E6%9A%91%E6%9C%9F%E5%A4%9A%E6%A0%A1%E8%AE%AD%E7%BB%83%E8%90%A5%EF%BC%88%E7%AC%AC%E4%B8%89%E5%9C%BA%EF%BC%89E%20-%20Two%20Matchings(dp)/" class="archive-article-date">
+  <time class="dt-published" datetime="2020-07-19T14:58:00.000Z" itemprop="datePublished">2020-07-19</time>
+</a>
+    </header>
+  </div>
+</article>
+  
+    
+    
+      
+        </div></section>
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="../../archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="../../2019/11/21/Educational%20Codeforces%20Round%2076%20(Rated%20for%20Div.%202)%20-%20E.%20The%20Contest(dp)/">Educational Codeforces Round 76 (Rated for Div. 2) - E. The Contest(dp)</a>
+    </h1>
+  
+
+      <div class="archive-article-line"></div>
+      <a href="../../2019/11/21/Educational%20Codeforces%20Round%2076%20(Rated%20for%20Div.%202)%20-%20E.%20The%20Contest(dp)/" class="archive-article-date">
+  <time class="dt-published" datetime="2019-11-21T06:04:00.000Z" itemprop="datePublished">2019-11-21</time>
+</a>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="../../2019/08/01/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E7%BA%BF%E6%80%A7%EF%BC%8C%E5%8C%BA%E9%97%B4%EF%BC%8C%E6%A0%91%E5%BD%A2%EF%BC%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96%EF%BC%8C%E5%9B%9B%E8%BE%B9%E5%BD%A2%E4%B8%8D%E7%AD%89%E5%BC%8F%EF%BC%89/">动态规划（线性，区间，树形，数据结构优化，四边形不等式）</a>
+    </h1>
+  
+
+      <div class="archive-article-line"></div>
+      <a href="../../2019/08/01/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E7%BA%BF%E6%80%A7%EF%BC%8C%E5%8C%BA%E9%97%B4%EF%BC%8C%E6%A0%91%E5%BD%A2%EF%BC%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96%EF%BC%8C%E5%9B%9B%E8%BE%B9%E5%BD%A2%E4%B8%8D%E7%AD%89%E5%BC%8F%EF%BC%89/" class="archive-article-date">
+  <time class="dt-published" datetime="2019-08-01T13:44:00.000Z" itemprop="datePublished">2019-08-01</time>
+</a>
+    </header>
+  </div>
+</article>
+  
+  
+    </div></section>
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../2022/08/04/ASP%20.NET%20WebApi%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/">ASP .NET WebApi解决跨域问题</a>
+          </li>
+        
+          <li>
+            <a href="../../2022/08/03/ubuntu%E4%B8%8A%E5%88%A9%E7%94%A8CS%E8%B0%83%E7%94%A8Python%E8%84%9A%E6%9C%AC(%E5%90%AB%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93)/">ubuntu上利用CS调用Python脚本(含第三方库)</a>
+          </li>
+        
+          <li>
+            <a href="../../2022/08/03/domjudge%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">domjudge安装与使用</a>
+          </li>
+        
+          <li>
+            <a href="../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
+          </li>
+        
+          <li>
+            <a href="../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-  <div class='scripts'>
-    <script type="text/javascript">
-  stellar = {
-    // 懒加载 css https://github.com/filamentgroup/loadCSS
-    loadCSS: (href, before, media, attributes) => {
-      var doc = window.document;
-      var ss = doc.createElement("link");
-      var ref;
-      if (before) {
-        ref = before;
-      } else {
-        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
-        ref = refs[refs.length - 1];
-      }
-      var sheets = doc.styleSheets;
-      if (attributes) {
-        for (var attributeName in attributes) {
-          if (attributes.hasOwnProperty(attributeName)) {
-            ss.setAttribute(attributeName, attributes[attributeName]);
-          }
-        }
-      }
-      ss.rel = "stylesheet";
-      ss.href = href;
-      ss.media = "only x";
-      function ready(cb) {
-        if (doc.body) {
-          return cb();
-        }
-        setTimeout(function () {
-          ready(cb);
-        });
-      }
-      ready(function () {
-        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
-      });
-      var onloadcssdefined = function (cb) {
-        var resolvedHref = ss.href;
-        var i = sheets.length;
-        while (i--) {
-          if (sheets[i].href === resolvedHref) {
-            return cb();
-          }
-        }
-        setTimeout(function () {
-          onloadcssdefined(cb);
-        });
-      };
-      function loadCB() {
-        if (ss.addEventListener) {
-          ss.removeEventListener("load", loadCB);
-        }
-        ss.media = media || "all";
-      }
-      if (ss.addEventListener) {
-        ss.addEventListener("load", loadCB);
-      }
-      ss.onloadcssdefined = onloadcssdefined;
-      onloadcssdefined(loadCB);
-      return ss;
-    },
-
-    // 从 butterfly 和 volantis 获得灵感
-    loadScript: (src, opt) => new Promise((resolve, reject) => {
-      var script = document.createElement('script');
-      script.src = src;
-      if (opt) {
-        for (let key of Object.keys(opt)) {
-          script[key] = opt[key]
-        }
-      } else {
-        // 默认异步，如果需要同步，第二个参数传入 {} 即可
-        script.async = true
-      }
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    }),
-
-    // https://github.com/jerryc127/hexo-theme-butterfly
-    jQuery: (fn) => {
-      if (typeof jQuery === 'undefined') {
-        stellar.loadScript(stellar.plugins.jQuery).then(fn)
-      } else {
-        fn()
-      }
-    }
-  };
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.8.0';
-  stellar.config = {
-    date_suffix: {
-      just: '刚刚',
-      min: '分钟前',
-      hour: '小时前',
-      day: '天前',
-      month: '个月前',
-    },
-  };
-
-  // required plugins (only load if needs)
-  stellar.plugins = {
-    jQuery: 'https://fastly.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
-    sitesjs: '../../js/plugins/sites.js',
-    friendsjs: '../../js/plugins/friends.js',
-  };
-
-  // optional plugins
-  if ('true' == 'true') {
-    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
-  }
-  if ('true' == 'true') {
-    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
-  }
-  if ('' == 'true') {
-    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://fastly.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
-  }
-  if ('true' == 'true') {
-    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://fastly.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://fastly.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
-  }
-  if ('true' == 'true') {
-    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
-  }
-  if ('false' == 'true') {
-    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
-  }
-</script>
-
-<!-- required -->
 
   
-<script src="../../js/main.js" async></script>
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../C/">C#</a></li><li class="category-list-item"><a class="category-list-link" href="../Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../domjudge/">domjudge</a></li><li class="category-list-item"><a class="category-list-link" href="">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 zzy<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
+      
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="../../js/clipboard.min.js"></script>
+<script src="../../js/jquery-1.4.3.min.js"></script>
+
+<script src="../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+
+
+<script src="../../js/script.js"></script>
 
 
 
-<!-- optional -->
 
 
 
-<!-- inject -->
+<script>
+  MathJax = {
+    options: {
+      enableMenu: false
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="../../mathjax/tex-chtml.js">
+</script>
+
 
 
   </div>
