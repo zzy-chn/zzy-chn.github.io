@@ -1,86 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang='zh-CN'>
+
 <head>
+  <meta name="generator" content="Hexo 5.4.1">
   <meta charset="utf-8">
   
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://fastly.jsdelivr.net'>
+  <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  <title>Codeforces训练记录 - zzy's blog</title>
+
   
-  <title>Codeforces训练记录 | zzy&#39;s blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Codeforces Round #693 (Div.3) Cards for Friends #include &lt;iostream&gt; #include &lt;algorithm&gt; #include &lt;cstring&gt; #include &lt;cstdio&gt; #include &lt;vector&gt;  using namespace std;  typ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Codeforces训练记录">
+<meta property="og:url" content="http://example.com/2021/01/17/Codeforces%E8%AE%AD%E7%BB%83%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="zzy&#39;s blog">
+<meta property="og:description" content="Codeforces Round #693 (Div.3) Cards for Friends #include &lt;iostream&gt; #include &lt;algorithm&gt; #include &lt;cstring&gt; #include &lt;cstdio&gt; #include &lt;vector&gt;  using namespace std;  typ">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-17T04:09:00.000Z">
+<meta property="article:modified_time" content="2022-02-23T14:15:56.803Z">
+<meta property="article:author" content="zzy">
+<meta name="twitter:card" content="summary">
   
-  <meta name="description" content="Codeforces Round #693 (Div.3)
-Cards for Friends
-#include &amp;lt;iostream&amp;gt;
-#include &amp;lt;algorithm&amp;gt;
-#include &amp;lt;cstring&amp;gt;
-#include &amp;lt;cstdio&amp;gt;
-">
   
+
+  <!-- feed -->
   
+
   
-    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+<link rel="stylesheet" href="../../../../css/main.css">
+
   
-  <link rel="stylesheet" href="../../../../css/style.css">
+
   
-    <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox-1.3.4.css">
+
   
-<meta name="generator" content="Hexo 5.4.1"></head>
+</head>
 
 <body>
-  <div id="container">
-    <div id="wrap">
-      <div id="nav-outer">
-  <nav id="main-nav" class="outer">
-    <a id="main-nav-toggle" class="nav-icon"></a>
-    
-      <a class="main-nav-link" href="../../../../index.html">Home</a>
-    
-      <a class="main-nav-link" href="../../../../archives">Archives</a>
-    
-    <div class="main-nav-space-between"></div>
-    
-  </nav>
-</div>
-<div id="header-title">
-  <h1 id="logo-wrap">
-    <a href="../../../../index.html" id="logo">zzy&#39;s blog</a>
-  </h1>
-  
-</div>
-
-      <div id="content" class="outer">
-        <section id="main"><article id="post-Codeforces训练记录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="" class="article-date">
-  <time class="dt-published" datetime="2021-01-17T04:09:00.000Z" itemprop="datePublished">2021-01-17</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="../../../../categories/Codeforces/">Codeforces</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      Codeforces训练记录
-    </h1>
   
 
-      </header>
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
     
-    
-<div id="article-toc">
-    <h2 class="widget-title">目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bcodeforces-round%20#693%20(div3)%5D(https://codeforces.com/contest/1472)"><span class="toc-number">1.</span> <span class="toc-text">Codeforces Round #693 (Div.3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#cards-for%20friends"><span class="toc-number">1.1.</span> <span class="toc-text">Cards for Friends</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fair-division"><span class="toc-number">1.2.</span> <span class="toc-text">Fair Division</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#long-jumps"><span class="toc-number">1.3.</span> <span class="toc-text">Long Jumps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#even-odd-game"><span class="toc-number">1.4.</span> <span class="toc-text">Even-Odd Game</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#correct-placement"><span class="toc-number">1.5.</span> <span class="toc-text">Correct Placement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new-year's%20puzzle"><span class="toc-number">1.6.</span> <span class="toc-text">New Year’s Puzzle</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bcodeforces-round%20#667%20(div3)%5D(https://codeforces.com/contest/1409)"><span class="toc-number">2.</span> <span class="toc-text">Codeforces Round #667 (Div.3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#yet-another%20two%20integers%20problem"><span class="toc-number">2.1.</span> <span class="toc-text">Yet Another Two Integers Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#minimum-product"><span class="toc-number">2.2.</span> <span class="toc-text">Minimum Product</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yet-another%20array%20restoration"><span class="toc-number">2.3.</span> <span class="toc-text">Yet Another Array Restoration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#decrease-the%20sum%20of%20digits"><span class="toc-number">2.4.</span> <span class="toc-text">Decrease the Sum of Digits</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#two-platforms"><span class="toc-number">2.5.</span> <span class="toc-text">Two Platforms</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bcodeforces-round%20#694%20(div%202)%5D(https://codeforces.com/contest/1471)"><span class="toc-number">3.</span> <span class="toc-text">Codeforces Round #694 (Div. 2)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-partition"><span class="toc-number">3.1.</span> <span class="toc-text">Strange Partition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-list"><span class="toc-number">3.2.</span> <span class="toc-text">Strange List</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-birthday%20party"><span class="toc-number">3.3.</span> <span class="toc-text">Strange Birthday Party</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-definition"><span class="toc-number">3.4.</span> <span class="toc-text">Strange Definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-housing"><span class="toc-number">3.5.</span> <span class="toc-text">Strange Housing</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bcodeforces-round%20#690%20(div3)%5D(https://codeforces.com/contest/1462)"><span class="toc-number">4.</span> <span class="toc-text">Codeforces Round #690 (Div.3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#favorite-sequence"><span class="toc-number">4.1.</span> <span class="toc-text">Favorite Sequence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#last-year's%20substring"><span class="toc-number">4.2.</span> <span class="toc-text">Last Year’s Substring</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unique-number"><span class="toc-number">4.3.</span> <span class="toc-text">Unique Number</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#add-to%20neighbour%20and%20remove"><span class="toc-number">4.4.</span> <span class="toc-text">Add to Neighbour and Remove</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#close-tuples%20(easy%20version)"><span class="toc-number">4.5.</span> <span class="toc-text">Close Tuples (easy version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#close-tuples%20(hard%20version)"><span class="toc-number">4.6.</span> <span class="toc-text">Close Tuples (hard version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-treasure%20of%20the%20segments"><span class="toc-number">4.7.</span> <span class="toc-text">The Treasure of The Segments</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bgood-bye%202020%5D(https://codeforcescom/contest/1466)"><span class="toc-number">5.</span> <span class="toc-text">Good Bye 2020</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bovine-dilemma"><span class="toc-number">5.1.</span> <span class="toc-text">Bovine Dilemma</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#last-minute%20enhancements"><span class="toc-number">5.2.</span> <span class="toc-text">Last minute enhancements</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#canine-poetry"><span class="toc-number">5.3.</span> <span class="toc-text">Canine poetry</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13th-labour%20of%20heracles"><span class="toc-number">5.4.</span> <span class="toc-text">13th Labour of Heracles</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#apollo-versus%20pan"><span class="toc-number">5.5.</span> <span class="toc-text">Apollo versus Pan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#euclid's-nightmare"><span class="toc-number">5.6.</span> <span class="toc-text">Euclid’s nightmare</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bcodeforces-round%20#634%20(div3)%5D(https://codeforces.com/contest/1335)"><span class="toc-number">6.</span> <span class="toc-text">Codeforces Round #634 (Div.3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#candies-and%20two%20sisters"><span class="toc-number">6.1.</span> <span class="toc-text">Candies and Two Sisters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#construct-the%20string"><span class="toc-number">6.2.</span> <span class="toc-text">Construct the String</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#two-teams%20composing"><span class="toc-number">6.3.</span> <span class="toc-text">Two Teams Composing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#anti-sudoku"><span class="toc-number">6.4.</span> <span class="toc-text">Anti-Sudoku</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#three-blocks%20palindrome%20(easy%20version)"><span class="toc-number">6.5.</span> <span class="toc-text">Three Blocks Palindrome (easy version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#three-blocks%20palindrome%20(hard%20version)"><span class="toc-number">6.6.</span> <span class="toc-text">Three Blocks Palindrome (hard version)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Beducational-codeforces%20round%20101%20(rated%20for%20div2)%5D(https://codeforces.com/contest/1469)"><span class="toc-number">7.</span> <span class="toc-text">Educational Codeforces Round 101 (Rated for Div.2)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#regular-bracket%20sequence"><span class="toc-number">7.1.</span> <span class="toc-text">Regular Bracket Sequence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#red-and%20blue"><span class="toc-number">7.2.</span> <span class="toc-text">Red and Blue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#building-a%20fence"><span class="toc-number">7.3.</span> <span class="toc-text">Building a Fence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ceil-divisions"><span class="toc-number">7.4.</span> <span class="toc-text">Ceil Divisions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-bit%20similar"><span class="toc-number">7.5.</span> <span class="toc-text">A Bit Similar</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bcodeforces-round%20#686%20(div3)%5D(https://codeforces.com/contest/1454)"><span class="toc-number">8.</span> <span class="toc-text">Codeforces Round #686 (Div.3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#special-permutation"><span class="toc-number">8.1.</span> <span class="toc-text">Special Permutation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unique-bid%20auction"><span class="toc-number">8.2.</span> <span class="toc-text">Unique Bid Auction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sequence-transformation"><span class="toc-number">8.3.</span> <span class="toc-text">Sequence Transformation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#number-into%20sequence"><span class="toc-number">8.4.</span> <span class="toc-text">Number into Sequence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#number-of%20simple%20paths"><span class="toc-number">8.5.</span> <span class="toc-text">Number of Simple Paths</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bcodeforces-round%20#627%20(div3)%5D(https://codeforces.com/contest/1324)"><span class="toc-number">9.</span> <span class="toc-text">Codeforces Round #627 (Div.3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#yet-another%20tetris%20problem"><span class="toc-number">9.1.</span> <span class="toc-text">Yet Another Tetris Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yet-another%20palindrome%20problem"><span class="toc-number">9.2.</span> <span class="toc-text">Yet Another Palindrome Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#frog-jumps"><span class="toc-number">9.3.</span> <span class="toc-text">Frog Jumps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pair-of%20topics"><span class="toc-number">9.4.</span> <span class="toc-text">Pair of Topics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleeping-schedule"><span class="toc-number">9.5.</span> <span class="toc-text">Sleeping Schedule</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bcodeforces-round%20#676%20(div2)%5D(https://codeforces.com/contest/1421)"><span class="toc-number">10.</span> <span class="toc-text">Codeforces Round #676 (Div.2)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#xorwice"><span class="toc-number">10.1.</span> <span class="toc-text">XORwice</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#putting-bricks%20in%20the%20wall"><span class="toc-number">10.2.</span> <span class="toc-text">Putting Bricks in the Wall</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#palindromifier"><span class="toc-number">10.3.</span> <span class="toc-text">Palindromifier</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexagons"><span class="toc-number">10.4.</span> <span class="toc-text">Hexagons</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bcodeforces-round%20#605%20(div3)%5D(https://codeforces.com/contest/1272)"><span class="toc-number">11.</span> <span class="toc-text">Codeforces Round #605 (Div.3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#three-friends"><span class="toc-number">11.1.</span> <span class="toc-text">Three Friends</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#snow-walking%20robot"><span class="toc-number">11.2.</span> <span class="toc-text">Snow Walking Robot</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yet-another%20broken%20keyboard"><span class="toc-number">11.3.</span> <span class="toc-text">Yet Another Broken Keyboard</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#remove-one%20element"><span class="toc-number">11.4.</span> <span class="toc-text">Remove One Element</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nearest-opposite%20parity"><span class="toc-number">11.5.</span> <span class="toc-text">Nearest Opposite Parity</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%5Bcodeforces-round%20#697%20(div%203)%5D(https://codeforces.com/contest/1475)"><span class="toc-number">12.</span> <span class="toc-text">Codeforces Round #697 (Div. 3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#odd-divisor"><span class="toc-number">12.1.</span> <span class="toc-text">Odd Divisor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new-year's%20number"><span class="toc-number">12.2.</span> <span class="toc-text">New Year’s Number</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ball-in%20berland"><span class="toc-number">12.3.</span> <span class="toc-text">Ball in Berland</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cleaning-the%20phone"><span class="toc-number">12.4.</span> <span class="toc-text">Cleaning the Phone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#advertising-agency"><span class="toc-number">12.5.</span> <span class="toc-text">Advertising Agency</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unusual-matrix"><span class="toc-number">12.6.</span> <span class="toc-text">Unusual Matrix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-beauty"><span class="toc-number">12.7.</span> <span class="toc-text">Strange Beauty</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9D%82%E9%A2%98"><span class="toc-number">13.</span> <span class="toc-text">杂题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1463d--%20pairs"><span class="toc-number">13.1.</span> <span class="toc-text">1463D - Pairs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1463c--%20busy%20robot"><span class="toc-number">13.2.</span> <span class="toc-text">1463C - Busy Robot</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1453c--%20triangles"><span class="toc-number">13.3.</span> <span class="toc-text">1453C - Triangles</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1453d--%20checkpoints"><span class="toc-number">13.4.</span> <span class="toc-text">1453D - Checkpoints</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1451d--%20circle%20game"><span class="toc-number">13.5.</span> <span class="toc-text">1451D - Circle Game</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1450d--%20rating%20compression"><span class="toc-number">13.6.</span> <span class="toc-text">1450D - Rating Compression</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1446b--%20catching%20cheaters"><span class="toc-number">13.7.</span> <span class="toc-text">1446B - Catching Cheaters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1444b--%20divide%20and%20sum"><span class="toc-number">13.8.</span> <span class="toc-text">1444B - Divide and Sum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1442b--%20identify%20the%20operations"><span class="toc-number">13.9.</span> <span class="toc-text">1442B - Identify the Operations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1442a--%20extreme%20subtraction"><span class="toc-number">13.10.</span> <span class="toc-text">1442A - Extreme Subtraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1437c--%20chef%20monocarp"><span class="toc-number">13.11.</span> <span class="toc-text">1437C - Chef Monocarp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1430d--%20string%20deletion"><span class="toc-number">13.12.</span> <span class="toc-text">1430D - String Deletion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1422c--%20bargain"><span class="toc-number">13.13.</span> <span class="toc-text">1422C - Bargain</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1426e--%20rock,%20paper,%20scissors"><span class="toc-number">13.14.</span> <span class="toc-text">1426E - Rock, Paper, Scissors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1436d--%20bandit%20in%20a%20city"><span class="toc-number">13.15.</span> <span class="toc-text">1436D - Bandit in a City</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1430e--%20string%20reversal"><span class="toc-number">13.16.</span> <span class="toc-text">1430E - String Reversal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1400b--%20rpg%20protagonist"><span class="toc-number">13.17.</span> <span class="toc-text">1400B - RPG Protagonist</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1396b--%20stoned%20game"><span class="toc-number">13.18.</span> <span class="toc-text">1396B - Stoned Game</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1368d--%20and,%20or%20and%20square%20sum"><span class="toc-number">13.19.</span> <span class="toc-text">1368D - AND, OR and square sum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1359c--%20mixing%20water"><span class="toc-number">13.20.</span> <span class="toc-text">1359C - Mixing Water</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1340b--%20nastya%20and%20scoreboard"><span class="toc-number">13.21.</span> <span class="toc-text">1340B - Nastya and Scoreboard</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1423b--%20valuable%20paper"><span class="toc-number">13.22.</span> <span class="toc-text">1423B - Valuable Paper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1392d--%20omkar%20and%20bed%20wars"><span class="toc-number">13.23.</span> <span class="toc-text">1392D - Omkar and Bed Wars</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1333c--%20eugene%20and%20an%20array"><span class="toc-number">13.24.</span> <span class="toc-text">1333C - Eugene and an array</span></a></li></ol></li></ol>
+
+
+<header class="header">
+
+<div class="logo-wrap"><a class="title" href="../../../../index.html"><div class="main">zzy's blog</div></a></div>
+<nav class="menu dis-select"><a class="nav-item active" href="../../../../index.html">文章</a></nav></header>
+
+<div class="widgets">
+
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#cards-for%20friends"><span class="toc-text">Cards for Friends</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fair-division"><span class="toc-text">Fair Division</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#long-jumps"><span class="toc-text">Long Jumps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#even-odd-game"><span class="toc-text">Even-Odd Game</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#correct-placement"><span class="toc-text">Correct Placement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new-year's%20puzzle"><span class="toc-text">New Year’s Puzzle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yet-another%20two%20integers%20problem"><span class="toc-text">Yet Another Two Integers Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#minimum-product"><span class="toc-text">Minimum Product</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yet-another%20array%20restoration"><span class="toc-text">Yet Another Array Restoration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#decrease-the%20sum%20of%20digits"><span class="toc-text">Decrease the Sum of Digits</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#two-platforms"><span class="toc-text">Two Platforms</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-partition"><span class="toc-text">Strange Partition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-list"><span class="toc-text">Strange List</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-birthday%20party"><span class="toc-text">Strange Birthday Party</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-definition"><span class="toc-text">Strange Definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-housing"><span class="toc-text">Strange Housing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#favorite-sequence"><span class="toc-text">Favorite Sequence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#last-year's%20substring"><span class="toc-text">Last Year’s Substring</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unique-number"><span class="toc-text">Unique Number</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#add-to%20neighbour%20and%20remove"><span class="toc-text">Add to Neighbour and Remove</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#close-tuples%20(easy%20version)"><span class="toc-text">Close Tuples (easy version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#close-tuples%20(hard%20version)"><span class="toc-text">Close Tuples (hard version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-treasure%20of%20the%20segments"><span class="toc-text">The Treasure of The Segments</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bovine-dilemma"><span class="toc-text">Bovine Dilemma</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#last-minute%20enhancements"><span class="toc-text">Last minute enhancements</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#canine-poetry"><span class="toc-text">Canine poetry</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13th-labour%20of%20heracles"><span class="toc-text">13th Labour of Heracles</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#apollo-versus%20pan"><span class="toc-text">Apollo versus Pan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#euclid's-nightmare"><span class="toc-text">Euclid’s nightmare</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#candies-and%20two%20sisters"><span class="toc-text">Candies and Two Sisters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#construct-the%20string"><span class="toc-text">Construct the String</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#two-teams%20composing"><span class="toc-text">Two Teams Composing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#anti-sudoku"><span class="toc-text">Anti-Sudoku</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#three-blocks%20palindrome%20(easy%20version)"><span class="toc-text">Three Blocks Palindrome (easy version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#three-blocks%20palindrome%20(hard%20version)"><span class="toc-text">Three Blocks Palindrome (hard version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#regular-bracket%20sequence"><span class="toc-text">Regular Bracket Sequence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#red-and%20blue"><span class="toc-text">Red and Blue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#building-a%20fence"><span class="toc-text">Building a Fence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ceil-divisions"><span class="toc-text">Ceil Divisions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-bit%20similar"><span class="toc-text">A Bit Similar</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#special-permutation"><span class="toc-text">Special Permutation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unique-bid%20auction"><span class="toc-text">Unique Bid Auction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sequence-transformation"><span class="toc-text">Sequence Transformation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#number-into%20sequence"><span class="toc-text">Number into Sequence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#number-of%20simple%20paths"><span class="toc-text">Number of Simple Paths</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yet-another%20tetris%20problem"><span class="toc-text">Yet Another Tetris Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yet-another%20palindrome%20problem"><span class="toc-text">Yet Another Palindrome Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#frog-jumps"><span class="toc-text">Frog Jumps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pair-of%20topics"><span class="toc-text">Pair of Topics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleeping-schedule"><span class="toc-text">Sleeping Schedule</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xorwice"><span class="toc-text">XORwice</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#putting-bricks%20in%20the%20wall"><span class="toc-text">Putting Bricks in the Wall</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#palindromifier"><span class="toc-text">Palindromifier</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexagons"><span class="toc-text">Hexagons</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#three-friends"><span class="toc-text">Three Friends</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#snow-walking%20robot"><span class="toc-text">Snow Walking Robot</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yet-another%20broken%20keyboard"><span class="toc-text">Yet Another Broken Keyboard</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#remove-one%20element"><span class="toc-text">Remove One Element</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nearest-opposite%20parity"><span class="toc-text">Nearest Opposite Parity</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#odd-divisor"><span class="toc-text">Odd Divisor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new-year's%20number"><span class="toc-text">New Year’s Number</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ball-in%20berland"><span class="toc-text">Ball in Berland</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cleaning-the%20phone"><span class="toc-text">Cleaning the Phone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#advertising-agency"><span class="toc-text">Advertising Agency</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unusual-matrix"><span class="toc-text">Unusual Matrix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strange-beauty"><span class="toc-text">Strange Beauty</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1463d--%20pairs"><span class="toc-text">1463D - Pairs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1463c--%20busy%20robot"><span class="toc-text">1463C - Busy Robot</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1453c--%20triangles"><span class="toc-text">1453C - Triangles</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1453d--%20checkpoints"><span class="toc-text">1453D - Checkpoints</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1451d--%20circle%20game"><span class="toc-text">1451D - Circle Game</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1450d--%20rating%20compression"><span class="toc-text">1450D - Rating Compression</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1446b--%20catching%20cheaters"><span class="toc-text">1446B - Catching Cheaters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1444b--%20divide%20and%20sum"><span class="toc-text">1444B - Divide and Sum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1442b--%20identify%20the%20operations"><span class="toc-text">1442B - Identify the Operations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1442a--%20extreme%20subtraction"><span class="toc-text">1442A - Extreme Subtraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1437c--%20chef%20monocarp"><span class="toc-text">1437C - Chef Monocarp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1430d--%20string%20deletion"><span class="toc-text">1430D - String Deletion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1422c--%20bargain"><span class="toc-text">1422C - Bargain</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1426e--%20rock,%20paper,%20scissors"><span class="toc-text">1426E - Rock, Paper, Scissors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1436d--%20bandit%20in%20a%20city"><span class="toc-text">1436D - Bandit in a City</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1430e--%20string%20reversal"><span class="toc-text">1430E - String Reversal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1400b--%20rpg%20protagonist"><span class="toc-text">1400B - RPG Protagonist</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1396b--%20stoned%20game"><span class="toc-text">1396B - Stoned Game</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1368d--%20and,%20or%20and%20square%20sum"><span class="toc-text">1368D - AND, OR and square sum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1359c--%20mixing%20water"><span class="toc-text">1359C - Mixing Water</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1340b--%20nastya%20and%20scoreboard"><span class="toc-text">1340B - Nastya and Scoreboard</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1423b--%20valuable%20paper"><span class="toc-text">1423B - Valuable Paper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1392d--%20omkar%20and%20bed%20wars"><span class="toc-text">1392D - Omkar and Bed Wars</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1333c--%20eugene%20and%20an%20array"><span class="toc-text">1333C - Eugene and an array</span></a></li></ol></div></div></div>
+
+
 </div>
 
-    <div class="e-content article-entry" itemprop="articleBody">
+
+    </aside>
+    <div class='l_main'>
       
-        <h1 id="[codeforces-round #693 (div3)](https://codeforces.com/contest/1472)"><a target="_blank" rel="noopener" href="https://codeforces.com/contest/1472">Codeforces Round #693 (Div.3)</a></h1>
+
+      
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="../../../../categories/Codeforces/">Codeforces</a></div><div id="post-meta">发布于&nbsp;<time datetime="2021-01-17T04:09:00.000Z">2021-01-17</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>Codeforces训练记录</span></h1>
+<h1 id="[codeforces-round #693 (div3)](https://codeforces.com/contest/1472)"><a target="_blank" rel="noopener" href="https://codeforces.com/contest/1472">Codeforces Round #693 (Div.3)</a></h1>
 <h2 id="cards-for friends">Cards for Friends</h2>
 <div class="highlight"><pre class="code"><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span>
@@ -4883,147 +4886,178 @@ map&lt;ll, <span class="hljs-keyword">int</span>&gt; mp;
 &#125;
 </code></pre></div>
 
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="../../29/Codeforces%20Round698%20(Div.%202)/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Codeforces Round698 (Div.2)
-        
-      </div>
-    </a>
-  
-  
-    <a href="../../../../2020/10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">
-        
-          2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)
-        
-      </div>
-    </a>
-  
-</nav>
 
-  
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section></div>
+
 </article>
 
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="../../../../2022/08/03/ubuntu%E4%B8%8A%E5%88%A9%E7%94%A8CS%E8%B0%83%E7%94%A8Python%E8%84%9A%E6%9C%AC(%E5%90%AB%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93)/">ubuntu上利用CS调用Python脚本(含第三方库)</a>
-          </li>
-        
-          <li>
-            <a href="../../../../2022/08/03/domjudge%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">domjudge安装与使用</a>
-          </li>
-        
-          <li>
-            <a href="../../../../2022/08/01/ubuntu%E9%83%A8%E7%BD%B2ASP.NET%20Core%20WebApi/">ubuntu部署ASP.NET Core WebApi</a>
-          </li>
-        
-          <li>
-            <a href="../../../../2022/03/29/2022%E5%B9%B4%E8%A5%BF%E5%AE%89%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6915%E4%B8%8A%E5%B2%B8%E5%A4%8D%E7%9B%98/">2022年西安交通大学915上岸复盘</a>
-          </li>
-        
-          <li>
-            <a href="../../29/Codeforces%20Round698%20(Div.%202)/">Codeforces Round698 (Div.2)</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">分类</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/C/">C#</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Codeforces/">Codeforces</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/domjudge/">domjudge</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9B%BE%E8%AE%BA/">图论</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">基础算法</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li></ul>
-    </div>
-  </div>
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="../../../../2020/10/15/2017%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B-%E6%9D%AD%E5%B7%9E%E7%AB%99%20-%20B.%20Master%20of%20Phi(%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0)/">2017中国大学生程序设计竞赛-杭州站 - B. Master of Phi(积性函数)<span class="note">较早</span></a><div class="line"></div><a id="prev" href="../../29/Codeforces%20Round698%20(Div.%202)/">Codeforces Round698 (Div.2)<span class="note">较新</span></a></section></div>
 
 
-  
-    
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
+
+
+
+
+
+
       
-      &copy; 2022 zzy<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a><br>
-      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="http://example.com/">@zzy</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.8.0" title="v1.8.0">Stellar</a> 作为主题。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
     </div>
   </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
-  
-    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="../../../../js/clipboard.min.js"></script>
-<script src="../../../../js/jquery-1.4.3.min.js"></script>
-
-<script src="../../../../fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-
-
-<script src="../../../../js/script.js"></script>
-
-
-
-
-
-
-<script>
-  MathJax = {
-    options: {
-      enableMenu: false
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
     },
-    tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']],
-      displayMath: [['$$', '$$'], ['\\[', '\\]']],
-    },
-    chtml: {
-      matchFontHeight: true
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
     }
   };
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.8.0';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://fastly.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    sitesjs: '../../../../js/plugins/sites.js',
+    friendsjs: '../../../../js/plugins/friends.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://fastly.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://fastly.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://fastly.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
 </script>
 
-<script type="text/javascript" id="MathJax-script" async
-  src="../../../../mathjax/tex-chtml.js">
-</script>
+<!-- required -->
 
+  
+<script src="../../../../js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
 
 
   </div>
