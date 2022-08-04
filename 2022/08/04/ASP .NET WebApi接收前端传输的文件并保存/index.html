@@ -4,15 +4,14 @@
   <meta charset="utf-8">
   
   
-  <title>ASP .NET WebApi解决跨域问题 | zzy&#39;s blog</title>
+  <title>ASP .NET WebApi接收前端传输的文件并保存 | zzy&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <meta name="description" content="添加受信赖的域
-在Setup.cs的ConfigureServices函数中添加以下内容
-services.AddCors(options =&amp;gt;
+  <meta name="description" content="代码如下
+public IActionResult ImpFile(IFormFile file)
 &amp;#123;
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy ">
+    string fileHead = $&amp;quot;./FileUpload/&amp;#123;DateTime.Now: yyyyMMddHHmmss&amp;#125;&amp;quot;;
+   ">
   
   
   
@@ -47,10 +46,10 @@ services.AddCors(options =&amp;gt;
 </div>
 
       <div id="content" class="outer">
-        <section id="main"><article id="post-ASP .NET WebApi解决跨域问题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-ASP .NET WebApi接收前端传输的文件并保存" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="" class="article-date">
-  <time class="dt-published" datetime="2022-08-04T09:05:00.000Z" itemprop="datePublished">2022-08-04</time>
+  <time class="dt-published" datetime="2022-08-04T12:31:00.000Z" itemprop="datePublished">2022-08-04</time>
 </a>
     
   <div class="article-category">
@@ -65,55 +64,39 @@ services.AddCors(options =&amp;gt;
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      ASP .NET WebApi解决跨域问题
+      ASP .NET WebApi接收前端传输的文件并保存
     </h1>
   
 
       </header>
     
     
-<div id="article-toc">
-    <h2 class="widget-title">目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%8F%97%E4%BF%A1%E8%B5%96%E7%9A%84%E5%9F%9F"><span class="toc-number">1.</span> <span class="toc-text">添加受信赖的域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%81%E8%AE%B8%E6%89%80%E6%9C%89%E5%9F%9F"><span class="toc-number">2.</span> <span class="toc-text">允许所有域</span></a></li></ol>
-</div>
-
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h2 id="添加受信赖的域">添加受信赖的域</h2>
-<p>在<code>Setup.cs</code>的<code>ConfigureServices</code>函数中添加以下内容</p>
-<div class="highlight"><pre class="code"><code>services.AddCors(options =&gt;
+        <p>代码如下</p>
+<div class="highlight"><pre class="code"><code><span class="hljs-function"><span class="hljs-keyword">public</span> IActionResult <span class="hljs-title">ImpFile</span>(<span class="hljs-params">IFormFile file</span>)</span>
 &#123;
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy =&gt;
-        &#123;
-            policy.WithOrigins(<span class="hljs-string">&quot;http://example.com&quot;</span>, <span class="hljs-string">&quot;http://www.contoso.com&quot;</span>)
-            .AllowAnyMethod()
-            .SetIsOriginAllowed(_ =&gt; <span class="hljs-literal">true</span>)
-            .AllowCredentials();
-        &#125;);
-&#125;);
-</code></pre></div>
-<p>其中<code>MyAllowSpecificOrigins</code>为策略名，策略名称是任意的。</p>
-<p>在<code>Setup.cs</code>的<code>Configure</code>函数中添加以下内容</p>
-<div class="highlight"><pre class="code"><code>app.UseCors(MyAllowSpecificOrigins);
-</code></pre></div>
-<h2 id="允许所有域">允许所有域</h2>
-<p>在<code>Setup.cs</code>的<code>ConfigureServices</code>函数中添加以下内容</p>
-<div class="highlight"><pre class="code"><code>services.AddCors(options =&gt;
-&#123;
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy =&gt;
-        &#123;
-            policy.AllowAnyHeader()
-            .AllowAnyMethod()
-            .SetIsOriginAllowed(_ =&gt; <span class="hljs-literal">true</span>)
-            .AllowCredentials();
-        &#125;);
-&#125;);
-</code></pre></div>
-<p>其中<code>MyAllowSpecificOrigins</code>为策略名，策略名称是任意的。</p>
-<p>在<code>Setup.cs</code>的<code>Configure</code>函数中添加以下内容</p>
-<div class="highlight"><pre class="code"><code>app.UseCors(MyAllowSpecificOrigins);
+    <span class="hljs-built_in">string</span> fileHead = <span class="hljs-string">$&quot;./FileUpload/<span class="hljs-subst">&#123;DateTime.Now: yyyyMMddHHmmss&#125;</span>&quot;</span>;
+    <span class="hljs-built_in">string</span> fullFileName = <span class="hljs-built_in">string</span>.Format(<span class="hljs-string">&quot;&#123;0&#125;/&#123;1&#125;&quot;</span>, fileHead, Path.GetFileName(file.FileName));
+    <span class="hljs-built_in">string</span> path = Path.GetDirectoryName(fullFileName);
+
+    <span class="hljs-keyword">if</span> (!Directory.Exists(path))
+    &#123;
+        Console.WriteLine(path);
+        Directory.CreateDirectory(path);
+    &#125;
+
+    System.IO.Stream stream = file.OpenReadStream();
+    <span class="hljs-built_in">byte</span>[] bytes = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[stream.Length];
+    stream.Read(bytes, <span class="hljs-number">0</span>, (<span class="hljs-built_in">int</span>)stream.Length);
+    stream.Seek(<span class="hljs-number">0</span>, SeekOrigin.Begin);
+
+    FileStream fs = <span class="hljs-keyword">new</span> FileStream(fullFileName, FileMode.Create);
+    BinaryWriter bw = <span class="hljs-keyword">new</span> BinaryWriter(fs);
+    bw.Write(bytes);
+    bw.Close();
+    fs.Close();
+&#125;
 </code></pre></div>
 
       
@@ -128,21 +111,12 @@ services.AddCors(options =&amp;gt;
     
 <nav id="article-nav">
   
-    <a href="../ASP%20.NET%20WebApi%E6%8E%A5%E6%94%B6%E5%89%8D%E7%AB%AF%E4%BC%A0%E8%BE%93%E7%9A%84%E6%96%87%E4%BB%B6%E5%B9%B6%E4%BF%9D%E5%AD%98/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          ASP .NET WebApi接收前端传输的文件并保存
-        
-      </div>
-    </a>
   
-  
-    <a href="../../03/ubuntu%E4%B8%8A%E5%88%A9%E7%94%A8CS%E8%B0%83%E7%94%A8Python%E8%84%9A%E6%9C%AC(%E5%90%AB%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93)/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="../ASP%20.NET%20WebApi%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">
         
-          ubuntu上利用CS调用Python脚本(含第三方库)
+          ASP .NET WebApi解决跨域问题
         
       </div>
     </a>
@@ -164,11 +138,11 @@ services.AddCors(options =&amp;gt;
       <ul>
         
           <li>
-            <a href="../ASP%20.NET%20WebApi%E6%8E%A5%E6%94%B6%E5%89%8D%E7%AB%AF%E4%BC%A0%E8%BE%93%E7%9A%84%E6%96%87%E4%BB%B6%E5%B9%B6%E4%BF%9D%E5%AD%98/">ASP .NET WebApi接收前端传输的文件并保存</a>
+            <a href="">ASP .NET WebApi接收前端传输的文件并保存</a>
           </li>
         
           <li>
-            <a href="">ASP .NET WebApi解决跨域问题</a>
+            <a href="../ASP%20.NET%20WebApi%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/">ASP .NET WebApi解决跨域问题</a>
           </li>
         
           <li>
